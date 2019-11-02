@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://0.0.0.0:3307/morningbees?createDatabaseIfNotExist=true&useSSL=false&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: mysql
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    generate-ddl: true
+    database: mysql
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5Dialect
