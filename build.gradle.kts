@@ -4,6 +4,7 @@ plugins {
     kotlin("plugin.jpa") version "1.3.50"
     id("org.springframework.boot") version "2.2.0.RELEASE"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
+    id("org.flywaydb.flyway") version "6.0.8"
     kotlin("jvm") version "1.3.50"
     kotlin("plugin.spring") version "1.3.50"
     kotlin("plugin.allopen") version "1.3.50"
@@ -30,7 +31,10 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    runtimeOnly("mysql:mysql-connector-java")
+    implementation("net.logstash.logback:logstash-logback-encoder:6.2")
+    implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
+    implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
+    implementation("mysql:mysql-connector-java:5.1.47")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
@@ -44,4 +48,10 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
     }
+}
+
+flyway {
+    url = "jdbc:mysql://0.0.0.0:3307/morningbees"
+    user = "root"
+    password = "mysql"
 }
