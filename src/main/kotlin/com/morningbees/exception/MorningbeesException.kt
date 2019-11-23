@@ -17,6 +17,11 @@ open class MorningbeesException : RuntimeException {
     }
 }
 
+class InternalException : MorningbeesException {
+    constructor(message: String): super(message) {}
+    constructor(message: String, code: Int = 0, logEventCode: String = ""): super(message, code, logEventCode)
+}
+
 class BadRequestException : MorningbeesException {
     constructor(message: String): super(message) {}
     constructor(message: String, code: Int = 0, logEventCode: String = ""): super(message, code, logEventCode)

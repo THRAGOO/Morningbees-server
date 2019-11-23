@@ -1,15 +1,18 @@
 package com.morningbees.exception
 
-import net.logstash.logback.argument.StructuredArguments.kv
 import org.slf4j.MDC
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.time.LocalDateTime
+import javax.servlet.http.HttpServletRequest
 
+@RestController
 @ControllerAdvice
 class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
     private val log = org.slf4j.LoggerFactory.getLogger(MorningbeesExceptionHandler::class.java)
@@ -34,8 +37,8 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
     }
 
-    @ExceptionHandler(Exception::class)
-    fun internalException(ex :Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+    @ExceptionHandler(InternalException::class)
+    fun InternalException(ex :Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         val exception = (ex as MorningbeesException)
         MDC.put("logEventCode", exception.logEventCode)
         MDC.put("backTrace", exception.stackTrace[0].toString())

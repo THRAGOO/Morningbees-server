@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://0.0.0.0:3307/morningbees?useSSL=false
+    url: jdbc:mysql://0.0.0.0:3307/morningbees_test?useSSL=false
     username: root
     password: mysql
   jpa:

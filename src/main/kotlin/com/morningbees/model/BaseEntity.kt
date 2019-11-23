@@ -9,24 +9,24 @@ import java.time.LocalDateTime
 open class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected var id: Long? = null
+    open val id: Long? = null
 
     @Column(name = "created_at", updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-    protected var createdAt: LocalDateTime = LocalDateTime.now()
+    open var createdAt: LocalDateTime = LocalDateTime.now()
 
     @Column(name = "updated_at")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-    protected var updatedAt: LocalDateTime = LocalDateTime.now()
+    open var updatedAt: LocalDateTime = LocalDateTime.now()
 
     @PrePersist
-    protected fun onPersist() {
+    open fun onPersist() {
         this.updatedAt = LocalDateTime.now()
         this.createdAt = this.updatedAt
     }
 
     @PreUpdate
-    protected fun onUpdate() {
+    open fun onUpdate() {
         this.updatedAt = LocalDateTime.now()
     }
 }

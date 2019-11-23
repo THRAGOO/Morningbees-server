@@ -16,7 +16,7 @@
             </layout>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_PATH}/log_%d{yyyy-MM-dd}.%i.json</FileNamePattern>
+            <FileNamePattern>${LOGS_ABSOLUTE_PATH}/log_%d{yyyy-MM-dd}.%i.json</FileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>5MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
@@ -27,7 +27,7 @@
     <logger name="com.morningbees" level="INFO">
         <appender-ref ref="JSON_FILE" />
     </logger>
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>

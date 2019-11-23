@@ -35,8 +35,17 @@ dependencies {
     implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
     implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
     implementation("mysql:mysql-connector-java:5.1.47")
+    implementation("io.jsonwebtoken:jjwt:0.9.1")
+
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.flywaydb.flyway-test-extensions:flyway-spring5-test:6.0.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.5.2")
+//    testImplementation("org.junit.platform:junit-platform-engine:1.0.2")
+//    testImplementation("org.junit.platform:junit-platform-launcher:1.0.2")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.3.50")
+    testImplementation("org.assertj:assertj-core:3.13.2")
 }
 
 tasks.withType<Test> {
@@ -51,7 +60,8 @@ tasks.withType<KotlinCompile> {
 }
 
 flyway {
-    url = "jdbc:mysql://0.0.0.0:3307/morningbees"
+    url = "jdbc:mysql://0.0.0.0:3307?useSSL=false"
     user = "root"
     password = "mysql"
+    schemas = arrayOf("morningbees", "morningbees_test")
 }
