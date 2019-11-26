@@ -1,7 +1,7 @@
 package com.morningbees.service.token
 
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
+import com.morningbees.exception.UnAuthorizeException
+import io.jsonwebtoken.*
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -11,7 +11,7 @@ open class TokenService {
 
     open fun getExpirationDate(): Long { return Date().getTime() }
 
-    fun generateJWTToken(payload: HashMap<String, Any?>): String {
+    fun encodeJWT(payload: HashMap<String, Any?>): String {
         val headers = HashMap<String, Any?>()
         headers.put("alg", "HS256")
         headers.put("typ", "JWT")
@@ -30,9 +30,33 @@ open class TokenService {
         return jwt
     }
 
+    open fun decodeAndGetInfos(token: String): AuthTokenInfos { return AuthTokenInfos() }
+
+    fun decodeJWT(JWTToken: String): Claims {
+        try {
+            val body :Claims = Jwts.parser()
+                    .setSigningKey(this.generateKey())
+                    .parseClaimsJws(JWTToken)
+                    .body
+
+            return body
+        } catch (e: JwtException) {
+            throw UnAuthorizeException(e.message.toString(), 101, "JWT_PARSE_ERROR")
+        }
+    }
+
+    fun getTokenType(type: TokenType): Int {
+        return when(type) {
+            TokenType.ACCESS_TOKEN -> 0
+            TokenType.REFRESH_TOKEN -> 1
+        }
+    }
+
     private fun generateKey(): ByteArray? {
         val key: ByteArray? = SALT.toByteArray()
 
         return key
     }
 }
+
+enum class TokenType { ACCESS_TOKEN, REFRESH_TOKEN }

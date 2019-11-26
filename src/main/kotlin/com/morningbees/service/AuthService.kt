@@ -3,7 +3,6 @@ package com.morningbees.service
 import com.morningbees.model.User
 import com.morningbees.repository.UserRepository
 import com.morningbees.service.token.AccessTokenService
-import com.morningbees.service.token.TokenService
 import com.sun.istack.NotNull
 import org.springframework.beans.factory.annotation.Autowired
 

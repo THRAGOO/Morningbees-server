@@ -3,22 +3,19 @@ package com.morningbees.exception
 import org.slf4j.MDC
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.time.LocalDateTime
-import javax.servlet.http.HttpServletRequest
 
-@RestController
 @ControllerAdvice
 class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
     private val log = org.slf4j.LoggerFactory.getLogger(MorningbeesExceptionHandler::class.java)
 
     @ExceptionHandler(NotFoundException::class)
-    fun NotFoundException(ex :Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+    fun NotFoundException(ex :NotFoundException, request: WebRequest): ResponseEntity<ErrorResponse> {
         val exception = (ex as MorningbeesException)
         MDC.put("logEventCode", exception.logEventCode)
         MDC.put("backTrace", exception.stackTrace[0].toString())
@@ -28,7 +25,7 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(InvalidParameterException::class)
-    fun InvalidParameterException(ex :Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+    fun InvalidParameterException(ex :InvalidParameterException, request: WebRequest): ResponseEntity<ErrorResponse> {
         val exception = (ex as MorningbeesException)
         MDC.put("logEventCode", exception.logEventCode)
         MDC.put("backTrace", exception.stackTrace[0].toString())
@@ -38,12 +35,22 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(InternalException::class)
-    fun InternalException(ex :Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+    fun InternalException(ex :InternalException, request: WebRequest): ResponseEntity<ErrorResponse> {
         val exception = (ex as MorningbeesException)
         MDC.put("logEventCode", exception.logEventCode)
         MDC.put("backTrace", exception.stackTrace[0].toString())
         log.error(exception.message)
         val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.message, exception.code)
         return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    @ExceptionHandler(UnAuthorizeException::class)
+    fun UnAuthorizeException(ex :UnAuthorizeException, request: WebRequest): ResponseEntity<ErrorResponse> {
+        val exception = (ex as MorningbeesException)
+        MDC.put("logEventCode", exception.logEventCode)
+        MDC.put("backTrace", exception.stackTrace[0].toString())
+        log.error(exception.message)
+        val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(), exception.message, exception.code)
+        return ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED)
     }
 }
