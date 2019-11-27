@@ -1,36 +1,44 @@
 package com.morningbees.filter
 
-import jdk.nashorn.internal.runtime.regexp.joni.Config.log
+import com.morningbees.exception.UnAuthorizeException
+import com.morningbees.model.User
+import com.morningbees.service.token.AccessTokenService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import javax.servlet.*
 import javax.servlet.annotation.WebFilter
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-@WebFilter(urlPatterns = ["/"], description = "인증 필터")
-abstract class JWTAuthenticationFilter : Filter {
+@WebFilter(urlPatterns= ["/api/v1/*"])
+class JWTAuthenticationFilter : Filter {
+    @Autowired
+    lateinit var accessTokenService: AccessTokenService
+
+    override fun init(filterConfig: FilterConfig?) {
+        super.init(filterConfig)
+    }
+
     override fun destroy() {
         super.destroy()
     }
 
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain?) {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//        log.info("filter => API Token Filter");
-//        HttpServletRequest request = (HttpServletRequest) req;
-//        HttpServletResponse response = (HttpServletResponse) res;
-//        log.info("req header => {}", request.getHeader("x-auth-token"));
-//        if ( request.getHeader("x-auth-token") == null ) {
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증오류");
-//        }
-//        chain.doFilter(req, res);
-        var req:HttpServletRequest = request as HttpServletRequest
-        var res:HttpServletResponse = response as HttpServletResponse
-        if (req.getHeader("X-BEES-ACCESS-TOKEN") == "") {
+        val req:HttpServletRequest = request as HttpServletRequest
+        val res:HttpServletResponse = response as HttpServletResponse
 
+        try {
+            val accessToken: String = req.getHeader("X-BEES-ACCESS-TOKEN")
+
+            val tokenBody = accessTokenService.decodeAndGetInfos(accessToken)
+            req.setAttribute("claims", tokenBody)
+            req.setAttribute("User", User(tokenBody.nickname))
+
+            chain?.doFilter(request, response);
+        } catch(e: UnAuthorizeException) {
+            res.sendError(HttpStatus.UNAUTHORIZED.value(), e.message)
+        } catch (e: Exception) {
+            res.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.message)
         }
-        chain?.doFilter(request, response);
-    }
-
-    public override fun init(filterConfig : FilterConfig) {
-        throw ServletException("")
     }
 }
