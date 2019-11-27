@@ -7,13 +7,13 @@ import java.util.*
 import kotlin.collections.HashMap
 
 @Service
-class AccessTokenService : TokenService() {
+class RefreshTokenService : TokenService() {
 
-    private val accessTokenExpireAt = 60001
+    private val refreshTokenExpireAt = 100001
 
     override fun getExpirationDate(): Long {
         val now = Date()
-        val expiredTime :Int = 1000 * accessTokenExpireAt
+        val expiredTime :Int = 1000 * refreshTokenExpireAt
 
         return (now.time/1000) + expiredTime
     }
@@ -22,7 +22,7 @@ class AccessTokenService : TokenService() {
         val additionalInfos = HashMap<String, Any?>()
         additionalInfos.put("userId", user.id)
         additionalInfos.put("nickname", user.nickname)
-        additionalInfos.put("tokenType", this.getTokenType(TokenType.ACCESS_TOKEN))
+        additionalInfos.put("tokenType", this.getTokenType(TokenType.REFRESH_TOKEN))
         val jwt :String = encodeJWT(additionalInfos)
 
         return jwt

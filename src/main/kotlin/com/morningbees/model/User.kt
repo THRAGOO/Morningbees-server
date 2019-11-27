@@ -2,6 +2,7 @@ package com.morningbees.model
 
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.OneToOne
 import javax.persistence.Table
 
 @Entity
@@ -9,7 +10,6 @@ import javax.persistence.Table
 data class User(
         @Column
         val nickname: String = "",
-
         @Column
         val status: Int = 0
 ) : BaseEntity()

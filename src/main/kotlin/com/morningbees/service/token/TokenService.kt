@@ -10,6 +10,7 @@ open class TokenService {
     private val SALT = "secret"
 
     open fun getExpirationDate(): Long { return Date().getTime() }
+    open fun decodeAndGetInfos(JWTToken: String): AuthTokenInfos { return AuthTokenInfos() }
 
     fun encodeJWT(payload: HashMap<String, Any?>): String {
         val headers = HashMap<String, Any?>()
@@ -29,8 +30,6 @@ open class TokenService {
                 .compact()
         return jwt
     }
-
-    open fun decodeAndGetInfos(token: String): AuthTokenInfos { return AuthTokenInfos() }
 
     fun decodeJWT(JWTToken: String): Claims {
         try {

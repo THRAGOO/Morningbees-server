@@ -46,6 +46,7 @@ dependencies {
 //    testImplementation("org.junit.platform:junit-platform-launcher:1.0.2")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.3.50")
     testImplementation("org.assertj:assertj-core:3.13.2")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
 }
 
 tasks.withType<Test> {

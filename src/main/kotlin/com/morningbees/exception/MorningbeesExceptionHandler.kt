@@ -44,6 +44,16 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
+    @ExceptionHandler(BadRequestException::class)
+    fun BadRequestException(ex :BadRequestException, request: WebRequest): ResponseEntity<ErrorResponse> {
+        val exception = (ex as MorningbeesException)
+        MDC.put("logEventCode", exception.logEventCode)
+        MDC.put("backTrace", exception.stackTrace[0].toString())
+        log.error(exception.message)
+        val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), exception.message, exception.code)
+        return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
+    }
+
     @ExceptionHandler(UnAuthorizeException::class)
     fun UnAuthorizeException(ex :UnAuthorizeException, request: WebRequest): ResponseEntity<ErrorResponse> {
         val exception = (ex as MorningbeesException)
