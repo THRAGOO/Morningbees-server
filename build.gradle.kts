@@ -40,6 +40,7 @@ dependencies {
     implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
     implementation("mysql:mysql-connector-java:5.1.47")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
+
     implementation("org.flywaydb:flyway-core")
 
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
