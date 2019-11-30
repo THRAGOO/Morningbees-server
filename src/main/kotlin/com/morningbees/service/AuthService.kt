@@ -27,6 +27,8 @@ class AuthService {
     lateinit var refreshTokenService: RefreshTokenService
 
     fun signUp(@NotNull email: String, @NotNull nickname: String, @NotNull socialAccessToken: String, @NotNull provider: String): HashMap<String, String> {
+        // 이미 가입된 이메일인지 확인 필요
+
         val user = User(nickname =  nickname)
         userRepository.save(user)
         val user_provider = UserProvider(user = user, email = email, provider = provider)

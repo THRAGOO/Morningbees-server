@@ -1,4 +1,11 @@
 spring:
+  profiles:
+    active: development
+
+---
+
+spring:
+  profiles: development
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://0.0.0.0:3307/morningbees?useSSL=false
@@ -6,15 +13,44 @@ spring:
     password: mysql
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
+    generate-ddl: false
+    database: mysql
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+  flyway:
+    enabled: true
+    encoding: UTF-8
+    out-of-order: true
+
+token:
+  salt: t!h@r!a@g!o@o
+
+---
+
+spring:
+  profiles: production
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    sql-script-encoding: UTF-8
+    url: ${MORNINGBEES_PRD_DB_URL}
+    username: ${MORNINGBEES_PRD_DB_USER}
+    password: ${MORNINGBEES_PRD_DB_PASSWORD}
+  flyway:
+    enabled: true
+    encoding: UTF-8
+    out-of-order: true
+  jpa:
+    hibernate:
+      ddl-auto: none
     generate-ddl: false
     database: mysql
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL5Dialect
 
-# spring boot의 기본 properties
+token:
+  salt: ${MORNINGBEES_TOKEN_SALT}
+
 server.error:
   include-exception: false
-  include-stacktrace: never # 오류 응답에 stacktrace 내용을 포함할 지 여부
-#  path: '/error' # 오류 응답을 처리할 Handler의 경로
-#  whitelabel.enabled: true # 서버 오류 발생시 브라우저에 보여줄 기본 페이지 생성 여부
+  include-stacktrace: never

@@ -1,21 +1,30 @@
 package com.morningbees.service.token
 
+import com.morningbees.config.TokenConfig
 import com.morningbees.exception.UnAuthorizeException
 import io.jsonwebtoken.*
+import org.springframework.context.annotation.Configuration
 import java.util.*
 import kotlin.collections.HashMap
 
-open class TokenService {
 
-    private val SALT = "secret"
+
+@Configuration
+open class TokenService() {
+
+    final val tokenConfig: TokenConfig = TokenConfig()
+
+    private val SALT = tokenConfig.salt
+    private val JWT_ALG = "HS567"
+    private val JWT_TYPE = "JWT"
 
     open fun getExpirationDate(): Long { return Date().getTime() }
     open fun decodeAndGetInfos(JWTToken: String): AuthTokenInfos { return AuthTokenInfos() }
 
     fun encodeJWT(payload: HashMap<String, Any?>): String {
         val headers = HashMap<String, Any?>()
-        headers.put("alg", "HS256")
-        headers.put("typ", "JWT")
+        headers.put("alg", JWT_ALG)
+        headers.put("typ", JWT_TYPE)
 
         val claim = HashMap<String, Any?>()
         claim.put("exp", getExpirationDate())
@@ -51,8 +60,8 @@ open class TokenService {
         }
     }
 
-    private fun generateKey(): ByteArray? {
-        val key: ByteArray? = SALT.toByteArray()
+    private fun generateKey(): kotlin.ByteArray {
+        val key: kotlin.ByteArray = SALT.toByteArray()
 
         return key
     }
