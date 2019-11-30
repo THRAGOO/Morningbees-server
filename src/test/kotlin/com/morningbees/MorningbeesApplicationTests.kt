@@ -11,11 +11,7 @@ import org.flywaydb.test.junit5.annotation.FlywayTestExtension;
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @FlywayTestExtension
-@FlywayTest(flywayName = "migrateTest")
+@FlywayTest
 open class MorningbeesApplicationTests {
-
-	@Test
-	fun contextLoads() {
-	}
 
 }
