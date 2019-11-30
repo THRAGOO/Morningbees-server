@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://0.0.0.0:3307/morningbees_test?useSSL=false
+    username: root
+    password: mysql
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    generate-ddl: false
+    database: mysql
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5Dialect
