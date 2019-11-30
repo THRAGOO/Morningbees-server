@@ -11,6 +11,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import org.flywaydb.test.annotation.FlywayTest
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
@@ -29,6 +30,7 @@ internal class AuthServiceTest : SpringMockMvcTestSupport() {
     lateinit var userProviderRepository: UserProviderRepository
 
     @Test
+    @FlywayTest
     @DisplayName("유저 생성이 성공하다.")
     fun successCreateUserSignUp() {
         authService.signUp("test@naver.com", "Test", "socialToken", "naver")

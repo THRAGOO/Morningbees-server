@@ -7,6 +7,7 @@ import com.morningbees.repository.UserRepository
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import org.flywaydb.test.annotation.FlywayTest
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
@@ -30,6 +31,7 @@ internal class RefreshTokenServiceTest: SpringMockMvcTestSupport() {
     }
 
     @Test
+    @FlywayTest
     fun generate() {
         val user : User? = userRepository.findByIdOrNull(1)
         val accessToken :String = refreshTokenService.generate(user!!)
@@ -41,6 +43,7 @@ internal class RefreshTokenServiceTest: SpringMockMvcTestSupport() {
     }
 
     @Test
+    @FlywayTest
     @DisplayName("success decode token")
     fun successDecodeToken() {
         val user : User = userRepository.findById(1).orElse(null)
@@ -53,6 +56,7 @@ internal class RefreshTokenServiceTest: SpringMockMvcTestSupport() {
     }
 
     @Test
+    @FlywayTest
     @DisplayName("fail decode token")
     fun failDecodeToken() {
         val headers = HashMap<String, Any?>()
