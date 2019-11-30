@@ -1,2 +1,0 @@
-CREATE SCHEMA IF NOT EXISTS morningbees;
-CREATE SCHEMA IF NOT EXISTS morningbees_test;

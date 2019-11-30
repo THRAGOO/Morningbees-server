@@ -32,7 +32,7 @@ class NaverLoginService {
             val objectMapper = ObjectMapper()
             val response: JsonNode = objectMapper.readTree(br.readLine())
 
-            email = response["response"]["email"].toString()
+            email = response["response"]["email"].textValue()
 
             br.close()
         } catch (e: Exception) {
