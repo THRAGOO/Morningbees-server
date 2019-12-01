@@ -2,6 +2,7 @@ package com.morningbees.service
 
 import com.morningbees.controller.ErrorController
 import com.morningbees.exception.BadRequestException
+import com.morningbees.exception.ErrorCode
 import com.morningbees.model.User
 import com.morningbees.model.UserProvider
 import com.morningbees.repository.UserProviderRepository
@@ -25,7 +26,7 @@ class AuthService {
 
     fun getAuthTokens(user: User?): HashMap<String, Any> {
         if ( user == null ) {
-            throw BadRequestException("user is nil", 101, "")
+            throw BadRequestException("user is nil", ErrorCode.BadRequest, "")
         }
 
         val accessToken: String = accessTokenService.generate(user)

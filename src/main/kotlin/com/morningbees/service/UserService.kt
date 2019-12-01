@@ -1,6 +1,7 @@
 package com.morningbees.service
 
 import com.morningbees.exception.BadRequestException
+import com.morningbees.exception.ErrorCode
 import com.morningbees.model.User
 import com.morningbees.model.UserProvider
 import com.morningbees.repository.UserProviderRepository
@@ -20,10 +21,10 @@ class UserService {
     fun signUpWithProvider(@NotNull email: String, @NotNull nickname: String, @NotNull provider: String): User {
         // 이미 가입된 이메일인지 확인 필요
         if ( userProviderRepository.existsByEmailAndProvider(email, provider) == true ) {
-            throw BadRequestException("alreay exists social email", 101, "")
+            throw BadRequestException("alreay exists social email", ErrorCode.AlreadySocialEmail, "")
         }
         if ( userRepository.existsByNickname(nickname) == true ) {
-            throw BadRequestException("alreay exists nikcname", 102, "")
+            throw BadRequestException("alreay exists nikcname", ErrorCode.AlreadyNickname, "")
         }
 
         val user = User(nickname =  nickname)
@@ -39,5 +40,13 @@ class UserService {
         val userProvider: UserProvider? = userProviderRepository.findByEmail(email)
 
         return userProvider?.user
+    }
+
+    fun isExistsNickname(nickname: String): Boolean {
+        if ( userRepository.existsByNickname(nickname) == true ) {
+            return false
+        }
+
+        return true
     }
 }

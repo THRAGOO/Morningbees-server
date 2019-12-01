@@ -1,6 +1,8 @@
 package com.morningbees.controller.api.v1
 
 import com.morningbees.exception.BadRequestException
+import com.morningbees.exception.ErrorCode
+import com.morningbees.exception.MorningbeesException
 import com.morningbees.model.User
 import com.morningbees.service.AuthService
 import com.morningbees.service.UserService
@@ -42,8 +44,10 @@ class AuthController {
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, "application/json")
                     .body(response)
+        } catch (e: MorningbeesException) {
+            throw BadRequestException(e.message!!, e.code, e.logEventCode)
         } catch (e: Exception) {
-            throw BadRequestException(e.message!!, 101, "EVENT_CODE")
+            throw BadRequestException(e.message!!, ErrorCode.BadRequest, "")
         }
     }
 
@@ -55,7 +59,7 @@ class AuthController {
             val email: String =  socialLoginFactory.createFromProvider(provider).getEmailByToken(socialAccessToken)
 
             val user: User? = userService.getUserByEmail(email)
-            
+
             var response: HashMap<String, Any> = HashMap<String, Any>()
 
             if ( user == null ) {
@@ -70,8 +74,30 @@ class AuthController {
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, "application/json")
                     .body(response)
+
+        } catch (e: MorningbeesException) {
+            throw BadRequestException(e.message!!, e.code, e.logEventCode)
         } catch (e: Exception) {
-            throw BadRequestException(e.message!!, 101, "EVENT_CODE")
+            throw BadRequestException(e.message!!, ErrorCode.BadRequest, "")
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/valid_nickname")
+    fun isValidNickname(@RequestParam(value = "nickname", required = true) nickname: String): ResponseEntity<HashMap<String, Any>> {
+        try {
+            val result = userService.isExistsNickname(nickname)
+
+            val response: HashMap<String, Any> = HashMap<String, Any>()
+            response.put("isValid", result)
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                    .body(response)
+        } catch (e: MorningbeesException) {
+            throw BadRequestException(e.message!!, e.code, e.logEventCode)
+        } catch (e: Exception) {
+            throw BadRequestException(e.message!!, ErrorCode.BadRequest, "")
         }
     }
 }

@@ -23,7 +23,7 @@ internal class AuthServiceTest : SpringMockMvcTestSupport() {
         val user = User(nickname =  "Test")
         userRepository.save(user)
 
-        val tokens: HashMap<String, String> = authService.getAuthTokens(user)
+        val tokens: HashMap<String, Any> = authService.getAuthTokens(user)
 
         assertNotNull(tokens["accessToken"])
         assertNotNull(tokens["refreshToken"])

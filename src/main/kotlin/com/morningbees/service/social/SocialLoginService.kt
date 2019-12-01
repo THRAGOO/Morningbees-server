@@ -3,6 +3,7 @@ package com.morningbees.service.social
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.morningbees.exception.BadRequestException
+import com.morningbees.exception.ErrorCode
 import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -22,8 +23,6 @@ open class SocialLoginService() {
 
     fun getResponseByUrl(socialToken: String): JsonNode {
         try {
-            val uri = UriComponentsBuilder.fromUriString(socialLoginUrl).build()
-
             val parameters = LinkedMultiValueMap<String, String>()
             val headers = LinkedMultiValueMap<String, String>()
 
@@ -39,10 +38,10 @@ open class SocialLoginService() {
 
             return response
         } catch (e: HttpClientErrorException) {
-            throw BadRequestException("invalid social access token", 202, "EVENT_CODE")
+            throw BadRequestException("invalid social access token", ErrorCode.InvalidSocialToken, "EVENT_CODE")
         }
         catch (e: Exception) {
-            throw BadRequestException(e.message!!, 202, "EVENT_CODE")
+            throw BadRequestException(e.message!!, ErrorCode.BadRequest, "EVENT_CODE")
         }
     }
 
