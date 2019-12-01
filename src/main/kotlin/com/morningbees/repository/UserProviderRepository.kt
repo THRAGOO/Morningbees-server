@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository
 interface UserProviderRepository : CrudRepository<UserProvider, Long> {
 
     fun findByUser(user: User): UserProvider
+    fun existsByEmailAndProvider(email: String, provider: String): Boolean
 }

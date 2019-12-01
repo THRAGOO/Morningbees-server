@@ -1,23 +1,14 @@
 package com.morningbees.service
 
 import com.morningbees.SpringMockMvcTestSupport
+import com.morningbees.exception.BadRequestException
 import com.morningbees.model.User
-import com.morningbees.model.UserProvider
-import com.morningbees.repository.UserProviderRepository
 import com.morningbees.repository.UserRepository
-import com.morningbees.service.social.NaverLoginService
-import com.morningbees.service.token.AccessTokenService
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
-import org.flywaydb.test.annotation.FlywayTest
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.repository.findByIdOrNull
 
 internal class AuthServiceTest : SpringMockMvcTestSupport() {
     @Autowired
@@ -26,18 +17,22 @@ internal class AuthServiceTest : SpringMockMvcTestSupport() {
     @Autowired
     lateinit var userRepository: UserRepository
 
-    @Autowired
-    lateinit var userProviderRepository: UserProviderRepository
+    @Test
+    @DisplayName("유저 생성이 성공하다.")
+    fun successGetAuthTokens() {
+        val user = User(nickname =  "Test")
+        userRepository.save(user)
+
+        val tokens: HashMap<String, String> = authService.getAuthTokens(user)
+
+        assertNotNull(tokens["accessToken"])
+        assertNotNull(tokens["refreshToken"])
+    }
 
     @Test
-    @FlywayTest
-    @DisplayName("유저 생성이 성공하다.")
-    fun successCreateUserSignUp() {
-        authService.signUp("test@naver.com", "Test", "socialToken", "naver")
-
-        val user: User? = userRepository.findByIdOrNull(1)
-        assertEquals("Test", user?.nickname)
-        val userProvider: UserProvider = userProviderRepository.findByUser(user!!)
-        assertEquals("test@naver.com", userProvider.email)
+    @DisplayName("파라미터로 전달 받은 유저가 없을 때 에러가 발생한다.")
+    fun failGetAuthTokens() {
+        val thrown = assertThrows(BadRequestException::class.java) { authService.getAuthTokens(null) }
+        assertEquals(thrown.message, "user is nil")
     }
 }

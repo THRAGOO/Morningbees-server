@@ -1,6 +1,7 @@
 package com.morningbees.service
 
 import com.morningbees.controller.ErrorController
+import com.morningbees.exception.BadRequestException
 import com.morningbees.model.User
 import com.morningbees.model.UserProvider
 import com.morningbees.repository.UserProviderRepository
@@ -16,23 +17,16 @@ import org.springframework.stereotype.Service
 class AuthService {
     private val log = org.slf4j.LoggerFactory.getLogger(AuthService::class.java)
 
-    @Autowired
-    lateinit var userRepository: UserRepository
-    @Autowired
-    lateinit var userProviderRepository: UserProviderRepository
 
     @Autowired
     lateinit var accessTokenService: AccessTokenService
     @Autowired
     lateinit var refreshTokenService: RefreshTokenService
 
-    fun signUp(@NotNull email: String, @NotNull nickname: String, @NotNull socialAccessToken: String, @NotNull provider: String): HashMap<String, String> {
-        // 이미 가입된 이메일인지 확인 필요
-
-        val user = User(nickname =  nickname)
-        userRepository.save(user)
-        val user_provider = UserProvider(user = user, email = email, provider = provider)
-        userProviderRepository.save(user_provider)
+    fun getAuthTokens(user: User?): HashMap<String, String> {
+        if ( user == null ) {
+            throw BadRequestException("user is nil", 101, "")
+        }
 
         val accessToken: String = accessTokenService.generate(user)
         val refreshToken: String = refreshTokenService.generate(user)

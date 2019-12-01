@@ -13,13 +13,13 @@ import org.springframework.http.HttpStatus
 @Service
 class NaverLoginService {
 
+    private val NAVER_LOGIN_URL = "https://openapi.naver.com/v1/nid/me"
+
     fun getEmailByToken(socialToken: String): String {
         var email: String = ""
 
         try {
-            val apiURL = "https://openapi.naver.com/v1/nid/me"
-
-            val url = URL(apiURL)
+            val url = URL(NAVER_LOGIN_URL)
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
             connection.setRequestProperty("Authorization", "Bearer $socialToken")
@@ -44,9 +44,7 @@ class NaverLoginService {
 
     fun isValidToken(socialToken: String): Boolean {
         try {
-            val apiURL = "https://openapi.naver.com/v1/nid/me"
-
-            val url = URL(apiURL)
+            val url = URL(NAVER_LOGIN_URL)
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
             connection.setRequestProperty("Authorization", "Bearer $socialToken")
