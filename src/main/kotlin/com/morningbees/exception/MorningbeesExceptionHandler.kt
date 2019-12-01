@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.time.LocalDateTime
@@ -20,7 +19,7 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
         MDC.put("logEventCode", exception.logEventCode)
         MDC.put("backTrace", exception.stackTrace[0].toString())
         log.error(exception.message)
-        val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), exception.message, exception.code)
+        val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), exception.code.message, exception.code.status)
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
     }
 
@@ -30,7 +29,7 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
         MDC.put("logEventCode", exception.logEventCode)
         MDC.put("backTrace", exception.stackTrace[0].toString())
         log.error(exception.message)
-        val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), exception.message, exception.code)
+        val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), exception.code.message, exception.code.status)
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
     }
 
@@ -40,7 +39,7 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
         MDC.put("logEventCode", exception.logEventCode)
         MDC.put("backTrace", exception.stackTrace[0].toString())
         log.error(exception.message)
-        val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.message, exception.code)
+        val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.code.message, exception.code.status)
         return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
@@ -50,7 +49,7 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
         MDC.put("logEventCode", exception.logEventCode)
         MDC.put("backTrace", exception.stackTrace[0].toString())
         log.error(exception.message)
-        val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), exception.message, exception.code)
+        val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), exception.code.message, exception.code.status)
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
 
@@ -60,7 +59,7 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
         MDC.put("logEventCode", exception.logEventCode)
         MDC.put("backTrace", exception.stackTrace[0].toString())
         log.error(exception.message)
-        val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(), exception.message, exception.code)
+        val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(), exception.code.message, exception.code.status)
         return ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED)
     }
 }
