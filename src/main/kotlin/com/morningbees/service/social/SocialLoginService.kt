@@ -10,6 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder
 import java.net.HttpURLConnection
 import java.net.URL
 import org.springframework.util.LinkedMultiValueMap
+import org.springframework.web.client.HttpClientErrorException
 import java.net.URI
 
 @Service
@@ -37,7 +38,10 @@ open class SocialLoginService() {
             val response = objectMapper.readTree(result.body)
 
             return response
-        } catch (e: Exception) {
+        } catch (e: HttpClientErrorException) {
+            throw BadRequestException("invalid social access token", 202, "EVENT_CODE")
+        }
+        catch (e: Exception) {
             throw BadRequestException(e.message!!, 202, "EVENT_CODE")
         }
     }

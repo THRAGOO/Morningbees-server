@@ -23,7 +23,7 @@ class AuthService {
     @Autowired
     lateinit var refreshTokenService: RefreshTokenService
 
-    fun getAuthTokens(user: User?): HashMap<String, String> {
+    fun getAuthTokens(user: User?): HashMap<String, Any> {
         if ( user == null ) {
             throw BadRequestException("user is nil", 101, "")
         }
@@ -31,7 +31,7 @@ class AuthService {
         val accessToken: String = accessTokenService.generate(user)
         val refreshToken: String = refreshTokenService.generate(user)
 
-        val tokenStore = HashMap<String, String>()
+        val tokenStore = HashMap<String, Any>()
         tokenStore.put("accessToken", accessToken)
         tokenStore.put("refreshToken", refreshToken)
 
