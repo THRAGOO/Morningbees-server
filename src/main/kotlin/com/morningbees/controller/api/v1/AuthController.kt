@@ -4,8 +4,7 @@ import com.morningbees.exception.BadRequestException
 import com.morningbees.model.User
 import com.morningbees.service.AuthService
 import com.morningbees.service.UserService
-import com.morningbees.service.social.GoogleLoginService
-import com.morningbees.service.social.NaverLoginService
+import com.morningbees.service.social.SocialLoginFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
@@ -22,10 +21,7 @@ class AuthController {
     lateinit var userService: UserService
 
     @Autowired
-    lateinit var naverLoginService: NaverLoginService
-
-    @Autowired
-    lateinit var googleLoginService: GoogleLoginService
+    lateinit var socialLoginFactory: SocialLoginFactory
 
     @ResponseBody
     @PostMapping("/sign_up")
@@ -33,13 +29,7 @@ class AuthController {
                @RequestParam(value = "provider", required = true) provider: String,
                @RequestParam(value = "nickname", required = true) nickname: String): ResponseEntity<HashMap<String, String>> {
         try {
-            var email: String =  ""
-
-            if ( provider == "naver") {
-                email = naverLoginService.getEmailByToken(socialAccessToken)
-            } else if (provider == "google") {
-                email = googleLoginService.getEmailByToken(socialAccessToken)
-            }
+            val email: String =  socialLoginFactory.createFromProvider(provider).getEmailByToken(socialAccessToken)
 
             val user: User = userService.signUpWithProvider(email, nickname, provider)
 
