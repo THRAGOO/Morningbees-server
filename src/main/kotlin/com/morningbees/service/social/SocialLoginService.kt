@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
+import com.morningbees.util.LogEvent
 import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.util.UriComponentsBuilder
-import java.net.HttpURLConnection
-import java.net.URL
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.HttpClientErrorException
 import java.net.URI
@@ -38,27 +36,10 @@ open class SocialLoginService() {
 
             return response
         } catch (e: HttpClientErrorException) {
-            throw BadRequestException("invalid social access token", ErrorCode.InvalidSocialToken, "EVENT_CODE")
+            throw BadRequestException("invalid social access token", ErrorCode.InvalidSocialToken, LogEvent.SocialLoginServiceProcessError.code)
         }
         catch (e: Exception) {
-            throw BadRequestException(e.message!!, ErrorCode.BadRequest, "EVENT_CODE")
+            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.SocialLoginServiceProcessError.code)
         }
-    }
-
-    fun isValidToken(socialToken: String): Boolean {
-        try {
-            val url = URL(socialLoginUrl)
-            val connection = url.openConnection() as HttpURLConnection
-            connection.requestMethod = "GET"
-            connection.setRequestProperty("Authorization", "Bearer $socialToken")
-
-            if (connection.responseCode != HttpStatus.OK.value()) {
-                return false
-            }
-        } catch (e: Exception) {
-            return false
-        }
-
-        return true
     }
 }

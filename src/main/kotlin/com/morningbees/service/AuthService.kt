@@ -1,16 +1,11 @@
 package com.morningbees.service
 
-import com.morningbees.controller.ErrorController
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
 import com.morningbees.model.User
-import com.morningbees.model.UserProvider
-import com.morningbees.repository.UserProviderRepository
-import com.morningbees.repository.UserRepository
-import com.morningbees.service.social.NaverLoginService
 import com.morningbees.service.token.AccessTokenService
 import com.morningbees.service.token.RefreshTokenService
-import com.sun.istack.NotNull
+import com.morningbees.util.LogEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -26,7 +21,7 @@ class AuthService {
 
     fun getAuthTokens(user: User?): HashMap<String, Any> {
         if ( user == null ) {
-            throw BadRequestException("user is nil", ErrorCode.BadRequest, "")
+            throw BadRequestException("user is nil", ErrorCode.BadRequest, LogEvent.AuthServiceProcessError.code)
         }
 
         val accessToken: String = accessTokenService.generate(user)

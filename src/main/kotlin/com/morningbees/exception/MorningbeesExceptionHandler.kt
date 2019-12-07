@@ -1,6 +1,6 @@
 package com.morningbees.exception
 
-import org.slf4j.MDC
+import net.logstash.logback.argument.StructuredArguments.kv
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -16,9 +16,7 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(NotFoundException::class)
     fun NotFoundException(ex :NotFoundException, request: WebRequest): ResponseEntity<ErrorResponse> {
         val exception = (ex as MorningbeesException)
-        MDC.put("logEventCode", exception.logEventCode)
-        MDC.put("backTrace", exception.stackTrace[0].toString())
-        log.error(exception.message)
+        log.error(exception.message, kv("eventCode", exception.logEventCode), kv("backTrace", exception.stackTrace[0].toString()))
         val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), exception.code.message, exception.code.status)
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
     }
@@ -26,9 +24,7 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(InvalidParameterException::class)
     fun InvalidParameterException(ex :InvalidParameterException, request: WebRequest): ResponseEntity<ErrorResponse> {
         val exception = (ex as MorningbeesException)
-        MDC.put("logEventCode", exception.logEventCode)
-        MDC.put("backTrace", exception.stackTrace[0].toString())
-        log.error(exception.message)
+        log.error(exception.message, kv("eventCode", exception.logEventCode), kv("backTrace", exception.stackTrace[0].toString()))
         val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), exception.code.message, exception.code.status)
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
     }
@@ -36,9 +32,7 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(InternalException::class)
     fun InternalException(ex :InternalException, request: WebRequest): ResponseEntity<ErrorResponse> {
         val exception = (ex as MorningbeesException)
-        MDC.put("logEventCode", exception.logEventCode)
-        MDC.put("backTrace", exception.stackTrace[0].toString())
-        log.error(exception.message)
+        log.error(exception.message, kv("eventCode", exception.logEventCode), kv("backTrace", exception.stackTrace[0].toString()))
         val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.code.message, exception.code.status)
         return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -46,9 +40,7 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(BadRequestException::class)
     fun BadRequestException(ex :BadRequestException, request: WebRequest): ResponseEntity<ErrorResponse> {
         val exception = (ex as MorningbeesException)
-        MDC.put("logEventCode", exception.logEventCode)
-        MDC.put("backTrace", exception.stackTrace[0].toString())
-        log.error(exception.message)
+        log.error(exception.message, kv("eventCode", exception.logEventCode), kv("backTrace", exception.stackTrace[0].toString()))
         val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), exception.code.message, exception.code.status)
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
@@ -56,9 +48,7 @@ class MorningbeesExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(UnAuthorizeException::class)
     fun UnAuthorizeException(ex :UnAuthorizeException, request: WebRequest): ResponseEntity<ErrorResponse> {
         val exception = (ex as MorningbeesException)
-        MDC.put("logEventCode", exception.logEventCode)
-        MDC.put("backTrace", exception.stackTrace[0].toString())
-        log.error(exception.message)
+        log.error(exception.message, kv("eventCode", exception.logEventCode), kv("backTrace", exception.stackTrace[0].toString()))
         val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(), exception.code.message, exception.code.status)
         return ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED)
     }
