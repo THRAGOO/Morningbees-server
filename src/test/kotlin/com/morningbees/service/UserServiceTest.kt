@@ -47,6 +47,6 @@ internal class UserServiceTest : SpringMockMvcTestSupport() {
         userRepository.save(User("test3"))
         val thrown = assertThrows(BadRequestException::class.java) { userService.signUpWithProvider("test3@naver.com", "test3", "naver") }
 
-        assertEquals(thrown.message, "alreay exists nikcname")
+        assertEquals(thrown.message, "alreay exists nickname")
     }
 }
