@@ -8,8 +8,15 @@ data class UserProvider(
         @OneToOne
         @JoinColumn(name = "user_id")
         val user: User,
+
         @Column
         val provider: String,
+
         @Column
         val email: String
-) : BaseEntity()
+) : BaseEntity() {
+        enum class Provider(val provider: String) {
+                Google("google"),
+                Naver("naver")
+        }
+}

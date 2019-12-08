@@ -1,4 +1,4 @@
-create table users(
+create table users (
     id bigint unsigned not null auto_increment primary key,
     nickname varchar(255),
     status int(1),
