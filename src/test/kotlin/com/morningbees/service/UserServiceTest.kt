@@ -7,6 +7,7 @@ import com.morningbees.model.User
 import com.morningbees.model.UserProvider
 import com.morningbees.repository.UserProviderRepository
 import com.morningbees.repository.UserRepository
+import org.flywaydb.test.annotation.FlywayTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -24,6 +25,7 @@ internal class UserServiceTest : SpringMockMvcTestSupport() {
     lateinit var userProviderRepository: UserProviderRepository
 
     @Test
+    @FlywayTest
     @DisplayName("유저 생성이 성공하다.")
     fun successSignUpWithProvider() {
         val user: User = userService.signUpWithProvider("test1@naver.com", "test1", "naver")
@@ -32,6 +34,7 @@ internal class UserServiceTest : SpringMockMvcTestSupport() {
     }
 
     @Test
+    @FlywayTest
     @DisplayName("같은 소셜 계정으로 이미 가입된 유저가 있을 때 에러가 리턴된다.")
     fun failBeacuseAlreadyExistsEmail() {
         val user: User = userRepository.save(User("test2"))
@@ -42,6 +45,7 @@ internal class UserServiceTest : SpringMockMvcTestSupport() {
     }
 
     @Test
+    @FlywayTest
     @DisplayName("같은 닉네임으로 이미 가입된 유저가 있을 때 에러가 리턴된다.")
     fun failBeacuseAlreadyExistsNickname() {
         userRepository.save(User("test3"))
