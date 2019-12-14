@@ -3,6 +3,7 @@ package com.morningbees.service.token
 import com.morningbees.config.TokenConfig
 import com.morningbees.exception.ErrorCode
 import com.morningbees.exception.UnAuthorizeException
+import com.morningbees.util.LogEvent
 import io.jsonwebtoken.*
 import org.springframework.context.annotation.Configuration
 import java.util.*
@@ -50,7 +51,7 @@ open class TokenService() {
 
             return body
         } catch (e: JwtException) {
-            throw UnAuthorizeException(e.message.toString(), ErrorCode.InvalidAccessToken, "JWT_PARSE_ERROR")
+            throw UnAuthorizeException(e.message.toString(), ErrorCode.InvalidAccessToken, LogEvent.TokenServiceProcessError.code)
         }
     }
 

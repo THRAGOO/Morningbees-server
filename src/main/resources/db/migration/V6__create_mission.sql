@@ -1,11 +1,13 @@
-create table user_providers (
+create table missions (
     id bigint unsigned not null auto_increment primary key,
     user_id bigint unsigned not null,
-    email varchar(255),
-    provider varchar(255),
+    bee_id bigint unsigned not null,
+    image_url VARCHAR(255),
+    type tinyint,
     created_at datetime not null,
     updated_at datetime not null,
+    FOREIGN KEY(`bee_id`) REFERENCES `bees` (`id`),
     FOREIGN KEY(`user_id`) REFERENCES `users` (`id`),
-    UNIQUE idx_user_id (`user_id`),
-    UNIQUE idx_email_provider_unique (`email`, `provider`)
+    INDEX idx_user_id_bee_id (user_id, bee_id),
+    INDEX idx_cretaed_at (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

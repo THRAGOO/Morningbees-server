@@ -29,24 +29,31 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-mustache")
     implementation("org.springframework.boot:spring-boot-starter-web")
-
-    kapt("org.springframework.boot:spring-boot-configuration-processor")
-
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
+
+    kapt("org.springframework.boot:spring-boot-configuration-processor")
+
+    // Log
     implementation("net.logstash.logback:logstash-logback-encoder:6.2")
     implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
     implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
+
+    // Mysql
     implementation("mysql:mysql-connector-java:5.1.47")
+
+    // JWT
     implementation("io.jsonwebtoken:jjwt:0.9.1")
 
+    // rest API
     implementation("org.apache.httpcomponents:httpclient:4.5")
 
+    // Flyway
     implementation("org.flywaydb:flyway-core")
 
-    runtimeOnly("org.springframework.boot:spring-boot-devtools")
-
+    // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.flywaydb.flyway-test-extensions:flyway-spring5-test:6.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.5.2")

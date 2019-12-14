@@ -7,6 +7,7 @@ import com.morningbees.model.User
 import com.morningbees.service.AuthService
 import com.morningbees.service.UserService
 import com.morningbees.service.social.SocialLoginFactory
+import com.morningbees.util.LogEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
@@ -47,7 +48,7 @@ class AuthController {
         } catch (e: MorningbeesException) {
             throw BadRequestException(e.message!!, e.code, e.logEventCode)
         } catch (e: Exception) {
-            throw BadRequestException(e.message!!, ErrorCode.BadRequest, "")
+            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.SignUpError.code)
         }
     }
 
@@ -60,7 +61,7 @@ class AuthController {
 
             val user: User? = userService.getUserByEmail(email)
 
-            var response: HashMap<String, Any> = HashMap<String, Any>()
+            var response: HashMap<String, Any> = HashMap()
 
             if ( user == null ) {
                 response.put("accessToken", "")
@@ -78,7 +79,7 @@ class AuthController {
         } catch (e: MorningbeesException) {
             throw BadRequestException(e.message!!, e.code, e.logEventCode)
         } catch (e: Exception) {
-            throw BadRequestException(e.message!!, ErrorCode.BadRequest, "")
+            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.SignInError.code)
         }
     }
 
@@ -88,7 +89,7 @@ class AuthController {
         try {
             val result = userService.isExistsNickname(nickname)
 
-            val response: HashMap<String, Any> = HashMap<String, Any>()
+            val response: HashMap<String, Any> = HashMap()
             response.put("isValid", result)
 
             return ResponseEntity.ok()
@@ -97,7 +98,7 @@ class AuthController {
         } catch (e: MorningbeesException) {
             throw BadRequestException(e.message!!, e.code, e.logEventCode)
         } catch (e: Exception) {
-            throw BadRequestException(e.message!!, ErrorCode.BadRequest, "")
+            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.ValidNicknameError.code)
         }
     }
 }
