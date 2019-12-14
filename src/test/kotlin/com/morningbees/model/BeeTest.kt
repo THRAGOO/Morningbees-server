@@ -29,7 +29,7 @@ internal class BeeTest : SpringMockMvcTestSupport() {
         val user = User("test")
         userRepository.save(user)
 
-        val bee = Bee("title", Time(10000), 10000)
+        val bee = Bee("title", "", Time(10000), 10000)
 
         bee.users.add(user)
         beeRepository.save(bee)
@@ -47,7 +47,7 @@ internal class BeeTest : SpringMockMvcTestSupport() {
         val user1 = User("test1")
         userRepository.save(user1)
 
-        val bee = Bee("title", Time(10000), 10000)
+        val bee = Bee("title", "", Time(10000), 10000)
 
         bee.users.add(user)
         beeRepository.save(bee)
@@ -65,7 +65,7 @@ internal class BeeTest : SpringMockMvcTestSupport() {
         val user = User("test")
         userRepository.save(user)
 
-        val bee = Bee("title", Time(10000), 10000)
+        val bee = Bee("title", "", Time(10000), 10000)
 
         bee.users.add(user)
         beeRepository.save(bee)
