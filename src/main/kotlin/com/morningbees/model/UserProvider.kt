@@ -3,7 +3,7 @@ package com.morningbees.model
 import javax.persistence.*
 
 @Entity
-@Table(name = "user_providers")
+@Table(name = "user_providers", uniqueConstraints = arrayOf(UniqueConstraint(name = "idx_email_provider_unique", columnNames = arrayOf("provider", "email"))))
 data class UserProvider(
         @OneToOne
         @JoinColumn(name = "user_id")

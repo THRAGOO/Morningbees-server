@@ -5,27 +5,29 @@ import javax.persistence.*
 @Entity
 @Table(name = "users")
 data class User(
-        @Column
+        @Column(unique = true)
         val nickname: String = "",
 
-        @Column
+        @Column(columnDefinition = "TINYINT")
         val status: Int = UserStatus.Use.status,
 
         @OneToMany(mappedBy = "user", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY)
-        val beePenalties: Set<BeePenalty> = emptySet(),
+        val beePenalties: List<BeePenalty> = emptyList(),
 
         @OneToMany(mappedBy = "user", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY)
-        val comment: Set<Comment> = emptySet(),
+        val comment: List<Comment> = emptyList(),
 
         @OneToMany(mappedBy = "user")
-        val missionVotes: Set<MissionVote> = emptySet(),
+        val missionVotes: List<MissionVote> = emptyList(),
 
-        @ManyToMany
-        @JoinTable(
-        name = "bee_members",
-        joinColumns = arrayOf(JoinColumn(name = "user_id")),
-        inverseJoinColumns = arrayOf(JoinColumn(name = "bee_id")))
-        val bees: Set<Bee> = emptySet()
+        @OneToOne(mappedBy = "user")
+        val provider: UserProvider? = null,
+
+        @OneToOne(mappedBy = "user")
+        val token: UserToken? = null,
+
+        @ManyToMany(mappedBy = "users")
+        val bees: MutableList<Bee> = mutableListOf<Bee>()
 ) : BaseEntity() {
         enum class UserStatus(val status: Int) {
                 Use(1),

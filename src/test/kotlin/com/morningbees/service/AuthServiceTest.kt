@@ -4,6 +4,7 @@ import com.morningbees.SpringMockMvcTestSupport
 import com.morningbees.exception.BadRequestException
 import com.morningbees.model.User
 import com.morningbees.repository.UserRepository
+import org.flywaydb.test.annotation.FlywayTest
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
@@ -18,6 +19,7 @@ internal class AuthServiceTest : SpringMockMvcTestSupport() {
     lateinit var userRepository: UserRepository
 
     @Test
+    @FlywayTest
     @DisplayName("유저 생성이 성공하다.")
     fun successGetAuthTokens() {
         val user = User(nickname =  "Test")
@@ -30,6 +32,7 @@ internal class AuthServiceTest : SpringMockMvcTestSupport() {
     }
 
     @Test
+    @FlywayTest
     @DisplayName("파라미터로 전달 받은 유저가 없을 때 에러가 발생한다.")
     fun failGetAuthTokens() {
         val thrown = assertThrows(BadRequestException::class.java) { authService.getAuthTokens(null) }

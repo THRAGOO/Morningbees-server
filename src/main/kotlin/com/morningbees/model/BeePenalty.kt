@@ -13,10 +13,10 @@ data class BeePenalty (
         @JoinColumn(name = "user_id")
         val user: User,
 
-        @Column
-        val status: Int = BeePenalityStatus.Pending.status
+        @Column(columnDefinition = "TINYINT")
+        val status: Int = BeePenaltyStatus.Pending.status
 ) : BaseEntity() {
-    enum class BeePenalityStatus(val status: Int) {
+    enum class BeePenaltyStatus(val status: Int) {
         Pending(0),
         Pay(1),
         Overdue(2)

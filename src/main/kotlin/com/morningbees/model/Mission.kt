@@ -10,10 +10,10 @@ data class Mission (
         val bee: Bee,
 
         @OneToMany(mappedBy = "mission", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY)
-        val comment: Set<Comment> = emptySet(),
+        val comment: List<Comment> = emptyList(),
 
         @OneToMany(mappedBy = "mission")
-        val missionVotes: Set<MissionVote> = emptySet(),
+        val missionVotes: List<MissionVote> = emptyList(),
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "user_id")
@@ -22,7 +22,7 @@ data class Mission (
         @Column
         val imageUrl: String = "",
 
-        @Column
+        @Column(columnDefinition = "TINYINT")
         val type: Int = MissionType.Question.type
 ) : BaseEntity() {
 

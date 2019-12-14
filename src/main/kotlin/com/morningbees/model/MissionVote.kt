@@ -18,7 +18,7 @@ data class MissionVote (
         @JoinColumn(name = "mission_id")
         val mission: Mission,
 
-        @Column
+        @Column(columnDefinition = "TINYINT")
         val type: Int = VoteType.Yes.type
 ) {
     enum class VoteType(val type: Int) {

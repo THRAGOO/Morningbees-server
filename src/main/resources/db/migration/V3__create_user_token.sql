@@ -3,7 +3,8 @@ create table user_tokens (
     user_id bigint unsigned not null,
     fcm_token varchar(255),
     refresh_token varchar(255),
-    created_at datetime,
-    updated_at datetime,
-    FOREIGN KEY(`user_id`) REFERENCES `users` (`id`)
+    created_at datetime not null,
+    updated_at datetime not null,
+    FOREIGN KEY(`user_id`) REFERENCES `users` (`id`),
+    UNIQUE idx_user_id (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
