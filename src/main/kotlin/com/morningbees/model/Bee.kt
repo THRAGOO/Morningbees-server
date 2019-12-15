@@ -1,11 +1,16 @@
 package com.morningbees.model
 
+import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.fasterxml.jackson.annotation.JsonManagedReference
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import java.sql.Time
 import javax.persistence.*
 
 @Entity
 @Table(name = "bees")
-data class Bee (
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator::class, property = "id")
+data class Bee(
         @Column
         val title: String,
 
@@ -16,23 +21,23 @@ data class Bee (
         val time: Time,
 
         @Column
-        val pay: Int,
-
+        val pay: Int
+) : BaseEntity() {
         @OneToMany(mappedBy = "bee", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY)
-        val beePenalties: MutableList<BeePenalty> = mutableListOf<BeePenalty>(),
+        val beePenalties: MutableList<BeePenalty> = mutableListOf<BeePenalty>()
 
-        @ManyToMany
-        @JoinTable(
-        name = "bee_members",
-        joinColumns = arrayOf(JoinColumn(name = "bee_id")),
-        inverseJoinColumns = arrayOf(JoinColumn(name = "user_id")))
-        val users: MutableList<User> = mutableListOf<User>()
-) : BaseEntity()
-//{
-//        @OneToMany(mappedBy = "bee", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY, targetEntity = BeePenalty::class)
-//        private val _beePenalties = mutableListOf<BeePenalty>()
-//
-//        val beePenalties = _beePenalties.toList()
-//
-//        fun addBeePenalty(beePenalty: BeePenalty) = this._beePenalties.add(beePenalty)
-//}
+        @OneToMany(mappedBy = "bee", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.EAGER)
+        @JsonManagedReference
+        val users: MutableSet<BeeMember> = mutableSetOf<BeeMember>()
+
+        fun addUser(newUser: User) {
+                val beeMember = BeeMember(newUser, this)
+                this.users.add(beeMember)
+                newUser.bees.add(beeMember)
+        }
+        fun removeUser(user: User) {
+                val beeMember = BeeMember(user, this)
+                this.users.remove(beeMember)
+                user.bees.remove(beeMember)
+        }
+}

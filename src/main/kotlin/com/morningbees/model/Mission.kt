@@ -1,19 +1,22 @@
 package com.morningbees.model
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import javax.persistence.*
 
 @Entity
 @Table(name = "missions")
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator::class, property = "id")
 data class Mission (
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "bee_id")
         val bee: Bee,
 
         @OneToMany(mappedBy = "mission", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY)
-        val comment: List<Comment> = emptyList(),
+        val comment: MutableList<Comment> = mutableListOf<Comment>(),
 
-        @OneToMany(mappedBy = "mission")
-        val missionVotes: List<MissionVote> = emptyList(),
+        @OneToMany(mappedBy = "mission", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.EAGER)
+        val missionVotes: MutableSet<MissionVote> = mutableSetOf<MissionVote>(),
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "user_id")
