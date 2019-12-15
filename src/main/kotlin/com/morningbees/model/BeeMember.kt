@@ -8,7 +8,6 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "bee_members")
-@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator::class, property = "id")
 data class BeeMember (
         @EmbeddedId
         private val id: BeeMemberKey?,

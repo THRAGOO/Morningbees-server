@@ -6,7 +6,6 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "missions")
-@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator::class, property = "id")
 data class Mission (
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "bee_id")

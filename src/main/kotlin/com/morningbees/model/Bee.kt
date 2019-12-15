@@ -9,7 +9,6 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "bees")
-@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator::class, property = "id")
 data class Bee(
         @Column
         val title: String,

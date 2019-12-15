@@ -9,7 +9,6 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "users")
-@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator::class, property = "id")
 data class User(
         @Column(unique = true)
         val nickname: String = "",

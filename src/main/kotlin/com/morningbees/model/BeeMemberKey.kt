@@ -7,8 +7,8 @@ import javax.persistence.Embeddable
 @Embeddable
 data class BeeMemberKey (
         @Column(name = "bee_id")
-        private val beeId: Long = 0,
+        private val beeId: Long? = 0,
 
         @Column(name = "user_id")
-        private val userId: Long = 0
+        private val userId: Long? = 0
 ) : Serializable

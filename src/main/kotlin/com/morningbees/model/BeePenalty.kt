@@ -7,7 +7,6 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "bee_penalties")
-@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator::class, property = "id")
 data class BeePenalty (
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "bee_id")
