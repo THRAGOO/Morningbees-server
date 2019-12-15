@@ -6,6 +6,7 @@ import com.morningbees.exception.MorningbeesException
 import com.morningbees.model.User
 import com.morningbees.service.AuthService
 import com.morningbees.service.UserService
+import com.morningbees.service.UserTokenService
 import com.morningbees.service.social.SocialLoginFactory
 import com.morningbees.util.LogEvent
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,6 +29,9 @@ class AuthController {
     lateinit var userService: UserService
 
     @Autowired
+    lateinit var userTokenService: UserTokenService
+
+    @Autowired
     lateinit var socialLoginFactory: SocialLoginFactory
 
     @ResponseBody
@@ -41,6 +45,8 @@ class AuthController {
             val user: User = userService.signUpWithProvider(email, nickname, provider)
 
             val response: HashMap<String, Any> = authService.getAuthTokens(user)
+
+            userTokenService.createUserToken(user, null, response["refreshToken"].toString())
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, "application/json")
@@ -70,6 +76,8 @@ class AuthController {
             } else {
                 response = authService.getAuthTokens(user)
                 response.put("type", SIGN_IN_TYPE)
+
+                userTokenService.createUserToken(user, null, response["refreshToken"].toString())
             }
 
             return ResponseEntity.ok()

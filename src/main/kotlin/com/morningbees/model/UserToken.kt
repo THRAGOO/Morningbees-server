@@ -10,8 +10,8 @@ data class UserToken (
         val user: User,
 
         @Column
-        val fcmToken: String,
+        var fcmToken: String?,
 
         @Column
-        val refreshToken: String
+        var refreshToken: String?
 ) : BaseEntity()
