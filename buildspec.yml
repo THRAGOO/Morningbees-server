@@ -13,7 +13,9 @@ phases:
     commands:
       - echo $(basename ./build/libs/*.jar)
       - pwd
-
+artifacts:
+  files:
+    - build/libs/*.jar
 cache:
   paths:
     - '/root/.gradle/caches/**/*'
