@@ -1,10 +1,23 @@
 package com.morningbees.service.social
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.morningbees.exception.BadRequestException
+import com.morningbees.exception.ErrorCode
+import com.morningbees.util.LogEvent
+import org.apache.commons.codec.binary.Base64
+
 class GoogleLoginService : SocialLoginService() {
 
-    override val socialLoginUrl: String = "https://www.googleapis.com/oauth2/v1/tokeninfo"
-
     override fun getEmailByToken(socialToken: String): String {
-        return this.getResponseByUrl(socialToken)["email"].textValue()
+        val notDecodePayload: String = socialToken.split(".")[1]
+
+        val decodedPayload: String = String(Base64.decodeBase64(notDecodePayload), Charsets.UTF_8)
+
+        val mapper = ObjectMapper()
+        val payload = mapper.readTree(decodedPayload)
+
+        if( payload["exp"].intValue() < System.currentTimeMillis()/1000 ) throw BadRequestException("google token expire", ErrorCode.InvalidAccessToken, LogEvent.SocialLoginServiceProcessError.code)
+
+        return payload ["email"].textValue()
     }
 }
