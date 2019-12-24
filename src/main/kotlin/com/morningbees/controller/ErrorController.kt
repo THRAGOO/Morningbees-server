@@ -1,13 +1,9 @@
 package com.morningbees.controller
 
 import com.morningbees.exception.ErrorResponse
-import com.morningbees.exception.MorningbeesException
-import com.morningbees.exception.MorningbeesExceptionHandler
-import org.slf4j.MDC
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MissingServletRequestParameterException
-import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
