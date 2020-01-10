@@ -4,9 +4,6 @@ phases:
   install:
     runtime-versions:
       java: openjdk8
-  pre_build:
-    commands:
-      - ./gradlew -Dflyway.configFiles=./src/main/resources/database-production.conf flywayMigrate
   build:
     commands:
       - echo Build Starting on `date`
