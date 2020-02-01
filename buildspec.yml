@@ -4,21 +4,28 @@ phases:
   install:
     runtime-versions:
       java: openjdk8
+      docker: 18
   pre_build:
     commands:
-      - ./gradlew -Dflyway.configFiles=./src/main/resources/database-production.conf flywayMigrate
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
   build:
     commands:
       - echo Build Starting on `date`
+      - echo Building the Docker image...
       - chmod +x ./gradlew
       - ./gradlew bootJar
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
   post_build:
     commands:
-      - echo $(basename ./build/libs/*.jar)
-      - pwd
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - printf '[{"name":"mb-api-app","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG > imagedefinitions.json
 artifacts:
   files:
-    - build/libs/*.jar
+    - imagedefinitions.json 
 cache:
   paths:
     - '/root/.gradle/caches/**/*'
