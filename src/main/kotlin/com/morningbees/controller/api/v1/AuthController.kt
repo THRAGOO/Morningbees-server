@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.lang.Exception
+import org.slf4j.LoggerFactory
 
 @RestController
 @RequestMapping("/api/auth")
@@ -21,6 +22,7 @@ class AuthController {
 
     private val SIGN_UP_TYPE = 0
     private val SIGN_IN_TYPE = 1
+    private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
     @Autowired
     lateinit var authService: AuthService
@@ -62,6 +64,8 @@ class AuthController {
     @PostMapping("/sign_in")
     fun signIp(@RequestParam(value = "socialAccessToken", required = true) socialAccessToken: String,
                @RequestParam(value = "provider", required = true) provider: String): ResponseEntity<HashMap<String, Any>> {
+        logger.info(socialAccessToken);
+        logger.info(provider);
         try {
             val email: String =  socialLoginFactory.createFromProvider(provider).getEmailByToken(socialAccessToken)
 
