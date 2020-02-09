@@ -62,8 +62,8 @@ class AuthController {
 
     @ResponseBody
     @PostMapping("/sign_in")
-    fun signIp(@RequestParam(value = "socialAccessToken", required = true) socialAccessToken: String,
-               @RequestParam(value = "provider", required = true) provider: String): ResponseEntity<HashMap<String, Any>> {
+    fun signIp(@RequestBody(value = "socialAccessToken", required = true) socialAccessToken: String,
+               @RequestBody(value = "provider", required = true) provider: String): ResponseEntity<HashMap<String, Any>> {
         logger.info(socialAccessToken);
         logger.info(provider);
         try {
