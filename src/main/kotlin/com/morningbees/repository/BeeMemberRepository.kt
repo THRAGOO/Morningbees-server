@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional
 
 interface BeeMemberRepository : CrudRepository<BeeMember, Long> {
 
+    fun addByBeeAndUser(bee: Bee, user: User)
+
     @Transactional
     fun deleteByBeeAndUser(bee: Bee, user: User): Long
 }

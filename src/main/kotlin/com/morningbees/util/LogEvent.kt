@@ -21,4 +21,6 @@ enum class LogEvent(val code: String) {
     // AuthService Process
     AuthServiceProcessError("ASE001"),
 
+    //BeeController Process
+    CreateBeeError("CBE001"),
 }

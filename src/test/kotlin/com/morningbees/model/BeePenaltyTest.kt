@@ -30,7 +30,7 @@ internal open class BeePenaltyTest : SpringMockMvcTestSupport() {
         val user = User("test")
         userRepository.save(user)
 
-        val bee = Bee("title", "", Time(10000), 10000)
+        val bee = Bee("title", "", "10000", 10000)
         beeRepository.save(bee)
     }
 
