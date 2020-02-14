@@ -1,5 +1,7 @@
 package com.morningbees.controller.api.v1
 
+import com.morningbees.dto.SignInDto
+import com.morningbees.dto.SignUpDto
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
 import com.morningbees.exception.MorningbeesException
@@ -15,6 +17,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.lang.Exception
 import org.slf4j.LoggerFactory
+import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.validation.Errors
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/auth")
@@ -38,9 +43,11 @@ class AuthController {
 
     @ResponseBody
     @PostMapping("/sign_up")
-    fun signUp(@RequestParam(value = "socialAccessToken", required = true) socialAccessToken: String,
-               @RequestParam(value = "provider", required = true) provider: String,
-               @RequestParam(value = "nickname", required = true) nickname: String): ResponseEntity<HashMap<String, Any>> {
+    fun signUp(@RequestBody @Valid signUpDto: SignUpDto, errors: Errors): ResponseEntity<HashMap<String, Any>> {
+        val socialAccessToken: String = signUpDto.socialAccessToken
+        val provider: String = signUpDto.provider
+        val nickname: String = signUpDto.nickname
+
         try {
             val email: String =  socialLoginFactory.createFromProvider(provider).getEmailByToken(socialAccessToken)
 
@@ -62,11 +69,11 @@ class AuthController {
 
     @ResponseBody
     @PostMapping("/sign_in")
-    fun signIp(@RequestBody(value = "socialAccessToken", required = true) socialAccessToken: String,
-               @RequestBody(value = "provider", required = true) provider: String): ResponseEntity<HashMap<String, Any>> {
-        logger.info(socialAccessToken);
-        logger.info(provider);
+    fun signIn(@RequestBody @Valid signInDto: SignInDto): ResponseEntity<HashMap<String, Any>> {
         try {
+            val socialAccessToken: String = signInDto.socialAccessToken
+            val provider: String = signInDto.provider
+
             val email: String =  socialLoginFactory.createFromProvider(provider).getEmailByToken(socialAccessToken)
 
             val user: User? = userService.getUserByEmail(email)
@@ -87,7 +94,6 @@ class AuthController {
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, "application/json")
                     .body(response)
-
         } catch (e: MorningbeesException) {
             throw BadRequestException(e.message!!, e.code, e.logEventCode)
         } catch (e: Exception) {

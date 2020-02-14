@@ -11,9 +11,6 @@ class HomeController {
 
     @GetMapping("/hello")
     fun hello(request: HttpServletRequest): String {
-//        (request.getAttribute("User") as User).nickname
-        logger.info("Hello, World!");
-
         return "Hello"
     }
 }
