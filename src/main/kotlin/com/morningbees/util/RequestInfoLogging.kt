@@ -1,6 +1,7 @@
 package com.morningbees.util
 
 import java.util.HashMap
+import java.util.stream.Collectors
 import javax.servlet.http.HttpServletRequest
 
 class RequestInfoLogging {
@@ -18,6 +19,12 @@ class RequestInfoLogging {
         request.parameterMap.forEach {
             k,v ->
                 requestParameters[k] = v.first()
+        }
+        if ( request.getAttribute("requestBody") != null ) {
+            (request.getAttribute("requestBody") as HashMap<String, Any>).forEach {
+                k,v ->
+                requestParameters[k] = v
+            }
         }
 
         // request header
