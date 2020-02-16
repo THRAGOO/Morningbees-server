@@ -8,12 +8,12 @@ spring:
   profiles: development
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://0.0.0.0:3307/morningbees?useSSL=false
+    url: jdbc:mysql://localhost:3306/morningbees?useSSL=false
     username: root
-    password: mysql
+    password: 1234
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     generate-ddl: false
     database: mysql
     show-sql: true

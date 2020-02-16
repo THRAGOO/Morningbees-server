@@ -1,1 +1,1 @@
-alter table bee_members add type tinyint null;
+alter table `bee_members` add `type` tinyint null;
