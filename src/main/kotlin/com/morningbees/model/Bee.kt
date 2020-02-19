@@ -26,13 +26,13 @@ data class Bee(
         @JsonManagedReference
         val users: MutableSet<BeeMember> = mutableSetOf<BeeMember>()
 
-        fun addUser(newUser: User) {
-                val beeMember = BeeMember(newUser, this)
+        fun addUser(newUser: User, memberType: Int) {
+                val beeMember = BeeMember(newUser, this, memberType)
                 this.users.add(beeMember)
                 newUser.bees.add(beeMember)
         }
-        fun removeUser(user: User) {
-                val beeMember = BeeMember(user, this)
+        fun removeUser(user: User, memberType: Int) {
+                val beeMember = BeeMember(user, this, memberType)
                 this.users.remove(beeMember)
                 user.bees.remove(beeMember)
         }
