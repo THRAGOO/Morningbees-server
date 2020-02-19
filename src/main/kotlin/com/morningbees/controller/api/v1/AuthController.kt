@@ -17,8 +17,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.lang.Exception
 import org.slf4j.LoggerFactory
-import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.validation.Errors
+import javax.servlet.http.HttpServletRequest
 import javax.validation.Valid
 
 @RestController
@@ -55,7 +55,7 @@ class AuthController {
 
             val response: HashMap<String, Any> = authService.getAuthTokens(user)
 
-            userTokenService.createUserToken(user, null, response["refreshToken"].toString())
+            userTokenService.saveUserToken(user, null, response["refreshToken"].toString())
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, "application/json")
@@ -88,7 +88,7 @@ class AuthController {
                 response = authService.getAuthTokens(user)
                 response.put("type", SIGN_IN_TYPE)
 
-                userTokenService.createUserToken(user, null, response["refreshToken"].toString())
+                userTokenService.saveUserToken(user, null, response["refreshToken"].toString())
             }
 
             return ResponseEntity.ok()
@@ -117,6 +117,43 @@ class AuthController {
             throw BadRequestException(e.message!!, e.code, e.logEventCode)
         } catch (e: Exception) {
             throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.ValidNicknameError.code)
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/renewal")
+    fun renewal(request: HttpServletRequest): ResponseEntity<HashMap<String, Any>> {
+        try {
+            val user: User = request.getAttribute("user") as User
+            val tokenInfos= authService.getAuthTokens(user)
+            val response: HashMap<String, Any> = HashMap()
+            response.put("accessToken", tokenInfos["accessToken"].toString())
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                    .body(response)
+        } catch (e: MorningbeesException) {
+            throw BadRequestException(e.message!!, e.code, e.logEventCode)
+        } catch (e: Exception) {
+            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.RenewalError.code)
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/me")
+    fun me(request: HttpServletRequest): ResponseEntity<HashMap<String, Any>> {
+        try {
+            val user: User = request.getAttribute("user") as User
+
+            val response = userService.me(user)
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                    .body(response)
+        } catch (e: MorningbeesException) {
+            throw BadRequestException(e.message!!, e.code, e.logEventCode)
+        } catch (e: Exception) {
+            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.MeError.code)
         }
     }
 }

@@ -37,10 +37,27 @@ class UserService {
         return user
     }
 
+    fun me(user: User): HashMap<String, Any> {
+        val result: HashMap<String, Any> = HashMap()
+        val alreadyJoin = user.bees.size > 0
+
+        result.put("nickname", user.nickname)
+        result.put("alreadyJoin", alreadyJoin)
+
+        return result
+    }
+
+
     fun getUserByEmail(@NotNull email: String): User? {
         val userProvider: UserProvider? = userProviderRepository.findByEmail(email)
 
         return userProvider?.user
+    }
+
+    fun getUserById(@NotNull id: Long): User {
+        val user: User = userRepository.getById(id)
+
+        return user
     }
 
     fun isExistsNickname(nickname: String): Boolean {

@@ -1,21 +1,29 @@
 package com.morningbees.filter
 
+import com.morningbees.exception.ErrorCode
 import com.morningbees.exception.UnAuthorizeException
 import com.morningbees.model.User
-import com.morningbees.service.token.AccessTokenService
+import com.morningbees.service.UserService
+import com.morningbees.service.token.RefreshTokenService
+import com.morningbees.util.LogEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
+import org.springframework.stereotype.Component
 import javax.servlet.*
 import javax.servlet.annotation.WebFilter
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-@WebFilter(urlPatterns= ["/api/v1/*"])
-@Order(2)
-class JWTAuthenticationFilter : Filter {
+//@Component
+@WebFilter(urlPatterns= ["/api/auth/renewal"])
+@Order(3)
+class RefreshTokenValidationFilter : Filter {
     @Autowired
-    lateinit var accessTokenService: AccessTokenService
+    lateinit var refreshTokenService: RefreshTokenService
+
+    @Autowired
+    lateinit var userService: UserService
 
     override fun init(filterConfig: FilterConfig?) {
         super.init(filterConfig)
@@ -30,11 +38,16 @@ class JWTAuthenticationFilter : Filter {
         val res:HttpServletResponse = response as HttpServletResponse
 
         try {
-            val accessToken: String = req.getHeader("X-BEES-ACCESS-TOKEN")
+            val refreshToken: String = req.getHeader("X-BEES-REFRESH-TOKEN")
 
-            val tokenBody = accessTokenService.decodeAndGetInfos(accessToken)
+            val tokenBody = refreshTokenService.decodeAndGetInfos(refreshToken)
+            val user: User = userService.getUserById(tokenBody.userId)
             req.setAttribute("claims", tokenBody)
-            req.setAttribute("User", User(tokenBody.nickname))
+            req.setAttribute("user", user)
+
+            if (user.token!!.refreshToken != refreshToken) {
+                throw UnAuthorizeException("not valid refresh token", ErrorCode.InvalidAccessToken, LogEvent.TokenServiceProcessError.code)
+            }
 
             chain?.doFilter(request, response)
         } catch(e: UnAuthorizeException) {

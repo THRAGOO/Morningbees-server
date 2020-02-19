@@ -5,6 +5,8 @@ enum class LogEvent(val code: String) {
     SignUpError("SUE001"),
     SignInError("SIE001"),
     ValidNicknameError("VNE001"),
+    RenewalError("RE001"),
+    MeError("ME001"),
 
     // UserService Process
     UserServiceProcessError("USPE001"),

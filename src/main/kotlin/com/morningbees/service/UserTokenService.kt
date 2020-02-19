@@ -12,7 +12,7 @@ class UserTokenService {
     @Autowired
     lateinit var userTokenRepository: UserTokenRepository
 
-    fun createUserToken(user: User, fcmToken: String?, refreshToken: String?) {
+    fun saveUserToken(user: User, fcmToken: String?, refreshToken: String?) {
         var userToken = userTokenRepository.findByUser(user)
         if (userToken == null ) {
             userToken = UserToken(user, fcmToken, refreshToken)
