@@ -37,7 +37,7 @@ internal class UserTokenServiceTest : SpringMockMvcTestSupport() {
 
         assertNull(userTokenRepository.findByUser(user))
 
-        userTokenService.createUserToken(user, "fcmToken", "refreshToken")
+        userTokenService.saveUserToken(user, "fcmToken", "refreshToken")
 
         assertNotNull(userTokenRepository.findByUser(user))
     }
@@ -47,10 +47,10 @@ internal class UserTokenServiceTest : SpringMockMvcTestSupport() {
     @FlywayTest
     fun successUpdateUserToken() {
         val user = userRepository.findById(1).get()
-        userTokenService.createUserToken(user, "fcmToken", "beforeRefreshToken")
+        userTokenService.saveUserToken(user, "fcmToken", "beforeRefreshToken")
         assertEquals("beforeRefreshToken", userTokenRepository.findByUser(user)?.refreshToken)
 
-        userTokenService.createUserToken(user, "fcmToken", "afterRefreshToken")
+        userTokenService.saveUserToken(user, "fcmToken", "afterRefreshToken")
         assertEquals("afterRefreshToken", userTokenRepository.findByUser(user)?.refreshToken)
     }
 
@@ -59,10 +59,10 @@ internal class UserTokenServiceTest : SpringMockMvcTestSupport() {
     @FlywayTest
     fun successNotUpdateIsNull() {
         val user = userRepository.findById(1).get()
-        userTokenService.createUserToken(user, "beforeFcmToken", "RefreshToken")
+        userTokenService.saveUserToken(user, "beforeFcmToken", "RefreshToken")
         assertEquals("RefreshToken", userTokenRepository.findByUser(user)?.refreshToken)
 
-        userTokenService.createUserToken(user, "afterFcmToken", null)
+        userTokenService.saveUserToken(user, "afterFcmToken", null)
         assertEquals("RefreshToken", userTokenRepository.findByUser(user)?.refreshToken)
         assertEquals("afterFcmToken", userTokenRepository.findByUser(user)?.fcmToken)
     }

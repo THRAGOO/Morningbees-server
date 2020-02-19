@@ -24,6 +24,7 @@ data class BeeMember (
         @Column(columnDefinition = "TINYINT")
         val type: Int = MemberType.Member.type
 ) {
+    constructor(user: User, bee: Bee, memberType: Int) : this(BeeMemberKey(bee.id, user.id), user, bee, memberType)
     constructor(user: User, bee: Bee) : this(BeeMemberKey(bee.id, user.id), user, bee)
 
     enum class MemberType(val type: Int) {

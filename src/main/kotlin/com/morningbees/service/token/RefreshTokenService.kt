@@ -9,11 +9,11 @@ import kotlin.collections.HashMap
 @Service
 class RefreshTokenService : TokenService() {
 
-    private val refreshTokenExpireAt = 100001
+    private val refreshTokenExpireAt = 15552000 // 6개월
 
     override fun getExpirationDate(): Long {
         val now = Date()
-        val expiredTime :Int = 1000 * refreshTokenExpireAt
+        val expiredTime :Int = refreshTokenExpireAt
 
         return (now.time/1000) + expiredTime
     }

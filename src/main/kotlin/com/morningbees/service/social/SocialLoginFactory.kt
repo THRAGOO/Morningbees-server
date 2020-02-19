@@ -12,6 +12,7 @@ class SocialLoginFactory {
         when (provider) {
             UserProvider.Provider.Naver.provider-> NaverLoginService()
             UserProvider.Provider.Google.provider -> GoogleLoginService()
+            UserProvider.Provider.Apple.provider -> AppleLoginService()
             else -> throw BadRequestException("unknown provider $provider", ErrorCode.UnknownProvider, LogEvent.SocialLoginFactoryProcessError.code)
         }
 }

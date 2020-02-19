@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service
 class AuthService {
     private val log = org.slf4j.LoggerFactory.getLogger(AuthService::class.java)
 
-
     @Autowired
     lateinit var accessTokenService: AccessTokenService
     @Autowired
