@@ -1,6 +1,11 @@
 package com.morningbees.util
 
 enum class LogEvent(val code: String) {
+    // Global Exception
+    MissingServletRequestParameterException("GBE001"),
+    HttpMessageNotReadableException("GBE002"),
+    GlobalException("GBE003"),
+
     // AuthController Process
     SignUpError("SUE001"),
     SignInError("SIE001"),

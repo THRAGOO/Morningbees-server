@@ -48,29 +48,22 @@ class AuthController {
         val provider: String = signUpDto.provider
         val nickname: String = signUpDto.nickname
 
-        try {
-            val email: String =  socialLoginFactory.createFromProvider(provider).getEmailByToken(socialAccessToken)
+        val email: String =  socialLoginFactory.createFromProvider(provider).getEmailByToken(socialAccessToken)
 
-            val user: User = userService.signUpWithProvider(email, nickname, provider)
+        val user: User = userService.signUpWithProvider(email, nickname, provider)
 
-            val response: HashMap<String, Any> = authService.getAuthTokens(user)
+        val response: HashMap<String, Any> = authService.getAuthTokens(user)
 
-            userTokenService.saveUserToken(user, null, response["refreshToken"].toString())
+        userTokenService.saveUserToken(user, null, response["refreshToken"].toString())
 
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                    .body(response)
-        } catch (e: MorningbeesException) {
-            throw BadRequestException(e.message!!, e.code, e.logEventCode)
-        } catch (e: Exception) {
-            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.SignUpError.code)
-        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                .body(response)
     }
 
     @ResponseBody
     @PostMapping("/sign_in")
     fun signIn(@RequestBody @Valid signInDto: SignInDto): ResponseEntity<HashMap<String, Any>> {
-        try {
             val socialAccessToken: String = signInDto.socialAccessToken
             val provider: String = signInDto.provider
 
@@ -94,58 +87,52 @@ class AuthController {
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, "application/json")
                     .body(response)
-        } catch (e: MorningbeesException) {
-            throw BadRequestException(e.message!!, e.code, e.logEventCode)
-        } catch (e: Exception) {
-            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.SignInError.code)
-        }
     }
 
     @ResponseBody
     @GetMapping("/valid_nickname")
     fun isValidNickname(@RequestParam(value = "nickname", required = true) nickname: String): ResponseEntity<HashMap<String, Any>> {
-        try {
-            val result = userService.isExistsNickname(nickname)
+        val result = userService.isExistsNickname(nickname)
 
-            val response: HashMap<String, Any> = HashMap()
-            response.put("isValid", result)
+        val response: HashMap<String, Any> = HashMap()
+        response.put("isValid", result)
 
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                    .body(response)
-        } catch (e: MorningbeesException) {
-            throw BadRequestException(e.message!!, e.code, e.logEventCode)
-        } catch (e: Exception) {
-            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.ValidNicknameError.code)
-        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                .body(response)
     }
 
     @ResponseBody
     @PostMapping("/renewal")
     fun renewal(request: HttpServletRequest): ResponseEntity<HashMap<String, Any>> {
-        try {
-            val user: User = request.getAttribute("user") as User
-            val tokenInfos= authService.getAuthTokens(user)
-            val response: HashMap<String, Any> = HashMap()
-            response.put("accessToken", tokenInfos["accessToken"].toString())
+        val user: User = request.getAttribute("user") as User
+        val tokenInfos= authService.getAuthTokens(user)
+        val response: HashMap<String, Any> = HashMap()
+        response.put("accessToken", tokenInfos["accessToken"].toString())
 
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                    .body(response)
-        } catch (e: MorningbeesException) {
-            throw BadRequestException(e.message!!, e.code, e.logEventCode)
-        } catch (e: Exception) {
-            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.RenewalError.code)
-        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                .body(response)
     }
 
     @ResponseBody
     @GetMapping("/me")
     fun me(request: HttpServletRequest): ResponseEntity<HashMap<String, Any>> {
-        try {
-            val user: User = request.getAttribute("user") as User
+        val user: User = request.getAttribute("user") as User
 
-            val response = userService.me(user)
+        val response = userService.me(user)
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                .body(response)
+    }
+
+    @ResponseBody
+    @GetMapping("/a")
+    fun a(@RequestParam(value="id") id: Long): ResponseEntity<HashMap<String, Any>> {
+        try {
+            val user = userService.getUserById(id)
+            val response: HashMap<String, Any> = authService.getAuthTokens(user)
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, "application/json")
@@ -153,7 +140,7 @@ class AuthController {
         } catch (e: MorningbeesException) {
             throw BadRequestException(e.message!!, e.code, e.logEventCode)
         } catch (e: Exception) {
-            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.MeError.code)
+            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.SignUpError.code)
         }
     }
 }
