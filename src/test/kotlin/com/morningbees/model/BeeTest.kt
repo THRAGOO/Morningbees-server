@@ -41,7 +41,7 @@ internal open class BeeTest : SpringMockMvcTestSupport() {
         val user = userRepository.findById(1).get()
         val bee = beeRepository.findById(1).get()
 
-        bee.addUser(user)
+        bee.addUser(user, BeeMember.MemberType.Member.type)
         beeRepository.save(bee)
 
         assertEquals(1, bee.users.size)
@@ -56,11 +56,11 @@ internal open class BeeTest : SpringMockMvcTestSupport() {
         val user2 = userRepository.findById(2).get()
         val bee = beeRepository.findById(1).get()
 
-        bee.addUser(user1)
+        bee.addUser(user1, BeeMember.MemberType.Member.type)
         beeRepository.save(bee)
         assertEquals(1, bee.users.size)
 
-        bee.addUser(user2)
+        bee.addUser(user2, BeeMember.MemberType.Member.type)
         beeRepository.save(bee)
         assertEquals(2, bee.users.size)
     }
@@ -72,11 +72,11 @@ internal open class BeeTest : SpringMockMvcTestSupport() {
         val user = userRepository.findById(1).get()
         val bee = beeRepository.findById(1).get()
 
-        bee.addUser(user)
+        bee.addUser(user, BeeMember.MemberType.Member.type)
         beeRepository.save(bee)
         assertEquals(1, bee.users.size)
 
-        bee.removeUser(user)
+        bee.removeUser(user, BeeMember.MemberType.Member.type)
         beeMemberRepository.deleteByBeeAndUser(bee, user)
         assertEquals(0, bee.users.size)
     }

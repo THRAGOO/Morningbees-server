@@ -5,5 +5,6 @@ import org.springframework.data.repository.CrudRepository
 
 interface UserRepository : CrudRepository<User, Long> {
 
+    fun getById(id: Long): User
     fun existsByNickname(nickname: String): Boolean
 }

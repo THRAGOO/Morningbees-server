@@ -17,6 +17,7 @@ data class UserProvider(
 ) : BaseEntity() {
         enum class Provider(val provider: String) {
                 Google("google"),
-                Naver("naver")
+                Naver("naver"),
+                Apple("apple")
         }
 }
