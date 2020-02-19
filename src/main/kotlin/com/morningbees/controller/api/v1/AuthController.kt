@@ -126,21 +126,4 @@ class AuthController {
                 .header(HttpHeaders.CONTENT_TYPE, "application/json")
                 .body(response)
     }
-
-    @ResponseBody
-    @GetMapping("/a")
-    fun a(@RequestParam(value="id") id: Long): ResponseEntity<HashMap<String, Any>> {
-        try {
-            val user = userService.getUserById(id)
-            val response: HashMap<String, Any> = authService.getAuthTokens(user)
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                    .body(response)
-        } catch (e: MorningbeesException) {
-            throw BadRequestException(e.message!!, e.code, e.logEventCode)
-        } catch (e: Exception) {
-            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.SignUpError.code)
-        }
-    }
 }
