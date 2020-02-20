@@ -8,5 +8,5 @@ interface UserProviderRepository : CrudRepository<UserProvider, Long> {
 
     fun findByUser(user: User): UserProvider
     fun existsByEmailAndProvider(email: String, provider: String): Boolean
-    fun findByEmail(email: String): UserProvider?
+    fun findByEmailAndProvider(email: String, provider: String): UserProvider?
 }

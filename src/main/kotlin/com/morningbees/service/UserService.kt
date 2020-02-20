@@ -48,8 +48,8 @@ class UserService {
     }
 
 
-    fun getUserByEmail(@NotNull email: String): User? {
-        val userProvider: UserProvider? = userProviderRepository.findByEmail(email)
+    fun getUserByEmailAndProvider(email: String, provider: String): User? {
+        val userProvider: UserProvider? = userProviderRepository.findByEmailAndProvider(email, provider)
 
         return userProvider?.user
     }
