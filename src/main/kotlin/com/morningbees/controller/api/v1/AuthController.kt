@@ -69,7 +69,7 @@ class AuthController {
 
             val email: String =  socialLoginFactory.createFromProvider(provider).getEmailByToken(socialAccessToken)
 
-            val user: User? = userService.getUserByEmail(email)
+            val user: User? = userService.getUserByEmailAndProvider(email, provider)
 
             var response: HashMap<String, Any> = HashMap()
 

@@ -16,7 +16,7 @@ class AppleLoginService : SocialLoginService() {
         val mapper = ObjectMapper()
         val payload = mapper.readTree(decodedPayload)
 
-        if( payload["is_private_email"] != null ) throw BadRequestException("pass apple private email", ErrorCode.ApplePrivateEmail, LogEvent.SocialLoginServiceProcessError.code)
+//        if( payload["is_private_email"] != null ) throw BadRequestException("pass apple private email", ErrorCode.ApplePrivateEmail, LogEvent.SocialLoginServiceProcessError.code)
         if( payload["exp"].intValue() < System.currentTimeMillis()/1000 ) throw BadRequestException("apple token expire", ErrorCode.InvalidAccessToken, LogEvent.SocialLoginServiceProcessError.code)
 
         return payload ["email"].textValue()
