@@ -53,6 +53,11 @@ dependencies {
     // Flyway
     implementation("org.flywaydb:flyway-core")
 
+    // AWS
+    implementation(platform("com.amazonaws:aws-java-sdk-bom:1.11.228"))
+    // S3
+    implementation("com.amazonaws:aws-java-sdk-s3")
+
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.flywaydb.flyway-test-extensions:flyway-spring5-test:6.0.0")

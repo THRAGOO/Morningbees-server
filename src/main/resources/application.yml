@@ -23,6 +23,11 @@ spring:
     encoding: UTF-8
     out-of-order: true
 
+aws:
+  access-key-id: ${AWS_ACCESS_KEY_ID}
+  secret-key: ${AWS_SECRET_ACCESS_KEY}
+  bucket: ${MORNINGBEES_DEV_S3_BUCKET_NAME}
+
 token:
   salt: t!h@r!a@g!o@o
 
@@ -47,6 +52,11 @@ spring:
     database: mysql
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL5Dialect
+
+aws:
+  access-key-id: ${AWS_ACCESS_KEY_ID}
+  secret-key: ${AWS_SECRET_ACCESS_KEY}
+  bucket: ${MORNINGBEES_PRD_S3_BUCKET_NAME}
 
 token:
   salt: ${MORNINGBEES_TOKEN_SALT}
