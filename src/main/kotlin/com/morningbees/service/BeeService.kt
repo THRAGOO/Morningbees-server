@@ -12,6 +12,8 @@ import com.morningbees.util.LogEvent
 import com.sun.istack.NotNull
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import javax.servlet.http.HttpServlet
+import javax.servlet.http.HttpServletRequest
 
 @Service
 class BeeService {
@@ -23,7 +25,7 @@ class BeeService {
     @Autowired
     lateinit var userTokenService: AuthService
 
-    fun createBeeByMaster(@NotNull description: String, @NotNull title: String, @NotNull time: String, @NotNull pay: Int):Bee {
+    fun createBeeByManager(@NotNull description: String, @NotNull title: String, @NotNull time: String, @NotNull pay: Int):Bee {
 
         var bee = Bee(description = description, title = title, time = time, pay = pay)
         beeRepository.save(bee)
@@ -31,8 +33,18 @@ class BeeService {
         return bee
     }
 
-    fun joinBeeForMember() {
+    fun addManager(request: HttpServletRequest) {
 
+        val bee : Bee  = request.getAttribute("Bee") as Bee
+        val user: User = request.getAttribute("user") as User
+
+        val manager = BeeMember(user= user, bee= bee, memberType= 0)
+
+        bee.addUser(user, manager.type)
+        beeRepository.save(bee)
     }
+
+
+
 
 }

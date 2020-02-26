@@ -6,6 +6,7 @@ import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
 import com.morningbees.exception.MorningbeesException
 import com.morningbees.model.Bee
+import com.morningbees.model.BeeMember
 import com.morningbees.model.User
 import com.morningbees.service.BeeService
 import com.morningbees.service.AuthService
@@ -20,8 +21,9 @@ import java.lang.Exception
 import org.slf4j.LoggerFactory
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.validation.Errors
+import javax.servlet.http.HttpServlet
+import javax.servlet.http.HttpServletRequest
 import javax.validation.Valid
-
 
 @RestController
 @RequestMapping("/api")
@@ -43,11 +45,10 @@ class BeeController {
         val description: String = CreateBeeDto.description
 
         try{
-            val bee: Bee = beeService.createBeeByMaster(description, title, time, pay)
+            val bee: Bee = beeService.createBeeByManager(description, title, time, pay)
 
             val response : HashMap<String, Any> = HashMap()
             response.put("title", title)
-
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .header(HttpHeaders.CONTENT_TYPE, "application/json")
@@ -59,11 +60,6 @@ class BeeController {
         }
     }
 
-    @ResponseBody
-    @PostMapping("/bees/join")
-    fun joinBee() {
-
-    }
 
 }
 
