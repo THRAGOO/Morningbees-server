@@ -34,27 +34,11 @@ class BeeController {
     @PostMapping("/bees")
     fun createBee(@RequestBody @Valid CreateBeeDto:CreateBeeDto, request : HttpServletRequest, errors:Errors): ResponseEntity<HashMap<String, Any>> {
 
-        val title: String = CreateBeeDto.title
-        val time: String = CreateBeeDto.time
-        val pay: Int = CreateBeeDto.pay
-        val description: String = CreateBeeDto.description
+        val user: User = request.getAttribute("user") as User
 
-        try{
-            val user: User = request.getAttribute("user") as User
+        val bee: Bee = beeService.createBeeByManager(user, CreateBeeDto.description, CreateBeeDto.title, CreateBeeDto.time, CreateBeeDto.pay)
 
-            val bee: Bee = beeService.createBeeByManager(user, description, title, time, pay)
-
-            val response : HashMap<String, Any> = HashMap()
-            response.put("title", bee.title)
-
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                    .body(response)
-        } catch(e: MorningbeesException) {
-            throw BadRequestException(e.message!!, e.code, e.logEventCode)
-        } catch(e: Exception) {
-            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.CreateBeeError.code)
-        }
+        return ResponseEntity(HttpStatus.CREATED)
     }
 
 

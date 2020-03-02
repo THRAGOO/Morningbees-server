@@ -28,7 +28,7 @@ data class BeeMember (
     constructor(user: User, bee: Bee) : this(BeeMemberKey(bee.id, user.id), user, bee)
 
     enum class MemberType(val type: Int) {
-        Owner(0),
-        Member(1)
+        Manager(1),
+        Member(0)
     }
 }
