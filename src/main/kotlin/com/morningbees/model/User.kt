@@ -1,8 +1,10 @@
 package com.morningbees.model
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
+import org.springframework.stereotype.Component
 import javax.persistence.*
 
+@Component
 @Entity
 @Table(name = "users")
 data class User(
@@ -10,34 +12,31 @@ data class User(
         val nickname: String = "",
 
         @Column(columnDefinition = "TINYINT")
-        val status: Int = UserStatus.Use.status,
-
+        val status: Int = UserStatus.Use.status
+) : BaseEntity() {
         @OneToOne(mappedBy = "user")
-        val provider: UserProvider? = null,
+        val provider: UserProvider? = null
 
         @OneToOne(mappedBy = "user")
         val token: UserToken? = null
-) : BaseEntity() {
-        @OneToMany(mappedBy = "user", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY)
+
+        @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
         @JsonManagedReference
         val beePenalties: MutableList<BeePenalty> = mutableListOf<BeePenalty>()
 
-        @OneToMany(mappedBy = "user", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
         @JsonManagedReference
-        val comment: MutableList<Comment> = mutableListOf<Comment>()
+        val comments: MutableList<Comment> = mutableListOf<Comment>()
 
-        @OneToMany(mappedBy = "user", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.EAGER)
+        @OneToMany(mappedBy = "bee", cascade = [CascadeType.ALL])
+        val missions: MutableList<Mission> = mutableListOf<Mission>()
+
+        @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
         val missionVotes: MutableSet<MissionVote> = mutableSetOf<MissionVote>()
 
-        @OneToMany(mappedBy = "user", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.EAGER)
+        @OneToMany(mappedBy = "user", cascade = [CascadeType.MERGE])
         @JsonManagedReference
         val bees: MutableSet<BeeMember> = mutableSetOf<BeeMember>()
-
-        fun addBee(newBee: Bee, memberType: Int) {
-                val beeMember = BeeMember(this, newBee, memberType)
-                this.bees.add(beeMember)
-                newBee.users.add(beeMember)
-        }
 
         enum class UserStatus(val status: Int) {
                 Use(1),

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.sql.Time
+import javax.transaction.Transactional
 
 internal open class BeeTest : SpringMockMvcTestSupport() {
 
@@ -37,7 +38,8 @@ internal open class BeeTest : SpringMockMvcTestSupport() {
     @Test
     @FlywayTest
     @DisplayName("Bee 를 생성하고 여러 유저가 해당 Bee에 가입이 성공한다.")
-    fun successCreateBee() {
+    @Transactional
+    open fun successCreateBee() {
         val user = userRepository.findById(1).get()
         val bee = beeRepository.findById(1).get()
 
@@ -51,7 +53,8 @@ internal open class BeeTest : SpringMockMvcTestSupport() {
     @Test
     @FlywayTest
     @DisplayName("한 모임의 두 명 이상의 유저가 가입에 성공한다.")
-    fun successTwoUserJoinToBee() {
+    @Transactional
+    open fun successTwoUserJoinToBee() {
         val user1 = userRepository.findById(1).get()
         val user2 = userRepository.findById(2).get()
         val bee = beeRepository.findById(1).get()
@@ -68,7 +71,8 @@ internal open class BeeTest : SpringMockMvcTestSupport() {
     @Test
     @FlywayTest
     @DisplayName("유저가 모임에서 탈퇴할 수 있어야한다.")
-    fun successExitToBee() {
+    @Transactional
+    open fun successExitToBee() {
         val user = userRepository.findById(1).get()
         val bee = beeRepository.findById(1).get()
 

@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -53,6 +54,15 @@ dependencies {
     // Flyway
     implementation("org.flywaydb:flyway-core")
 
+    // AWS
+    implementation(platform("com.amazonaws:aws-java-sdk-bom:1.11.228"))
+    // S3
+    implementation("com.amazonaws:aws-java-sdk-s3")
+
+    // QueryDSL
+    implementation("com.querydsl:querydsl-jpa:4.2.1")
+    kapt("com.querydsl:querydsl-apt:4.2.1:jpa")
+
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.flywaydb.flyway-test-extensions:flyway-spring5-test:6.0.0")
@@ -71,6 +81,10 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
     }
+}
+
+sourceSets["main"].withConvention(KotlinSourceSet::class) {
+    kotlin.srcDir("$buildDir/generated/source/kapt/main")
 }
 
 flyway {}
