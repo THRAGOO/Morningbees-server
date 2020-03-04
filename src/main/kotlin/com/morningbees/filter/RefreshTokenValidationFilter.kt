@@ -1,6 +1,5 @@
 package com.morningbees.filter
 
-import com.morningbees.controller.ErrorController
 import com.morningbees.exception.ErrorCode
 import com.morningbees.exception.UnAuthorizeException
 import com.morningbees.model.User
@@ -11,14 +10,15 @@ import net.logstash.logback.argument.StructuredArguments
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
+import org.springframework.web.multipart.MultipartHttpServletRequest
 import javax.servlet.*
 import javax.servlet.annotation.WebFilter
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-//@Component
-@WebFilter(urlPatterns= ["/api/auth/renewal"])
+@Component
 @Order(3)
 class RefreshTokenValidationFilter : Filter {
     private val log = org.slf4j.LoggerFactory.getLogger(RefreshTokenValidationFilter::class.java)
@@ -40,6 +40,12 @@ class RefreshTokenValidationFilter : Filter {
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain?) {
         val req:HttpServletRequest = request as HttpServletRequest
         val res:HttpServletResponse = response as HttpServletResponse
+
+        val path = request.requestURI
+        if (path != "/api/auth/renewal") {
+            chain?.doFilter(request, response)
+            return
+        }
 
         try {
             val refreshToken: String = req.getHeader("X-BEES-REFRESH-TOKEN")

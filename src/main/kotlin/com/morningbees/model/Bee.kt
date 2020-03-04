@@ -3,6 +3,7 @@ package com.morningbees.model
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import java.sql.Time
 import javax.persistence.*
+import javax.transaction.Transactional
 
 @Entity
 @Table(name = "bees")
@@ -19,10 +20,13 @@ data class Bee(
         @Column
         val pay: Int
 ) : BaseEntity() {
-        @OneToMany(mappedBy = "bee", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "bee", cascade = [CascadeType.ALL])
         val beePenalties: MutableList<BeePenalty> = mutableListOf<BeePenalty>()
 
-        @OneToMany(mappedBy = "bee", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.EAGER)
+        @OneToMany(mappedBy = "bee", cascade = [CascadeType.ALL])
+        val missions: MutableList<Mission> = mutableListOf<Mission>()
+
+        @OneToMany(mappedBy = "bee", cascade = [CascadeType.MERGE])
         @JsonManagedReference
         val users: MutableSet<BeeMember> = mutableSetOf<BeeMember>()
 

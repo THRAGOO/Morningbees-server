@@ -9,5 +9,8 @@ enum class ErrorCode(val message: String, val status: Int) {
     AlreadySocialEmail("이미 가입된 계정입니다.", 112),
     AlreadyNickname("이미 등록된 닉네임입니다.", 113),
 
-    ApplePrivateEmail("이메일 정보를 알 수 없습니다. Share My Email로 로그인해주세요.", 114)
+    ApplePrivateEmail("이메일 정보를 알 수 없습니다. Share My Email로 로그인해주세요.", 114),
+
+    NotJoinUserToBee("해당 모임에 가입되지 않은 유저입니다.", 120),
+    AlreadyUploadMissionToday("오늘 이미 미션을 등록했습니다.", 121),
 }

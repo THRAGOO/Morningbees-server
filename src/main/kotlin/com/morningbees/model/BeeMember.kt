@@ -9,13 +9,13 @@ data class BeeMember (
         @EmbeddedId
         private val id: BeeMemberKey?,
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne
         @MapsId("user_id")
         @JoinColumn(name = "user_id")
         @JsonBackReference
         var user: User,
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne
         @MapsId("bee_id")
         @JoinColumn(name = "bee_id")
         @JsonBackReference

@@ -15,3 +15,11 @@ spring:
     enabled: true
     encoding: UTF-8
     out-of-order: true
+
+aws:
+  access-key-id: test
+  secret-key: test
+  bucket: test
+
+token:
+  salt: t!h@r!a@g!o@o

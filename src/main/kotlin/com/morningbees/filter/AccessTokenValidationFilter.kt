@@ -1,6 +1,5 @@
 package com.morningbees.filter
 
-import com.morningbees.controller.ErrorController
 import com.morningbees.exception.UnAuthorizeException
 import com.morningbees.model.User
 import com.morningbees.service.UserService
@@ -16,7 +15,7 @@ import javax.servlet.annotation.WebFilter
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-//@Component
+@Component
 @WebFilter(urlPatterns= ["/api/*"])
 @Order(2)
 class AccessTokenValidationFilter : Filter {
@@ -40,7 +39,7 @@ class AccessTokenValidationFilter : Filter {
         val req:HttpServletRequest = request as HttpServletRequest
         val res:HttpServletResponse = response as HttpServletResponse
 
-        val excludeUrls :Array<String> = arrayOf("/api/auth/sign_up", "/api/auth/sign_in", "/api/auth/renewal", "/api/auth/valid_nickname", "/hello")
+        val excludeUrls :Array<String> = arrayOf("/api/auth/sign_up", "/api/auth/sign_in", "/api/auth/renewal", "/api/auth/valid_nickname", "/hello", "/upload")
         val path = request.requestURI
         if (excludeUrls.contains(path)) {
             chain?.doFilter(request, response)
@@ -54,8 +53,9 @@ class AccessTokenValidationFilter : Filter {
             val user: User = userService.getUserById(tokenBody.userId)
             req.setAttribute("claims", tokenBody)
             req.setAttribute("user", user)
+//            Token(user=user)
 
-            chain?.doFilter(request, response)
+            chain?.doFilter(req, response)
         } catch(ex: UnAuthorizeException) {
             log.warn(ex.message, StructuredArguments.kv("eventCode", LogEvent.GlobalException), StructuredArguments.kv("backTrace", ex.stackTrace[0].toString()))
             res.sendError(HttpStatus.UNAUTHORIZED.value(), "잘 못된 요청입니다.")
