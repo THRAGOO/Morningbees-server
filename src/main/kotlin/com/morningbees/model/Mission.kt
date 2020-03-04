@@ -1,35 +1,49 @@
 package com.morningbees.model
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo
-import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import javax.persistence.*
 
 @Entity
 @Table(name = "missions")
 data class Mission (
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "bee_id")
-        val bee: Bee,
-
-        @OneToMany(mappedBy = "mission", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY)
-        val comment: MutableList<Comment> = mutableListOf<Comment>(),
-
-        @OneToMany(mappedBy = "mission", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.EAGER)
-        val missionVotes: MutableSet<MissionVote> = mutableSetOf<MissionVote>(),
-
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "user_id")
-        val user: User,
-
         @Column
         val imageUrl: String = "",
 
+        @Column
+        val description: String = "",
+
         @Column(columnDefinition = "TINYINT")
-        val type: Int = MissionType.Question.type
+        val type: Int = MissionType.Question.type,
+
+        @Column(columnDefinition = "TINYINT")
+        val difficulty: Int = MissionDifficulty.Intermediate.level,
+
+        @ManyToOne
+        @JoinColumn(name = "bee_id")
+        val bee: Bee,
+
+        @ManyToOne
+        @JoinColumn(name = "user_id")
+        val user: User
 ) : BaseEntity() {
+    constructor(imageUrl: String, description: String, difficulty: MissionDifficulty, missionType: MissionType, bee: Bee, user: User) :
+            this(imageUrl, description, difficulty.level, missionType.type, bee, user) {
+        bee.missions.add(this)
+        user.missions.add(this)
+    }
+
+    @OneToMany(mappedBy = "mission", cascade = [CascadeType.ALL])
+    val comment: MutableList<Comment> = mutableListOf<Comment>()
+
+    @OneToMany(mappedBy = "mission", cascade = [CascadeType.ALL])
+    val missionVotes: MutableSet<MissionVote> = mutableSetOf<MissionVote>()
 
     enum class MissionType(val type: Int) {
         Question(1),
         Answer(2)
+    }
+    enum class MissionDifficulty(val level: Int) {
+        Beginning(0),
+        Intermediate(1),
+        Advanced(2)
     }
 }

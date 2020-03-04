@@ -10,4 +10,6 @@ interface BeeMemberRepository : CrudRepository<BeeMember, Long> {
 
     @Transactional
     fun deleteByBeeAndUser(bee: Bee, user: User): Long
+
+    fun existsByUserAndBee(user: User, bee: Bee): Boolean
 }
