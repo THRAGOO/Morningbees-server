@@ -30,8 +30,7 @@ enum class LogEvent(val code: String) {
 
     //BeeController Process
     CreateBeeError("CBE001"),
-    //BeeController Process
-    CreateBeeError("CBE001"),
+
     // S3Service Process
     S3ServiceProcessError("SSE001"),
 
