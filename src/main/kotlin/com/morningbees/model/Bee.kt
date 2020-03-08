@@ -1,3 +1,4 @@
+
 package com.morningbees.model
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
@@ -15,7 +16,7 @@ data class Bee(
         val description: String,
 
         @Column
-        val time: Time,
+        val time: String,
 
         @Column
         val pay: Int
