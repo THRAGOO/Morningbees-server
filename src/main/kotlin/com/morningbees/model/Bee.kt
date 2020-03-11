@@ -1,9 +1,9 @@
+
 package com.morningbees.model
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
-import java.sql.Time
+import java.time.LocalTime
 import javax.persistence.*
-import javax.transaction.Transactional
 
 @Entity
 @Table(name = "bees")
@@ -15,7 +15,10 @@ data class Bee(
         val description: String,
 
         @Column
-        val time: Time,
+        val startTime: LocalTime,
+
+        @Column
+        val endTime: LocalTime,
 
         @Column
         val pay: Int
@@ -30,10 +33,12 @@ data class Bee(
         @JsonManagedReference
         val users: MutableSet<BeeMember> = mutableSetOf<BeeMember>()
 
-        fun addUser(newUser: User, memberType: Int) {
+        fun addUser(newUser: User, memberType: Int): BeeMember {
                 val beeMember = BeeMember(newUser, this, memberType)
                 this.users.add(beeMember)
                 newUser.bees.add(beeMember)
+
+                return beeMember
         }
         fun removeUser(user: User, memberType: Int) {
                 val beeMember = BeeMember(user, this, memberType)

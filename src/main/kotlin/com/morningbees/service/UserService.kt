@@ -10,6 +10,7 @@ import com.morningbees.util.LogEvent
 import com.sun.istack.NotNull
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import kotlin.collections.HashMap
 
 @Service
 class UserService {
@@ -55,7 +56,7 @@ class UserService {
     }
 
     fun getUserById(@NotNull id: Long): User {
-        val user: User = userRepository.getById(id)
+        val user: User = userRepository.findById(id).get()
 
         return user
     }

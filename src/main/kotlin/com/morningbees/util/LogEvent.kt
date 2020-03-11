@@ -6,12 +6,9 @@ enum class LogEvent(val code: String) {
     HttpMessageNotReadableException("GBE002"),
     GlobalException("GBE003"),
 
-    // AuthController Process
-    SignUpError("SUE001"),
-    SignInError("SIE001"),
-    ValidNicknameError("VNE001"),
-    RenewalError("RE001"),
-    MeError("ME001"),
+    // Interceptor Process
+    AccessTokenInterceptorProcess("AIP001"),
+    RefreshTokenInterceptorProcess("RIP001"),
 
     // UserService Process
     UserServiceProcessError("USPE001"),
@@ -28,9 +25,18 @@ enum class LogEvent(val code: String) {
     // AuthService Process
     AuthServiceProcessError("ASE001"),
 
+    //BeeController Process
+    CreateBeeError("CBE001"),
+
     // S3Service Process
     S3ServiceProcessError("SSE001"),
 
-    // MissionService Proceess
+    // MissionService Proccess
     MissionServiceProcess("MSP001"),
+
+    // BeeService Process
+    BeeServiceProcess("BSP001"),
+
+    // BeeController Process
+    BeeControllerProcess("BCP001"),
 }
