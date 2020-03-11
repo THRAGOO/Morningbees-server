@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.sql.Time
 import org.springframework.mock.web.MockMultipartFile
+import java.time.LocalTime
 import javax.transaction.Transactional
 
 internal open class MissionServiceTest : SpringMockMvcTestSupport() {
@@ -35,7 +36,7 @@ internal open class MissionServiceTest : SpringMockMvcTestSupport() {
         val user = User("test")
         userRepository.save(user)
 
-        val bee = Bee("title", "", Time(10000), 10000)
+        val bee = Bee("title", "", LocalTime.of(1, 0, 0), LocalTime.of(2, 0, 0), 2000)
         beeRepository.save(bee)
     }
 

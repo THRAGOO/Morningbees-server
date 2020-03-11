@@ -13,4 +13,7 @@ enum class ErrorCode(val message: String, val status: Int) {
 
     NotJoinUserToBee("해당 모임에 가입되지 않은 유저입니다.", 120),
     AlreadyUploadMissionToday("오늘 이미 미션을 등록했습니다.", 121),
+    NotUploadTime("미션을 업로드 할 수 있는 시간이 아닙니다.", 122),
+
+    NotCreateBee("모임 생성이 실패했습니다.", 130),
 }
