@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
 import java.sql.Time
+import java.time.LocalTime
 
 internal open class BeePenaltyTest : SpringMockMvcTestSupport() {
 
@@ -30,7 +31,7 @@ internal open class BeePenaltyTest : SpringMockMvcTestSupport() {
         val user = User("test")
         userRepository.save(user)
 
-        val bee = Bee("title", "", Time(10000), 10000)
+        val bee = Bee("title", "", LocalTime.of(1, 0, 0), LocalTime.of(2, 0, 0), 2000)
         beeRepository.save(bee)
     }
 

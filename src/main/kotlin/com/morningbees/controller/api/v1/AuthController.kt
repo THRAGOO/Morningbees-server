@@ -2,20 +2,15 @@ package com.morningbees.controller.api.v1
 
 import com.morningbees.dto.SignInDto
 import com.morningbees.dto.SignUpDto
-import com.morningbees.exception.BadRequestException
-import com.morningbees.exception.ErrorCode
-import com.morningbees.exception.MorningbeesException
 import com.morningbees.model.User
 import com.morningbees.service.AuthService
 import com.morningbees.service.UserService
 import com.morningbees.service.UserTokenService
 import com.morningbees.service.social.SocialLoginFactory
-import com.morningbees.util.LogEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.lang.Exception
 import org.slf4j.LoggerFactory
 import org.springframework.validation.Errors
 import javax.servlet.http.HttpServletRequest
