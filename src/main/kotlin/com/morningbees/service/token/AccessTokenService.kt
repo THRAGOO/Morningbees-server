@@ -10,7 +10,7 @@ import kotlin.collections.HashMap
 class AccessTokenService : TokenService() {
 
 //    private val accessTokenExpireAt = 86400000 // 24시간
-    private val accessTokenExpireAt = 300 // 24시간
+    private val accessTokenExpireAt = 60 // 24시간
 
     override fun getExpirationDate(): Long {
         val now = Date()
