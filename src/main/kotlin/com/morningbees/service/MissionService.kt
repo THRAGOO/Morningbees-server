@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import javax.transaction.Transactional
 
 @Service
 class MissionService {
@@ -32,7 +31,7 @@ class MissionService {
     @Autowired
     lateinit var beeRepository: BeeRepository
     @Autowired
-    lateinit var beeMemberService: BeeMemeberService
+    lateinit var beeMemberService: BeeMemberService
 
     val UPLOAD_FREE_TIME: Long = 1
 
