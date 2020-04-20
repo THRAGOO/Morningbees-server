@@ -35,13 +35,6 @@ class BeeController {
         return ResponseEntity(HttpStatus.CREATED)
     }
 
-    @ResponseBody
-    @PostMapping("/bees/join")
-    fun joinBee(@RequestBody @Valid JoinBeeDto:JoinBeeDto, request : HttpServletRequest, errors: Errors) :ResponseEntity<HashMap<String, Any>>{
 
-        val bee = beeService.joinBeeByUser(JoinBeeDto.beeId, JoinBeeDto.userId)
-
-        return ResponseEntity(HttpStatus.OK)
-    }
 }
 

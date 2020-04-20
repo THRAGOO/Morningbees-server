@@ -3,7 +3,6 @@ package com.morningbees.service
 import com.morningbees.dto.BeeCreateDto
 import com.morningbees.model.Bee
 import com.morningbees.model.BeeMember
-import com.morningbees.model.BeeMemberKey
 import com.morningbees.model.User
 import com.morningbees.repository.BeeMemberRepository
 import com.morningbees.repository.BeeRepository
@@ -60,4 +59,5 @@ class BeeService {
 
         return bee
     }
+
 }
