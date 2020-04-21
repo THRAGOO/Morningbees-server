@@ -53,6 +53,8 @@ class MissionService {
         return true
     }
 
+    fun test1() {}
+
     fun alreadyUploadToday(user: User, bee: Bee): Boolean {
         val current = LocalDateTime.now()
 
