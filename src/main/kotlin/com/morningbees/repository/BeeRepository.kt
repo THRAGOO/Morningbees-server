@@ -5,4 +5,5 @@ import com.morningbees.model.User
 import org.springframework.data.repository.CrudRepository
 
 interface BeeRepository : CrudRepository<Bee, Long> {
+    fun getById(id: Long): Bee
 }

@@ -13,4 +13,6 @@ interface BeeMemberRepository : CrudRepository<BeeMember, Long> {
     fun deleteByBeeAndUser(bee: Bee, user: User): Long
 
     fun existsByUserAndBee(user: User, bee: Bee): Boolean
+
+    fun existByUser(user:User): Boolean
 }
