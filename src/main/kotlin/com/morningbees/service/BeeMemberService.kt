@@ -30,20 +30,22 @@ class BeeMemberService {
 
     fun isJoinUserToBee(user: User, bee: Bee): Boolean = beeMemberRepository.existsByUserAndBee(user, bee)
 
+    fun isAlreadyJoinBee(user:User) : Boolean = beeMemberRepository.existByUser(user)
+
     @Transactional
     fun joinBeeByUser(beeJoinDto : BeeJoinDto) : Boolean {
         try {
             val user:User = userRepository.getById(beeJoinDto.userId)
             val bee:Bee = beeRepository.getById(beeJoinDto.beeId)
 
-            if(beeMemberRepository.existsByUserAndBee(user, bee)== true) throw Exception("Already join bee")
+            if(isAlreadyJoinBee(user)) throw Exception("Already join bee")
 
             val beeMember = bee.addUser(user, BeeMember.MemberType.Member.type)
             beeMemberRepository.save(beeMember)
 
             return true
         } catch(ex: Exception) {
-            logger.warn(ex.message, kv("userId", beeJoinDto.userId), kv("eventCode", LogEvent.BeeMemberServiceProcess.code))
+            logger.warn(ex.message, kv("userId", beeJoinDto.userId), kv("beeId", beeJoinDto.beeId), kv("eventCode", LogEvent.BeeMemberServiceProcess.code))
             return false
         }
 

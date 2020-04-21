@@ -45,7 +45,7 @@ class BeeController {
     fun joinBee(@RequestBody @Valid beeJoinDto: BeeJoinDto, request: HttpServletRequest): ResponseEntity<HashMap<String, Any>> {
 
         val result = beeMemberService.joinBeeByUser(beeJoinDto)
-        if(!result) throw BadRequestException("fail join bee", ErrorCode.NotJoinUserToBee, LogEvent.BeeControllerProcess.code)
+        if(!result) throw BadRequestException("fail join bee", ErrorCode.NotJoinBee, LogEvent.BeeControllerProcess.code)
 
         return ResponseEntity(HttpStatus.OK)
     }
