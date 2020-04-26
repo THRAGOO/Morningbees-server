@@ -18,4 +18,6 @@ enum class ErrorCode(val message: String, val status: Int) {
     NotCreateBee("모임 생성이 실패했습니다.", 130),
 
     NotJoinBee("모임 가입에 실패했습니다.", 140),
+
+    FailWithdrwalBee("모임 탈퇴에 실패했습니다.", 150),
 }

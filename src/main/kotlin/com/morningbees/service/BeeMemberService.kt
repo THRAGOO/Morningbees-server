@@ -30,7 +30,7 @@ class BeeMemberService {
 
     fun isJoinUserToBee(user: User, bee: Bee): Boolean = beeMemberRepository.existsByUserAndBee(user, bee)
 
-    fun isAlreadyJoinBee(user:User) : Boolean = beeMemberRepository.existByUser(user)
+    fun isAlreadyJoinBee(user:User) : Boolean = beeMemberRepository.existsByUser(user)
 
     @Transactional
     fun joinBeeByUser(beeJoinDto : BeeJoinDto) : Boolean {

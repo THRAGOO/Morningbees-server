@@ -50,6 +50,15 @@ class BeeController {
         return ResponseEntity(HttpStatus.OK)
     }
 
+    @ResponseBody
+    @DeleteMapping("/bees/withdrawal")
+    fun withdrawal(request: HttpServletRequest): ResponseEntity<HashMap<String, Any>> {
+        val user: User = request.getAttribute("user") as User
 
+        val result = beeService.withdrawal(user)
+        if(!result) throw BadRequestException("fail withdrawal bee", ErrorCode.FailWithdrwalBee, LogEvent.BeeControllerProcess.code)
+
+        return ResponseEntity(HttpStatus.OK)
+    }
 }
 
