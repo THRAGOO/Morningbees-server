@@ -9,6 +9,7 @@ import com.morningbees.repository.BeeRepository
 import com.morningbees.repository.UserRepository
 import com.morningbees.util.LogEvent
 import com.sun.istack.NotNull
+import net.logstash.logback.argument.StructuredArguments
 import net.logstash.logback.argument.StructuredArguments.kv
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -47,17 +48,37 @@ class BeeService {
         }
     }
 
-    fun joinBeeByUser (@NotNull beeId : Long, @NotNull userId: Long):Bee {
+    fun withdrawal(user: User): Boolean {
+        try {
+            val beeMember: BeeMember? = beeMemberRepository.findByUser(user)
+            if (beeMember == null) throw Exception("bee member is null")
 
-        val user = userRepository.getById(userId)
-        val bee = beeRepository.getById(beeId)
+            val bee: Bee? = beeMember.bee
+            if (bee == null) throw Exception("bee is null")
 
-        val beeMember = BeeMember(user = user, bee = bee, memberType = 0)
-        beeMemberRepository.save(beeMember)
+            if (beeMember.isManager() && bee.users.size > 1) {
+                delegateManager(bee.users.first())
+            }
 
-        bee.addUser(user, BeeMember.MemberType.Member.type)
+            beeMemberRepository.deleteByBeeAndUser(bee, user)
 
-        return bee
+            if (bee.users.size == 1) {
+                beeRepository.deleteBeeById(bee.id!!)
+            }
+
+            return true
+        } catch (ex: Exception) {
+            logger.warn(ex.message, kv("userId", user.id), kv("eventCode", LogEvent.BeeServiceProcess.code), kv("backTrace", ex.stackTrace[0].toString() + ex.stackTrace[1].toString()))
+            return false
+        }
     }
 
+    private
+    fun delegateManager(delegateUser: BeeMember): Boolean {
+        val anotherBeeMember = delegateUser
+        anotherBeeMember.type = BeeMember.MemberType.Manager.type
+        beeMemberRepository.save(anotherBeeMember)
+
+        return true
+    }
 }

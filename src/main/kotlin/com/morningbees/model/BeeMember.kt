@@ -22,10 +22,12 @@ data class BeeMember (
         var bee: Bee,
 
         @Column(columnDefinition = "TINYINT")
-        val type: Int = MemberType.Member.type
+        var type: Int = MemberType.Member.type
 ) {
     constructor(user: User, bee: Bee, memberType: Int) : this(BeeMemberKey(bee.id, user.id), user, bee, memberType)
     constructor(user: User, bee: Bee) : this(BeeMemberKey(bee.id, user.id), user, bee)
+
+    fun isManager(): Boolean = this.type == MemberType.Manager.type
 
     enum class MemberType(val type: Int) {
         Manager(1),
