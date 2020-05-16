@@ -38,6 +38,17 @@ data class User(
         @JsonManagedReference
         val bees: MutableSet<BeeMember> = mutableSetOf<BeeMember>()
 
+        fun getJoinBeeId(): Long {
+                var beeId: Long = 0
+
+                val bees = this.bees
+                if(!bees.isEmpty()) {
+                        beeId = bees.last().bee.id!!
+                }
+
+                return beeId
+        }
+
         enum class UserStatus(val status: Int) {
                 Use(1),
                 Withdraw(2)

@@ -44,6 +44,7 @@ class UserService {
 
         result.put("nickname", user.nickname)
         result.put("alreadyJoin", alreadyJoin)
+        result.put("beeId", user.getJoinBeeId())
 
         return result
     }
