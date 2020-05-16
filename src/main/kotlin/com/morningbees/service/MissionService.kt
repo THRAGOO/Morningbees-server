@@ -39,10 +39,10 @@ class MissionService {
         val currentTime = LocalTime.now()
 
         val bee: Bee = beeRepository.findById(missionCreateDto.beeId).get()
-        if (!beeMemberService.isJoinUserToBee(user, bee)) throw BadRequestException("not join user", ErrorCode.NotJoinUserToBee, LogEvent.MissionServiceProcess.code)
-        if (bee.startTime > currentTime) throw BadRequestException("not mission upload start time", ErrorCode.NotUploadTime, LogEvent.MissionServiceProcess.code)
-        if (bee.endTime.plusHours(UPLOAD_FREE_TIME) < currentTime) throw BadRequestException("not mission upload end time", ErrorCode.NotUploadTime, LogEvent.MissionServiceProcess.code)
-        if (alreadyUploadToday(user, bee)) throw BadRequestException("already upload mission today", ErrorCode.AlreadyUploadMissionToday, LogEvent.MissionServiceProcess.code)
+//        if (!beeMemberService.isJoinUserToBee(user, bee)) throw BadRequestException("not join user", ErrorCode.NotJoinUserToBee, LogEvent.MissionServiceProcess.code)
+//        if (bee.startTime > currentTime) throw BadRequestException("not mission upload start time", ErrorCode.NotUploadTime, LogEvent.MissionServiceProcess.code)
+//        if (bee.endTime.plusHours(UPLOAD_FREE_TIME) < currentTime) throw BadRequestException("not mission upload end time", ErrorCode.NotUploadTime, LogEvent.MissionServiceProcess.code)
+//        if (alreadyUploadToday(user, bee)) throw BadRequestException("already upload mission today", ErrorCode.AlreadyUploadMissionToday, LogEvent.MissionServiceProcess.code)
 
         val imageUrl: String = s3Service.upload(image)
 
