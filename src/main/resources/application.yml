@@ -27,14 +27,18 @@ spring:
       max-file-size: 50MB
       max-request-size: 50MB
       enabled: true
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
 
 aws:
-  access-key-id: ${AWS_ACCESS_KEY_ID}
-  secret-key: ${AWS_SECRET_ACCESS_KEY}
-  bucket: ${MORNINGBEES_DEV_S3_BUCKET_NAME}
+  access-key-id:
+  secret-key:
+  bucket: mb-images-storages
 
 token:
-  salt: t!h@r!a@g!o@o
+  salt: dGhyYWdvbw==
 
 ---
 
@@ -62,6 +66,10 @@ spring:
       max-file-size: 50MB
       max-request-size: 50MB
       enabled: true
+  redis:
+    host: ${MORNINGBEES_PRD_REDIS_HOST}
+    port: ${MORNINGBEES_PRD_REDIS_PORT}
+    password:
 
 aws:
   access-key-id: ${AWS_ACCESS_KEY_ID}

@@ -15,6 +15,10 @@ spring:
     enabled: true
     encoding: UTF-8
     out-of-order: true
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
 
 aws:
   access-key-id: test
