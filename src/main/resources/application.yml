@@ -27,6 +27,14 @@ spring:
       max-file-size: 50MB
       max-request-size: 50MB
       enabled: true
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+  data:
+    redis:
+      repositories:
+        enabled: false
 
 aws:
   access-key-id: ${AWS_ACCESS_KEY_ID}
@@ -62,6 +70,10 @@ spring:
       max-file-size: 50MB
       max-request-size: 50MB
       enabled: true
+  redis:
+    host: ${MORNINGBEES_PRD_REDIS_HOST}
+    port: ${MORNINGBEES_PRD_REDIS_PORT}
+    password:
 
 aws:
   access-key-id: ${AWS_ACCESS_KEY_ID}

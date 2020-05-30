@@ -1,6 +1,7 @@
 package com.morningbees.service
 
 import com.morningbees.dto.MissionCreateDto
+import com.morningbees.dto.MissionInfoDto
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
 import com.morningbees.model.Bee
@@ -12,6 +13,8 @@ import com.morningbees.repository.MissionRepositorySupport
 import com.morningbees.util.LogEvent
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
@@ -30,12 +33,11 @@ class MissionService {
     lateinit var missionRepositorySupport: MissionRepositorySupport
     @Autowired
     lateinit var beeRepository: BeeRepository
-    @Autowired
-    lateinit var beeMemberService: BeeMemberService
 
     val UPLOAD_FREE_TIME: Long = 1
 
-    fun create(user: User, image: MultipartFile, missionCreateDto: MissionCreateDto): Boolean {
+    @CacheEvict(value = ["MissionInfos"], key = "#missionCreateDto.beeId + '_' + #currentDate")
+    fun create(user: User, image: MultipartFile, missionCreateDto: MissionCreateDto, currentDate: String): Boolean {
         val currentTime = LocalTime.now()
 
         val bee: Bee = beeRepository.findById(missionCreateDto.beeId).get()
@@ -52,7 +54,15 @@ class MissionService {
         return true
     }
 
-    fun test1() {}
+    @Cacheable(value = ["MissionInfos"], key = "#beeId + '_' + #targetDate.replace('-','')")
+    fun fetchInfos(beeId: Long, targetDate: String): List<MissionInfoDto> {
+        val bee = beeRepository.findById(beeId)
+        if (bee.isPresent == false) throw BadRequestException("bee is null", ErrorCode.BadRequest, LogEvent.MissionServiceProcess.code)
+
+        val missions = missionRepositorySupport.fetchMissionInfosByBeeAndCreatedAt(bee.get(), targetDate)
+
+        return missions
+    }
 
     fun alreadyUploadToday(user: User, bee: Bee): Boolean {
         val current = LocalDateTime.now()

@@ -19,12 +19,12 @@ data class MissionVote (
         val mission: Mission,
 
         @Column(columnDefinition = "TINYINT")
-        val type: Int = VoteType.Yes.type
+        val type: Int = VoteType.Agree.type
 ) {
     constructor(user: User, mission: Mission) : this(MissionVoteKey(mission.id, user.id), user, mission)
 
     enum class VoteType(val type: Int) {
-        No(0),
-        Yes(1)
+        Disagree(0),
+        Agree(1)
     }
 }
