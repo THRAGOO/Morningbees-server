@@ -31,14 +31,18 @@ spring:
     host: 127.0.0.1
     port: 6379
     password:
+  data:
+    redis:
+      repositories:
+        enabled: false
 
 aws:
-  access-key-id:
-  secret-key:
-  bucket: mb-images-storages
+  access-key-id: ${AWS_ACCESS_KEY_ID}
+  secret-key: ${AWS_SECRET_ACCESS_KEY}
+  bucket: ${MORNINGBEES_DEV_S3_BUCKET_NAME}
 
 token:
-  salt: dGhyYWdvbw==
+  salt: t!h@r!a@g!o@o
 
 ---
 
