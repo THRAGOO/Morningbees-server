@@ -18,7 +18,9 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.sql.Time
 import org.springframework.mock.web.MockMultipartFile
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import javax.transaction.Transactional
 
 internal open class MissionServiceTest : SpringMockMvcTestSupport() {
@@ -71,7 +73,7 @@ internal open class MissionServiceTest : SpringMockMvcTestSupport() {
 
         val missionCreateDto = MissionCreateDto( 1, "test", Mission.MissionDifficulty.Intermediate.level, Mission.MissionType.Question.type)
 
-        val thrown = assertThrows(BadRequestException::class.java) { missionService.create(user, firstFile, missionCreateDto) }
+        val thrown = assertThrows(BadRequestException::class.java) { missionService.create(user, firstFile, missionCreateDto, "20200501") }
         assertEquals(thrown.message, "already upload mission today")
     }
 
@@ -85,7 +87,25 @@ internal open class MissionServiceTest : SpringMockMvcTestSupport() {
         val firstFile = MockMultipartFile("data", "filename.txt", "text/plain", "some xml".toByteArray())
         val missionCreateDto = MissionCreateDto( 1, "test", Mission.MissionDifficulty.Intermediate.level, Mission.MissionType.Question.type)
 
-        val thrown = assertThrows(BadRequestException::class.java) { missionService.create(user, firstFile, missionCreateDto) }
+        val thrown = assertThrows(BadRequestException::class.java) { missionService.create(user, firstFile, missionCreateDto, "20200501") }
         assertEquals(thrown.message, "not join user")
+    }
+
+    @Test
+    @FlywayTest
+    @Transactional
+    open fun `해당 Bee의 모든 Mission Info를 반환한다`() {
+        val user = userRepository.findById(1).get()
+        val bee = beeRepository.findById(1).get()
+        missionRepository.save(Mission("test.jpg",  "description", Mission.MissionDifficulty.Intermediate, Mission.MissionType.Question, bee, user))
+
+        val current = LocalDateTime.now()
+
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val targetDate = current.format(formatter)
+
+        val missions = missionService.fetchInfos(1, targetDate)
+
+        assertEquals(missions.get(0).imageUrl, "test.jpg")
     }
 }
