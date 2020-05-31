@@ -16,6 +16,7 @@ import java.math.BigDecimal
 
 
 interface MissionRepository : CrudRepository<Mission, Long> {
+    fun getById(id: Long): Mission?
 }
 
 @Repository

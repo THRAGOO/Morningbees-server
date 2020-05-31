@@ -34,8 +34,16 @@ data class Mission (
     @OneToMany(mappedBy = "mission", cascade = [CascadeType.ALL])
     val comment: MutableList<Comment> = mutableListOf<Comment>()
 
-    @OneToMany(mappedBy = "mission", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "mission", cascade = [CascadeType.MERGE])
     val missionVotes: MutableSet<MissionVote> = mutableSetOf<MissionVote>()
+
+    fun addVote(tryUser: User, voteType: Int): MissionVote {
+        val missionVote = MissionVote(tryUser, this, voteType)
+        this.missionVotes.add(missionVote)
+        tryUser.missionVotes.add(missionVote)
+
+        return missionVote
+    }
 
     enum class MissionType(val type: Int) {
         Question(1),
