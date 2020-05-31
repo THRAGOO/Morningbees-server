@@ -31,7 +31,7 @@ data class User(
         @OneToMany(mappedBy = "bee", cascade = [CascadeType.ALL])
         val missions: MutableList<Mission> = mutableListOf<Mission>()
 
-        @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
+        @OneToMany(mappedBy = "user", cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
         val missionVotes: MutableSet<MissionVote> = mutableSetOf<MissionVote>()
 
         @OneToMany(mappedBy = "user", cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)

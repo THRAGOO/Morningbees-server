@@ -20,4 +20,7 @@ enum class ErrorCode(val message: String, val status: Int) {
     NotJoinBee("모임 가입에 실패했습니다.", 140),
 
     FailWithdrwalBee("모임 탈퇴에 실패했습니다.", 150),
+
+    CantVoteMyselfMission("자신의 미션에는 투표할 수 없습니다.", 160),
+    NotJoinUser("Bee의 가입되지 않은 유저는 투표할 수 없습니다.", 161),
 }
