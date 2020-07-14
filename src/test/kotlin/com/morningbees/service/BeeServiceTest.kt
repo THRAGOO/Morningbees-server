@@ -1,23 +1,28 @@
 package com.morningbees.service
 
+import com.morningbees.LogTracker
+import com.morningbees.LogTrackerStub
 import com.morningbees.SpringMockMvcTestSupport
 import com.morningbees.dto.BeeCreateDto
+import com.morningbees.dto.BeeInfoDto
+import com.morningbees.model.Bee
 import com.morningbees.model.BeeMember
+import com.morningbees.model.Mission
 import com.morningbees.model.User
 import com.morningbees.repository.BeeRepository
 import com.morningbees.repository.UserRepository
 import org.flywaydb.test.annotation.FlywayTest
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
-import org.springframework.beans.factory.annotation.Autowired
-import javax.transaction.Transactional
-import com.morningbees.LogTracker
-import com.morningbees.LogTrackerStub
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
-
+import org.skyscreamer.jsonassert.JSONAssert.assertEquals
+import org.springframework.beans.factory.annotation.Autowired
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import javax.transaction.Transactional
 
 
 internal class BeeServiceTest : SpringMockMvcTestSupport() {
@@ -68,4 +73,60 @@ internal class BeeServiceTest : SpringMockMvcTestSupport() {
         assertEquals(user.bees.first().bee.title, "bee")
         assertEquals(user.bees.first().type, BeeMember.MemberType.Manager.type)
     }
+
+    @Test
+    @FlywayTest
+    @DisplayName("startTime이 정해진 시간보다 빠르면 로그를 발생하고 false를 반환한다.")
+    @Transactional
+    open fun exceptionCreateBeeByStartTime() {
+        val beeCreateDto = BeeCreateDto("bee", "test", 3, 10, 2000)
+
+        val user = userRepository.findById(1).get()
+        val result = beeService.createBeeByManager(user, beeCreateDto)
+
+        assertTrue(logTrackerStub.contains("not match startTime"))
+        assertEquals(result, false)
+    }
+
+    @Test
+    @FlywayTest
+    @DisplayName("endTime이 정해진 시간보다 늦으면 로그를 발생하고 false를 반환한다.")
+    @Transactional
+    open fun exceptionCreateBeeByEndTime() {
+        val beeCreateDto = BeeCreateDto("bee", "test", 7, 12, 2000)
+
+        val user = userRepository.findById(1).get()
+        val result = beeService.createBeeByManager(user, beeCreateDto)
+
+        assertTrue(logTrackerStub.contains("not match endTime"))
+        assertEquals(result, false)
+    }
+
+    @Test
+    @FlywayTest
+    @DisplayName("pay가 정해진 가격대에 맞지 않으면 로그를 발생하고 false를 반환한다.")
+    @Transactional
+    open fun exceptionCreateBeeByPay() {
+        val beeCreateDto = BeeCreateDto("bee", "test", 7, 10, 1000)
+
+        val user = userRepository.findById(1).get()
+        val result = beeService.createBeeByManager(user, beeCreateDto)
+
+        assertTrue(logTrackerStub.contains("not match pay"))
+        assertEquals(result, false)
+    }
+
+    @Test
+    @FlywayTest
+    @Transactional
+    open fun fetchinfos() {
+
+        beeRepository.save(Bee("title",  "description", LocalTime.of(10, 0), LocalTime.of(12, 0), 1000))
+
+        val bees = beeService.fetchInfos(1)
+
+        assertEquals(bees.get(0).title, "title")
+
+    }
+
 }

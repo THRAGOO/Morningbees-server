@@ -4,6 +4,8 @@ package com.morningbees.controller.api.v1
 import com.morningbees.dto.BeeCreateDto
 import com.morningbees.dto.BeeJoinDto
 import com.morningbees.dto.BeeMemberInfoDto
+import com.morningbees.dto.BeeInfoDto
+import com.morningbees.dto.MissionInfoDto
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
 import com.morningbees.model.User
@@ -80,6 +82,17 @@ class BeeController {
         if(!result) throw BadRequestException("fail withdrawal bee", ErrorCode.FailWithdrwalBee, LogEvent.BeeControllerProcess.code, logger)
 
         return ResponseEntity(HttpStatus.OK)
+    }
+
+    @ResponseBody
+    @GetMapping("/bees")
+    fun beeInfo(@RequestParam("beeId") beeId:Long, request: HttpServletRequest): ResponseEntity<List<BeeInfoDto>> {
+        val response = beeService.fetchInfos(beeId)
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                .body(response)
+
     }
 }
 
