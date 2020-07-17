@@ -1,0 +1,1 @@
+alter table users add column profile_image VARCHAR(255) after nickname;

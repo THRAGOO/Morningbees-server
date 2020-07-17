@@ -1,6 +1,8 @@
 package com.morningbees.model
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonFormat
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -22,9 +24,13 @@ data class BeeMember (
         var bee: Bee,
 
         @Column(columnDefinition = "TINYINT")
-        var type: Int = MemberType.Member.type
+        var type: Int = MemberType.Member.type,
+
+        @Column(name = "created_at", updatable = false)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+        open var createdAt: LocalDateTime = LocalDateTime.now()
 ) {
-    constructor(user: User, bee: Bee, memberType: Int) : this(BeeMemberKey(bee.id, user.id), user, bee, memberType)
+    constructor(user: User, bee: Bee, memberType: Int) : this(BeeMemberKey(bee.id, user.id), user, bee, memberType, LocalDateTime.of(2020, 7, 16, 10, 10, 10))
     constructor(user: User, bee: Bee) : this(BeeMemberKey(bee.id, user.id), user, bee)
 
     fun isManager(): Boolean = this.type == MemberType.Manager.type

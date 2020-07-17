@@ -19,7 +19,10 @@ data class BeePenalty (
         val user: User,
 
         @Column(columnDefinition = "TINYINT")
-        val status: Int = BeePenaltyStatus.Pending.status
+        val status: Int = BeePenaltyStatus.Pending.status,
+
+        @Column
+        val penalty: Int = 0
 ) : BaseEntity() {
     fun createPenalty() {
         this.bee.beePenalties.add(this)

@@ -1,0 +1,1 @@
+alter table bee_penalties add column penalty int(10) default 0 after bee_id;

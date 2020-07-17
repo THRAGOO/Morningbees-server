@@ -1,0 +1,1 @@
+alter table bee_members add column created_at datetime not null DEFAULT '2020-07-12 10:00:00';
