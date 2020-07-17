@@ -13,6 +13,7 @@ import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.JPQLQuery
 import com.querydsl.core.types.dsl.CaseBuilder
 import java.math.BigDecimal
+import java.time.format.DateTimeFormatter
 
 
 interface MissionRepository : CrudRepository<Mission, Long> {
@@ -45,7 +46,9 @@ class MissionRepositorySupport(
         val missionInfos: JPQLQuery<MissionInfoDto> = query.from(qMission)
                 .innerJoin(qMission.user, qUser)
                 .leftJoin(qMission.missionVotes, qMissionVote)
-                .select(Projections.constructor(MissionInfoDto::class.java, qMission.id, qMission.imageUrl, qUser.nickname,
+                .select(Projections.constructor(MissionInfoDto::class.java,
+                        qMission.id, qMission.imageUrl, qUser.nickname, qMission.type, qMission.difficulty,
+                        Expressions.stringTemplate("DATE_FORMAT({0}, {1})", qMission.createdAt, ConstantImpl.create<String>("%Y-%m-%d %H:%i:%S")),
                         CaseBuilder()
                         .`when`(qMissionVote.type.eq(MissionVote.VoteType.Agree.type))
                         .then(BigDecimal.ONE)
@@ -55,7 +58,7 @@ class MissionRepositorySupport(
                         .then(BigDecimal.ONE)
                         .otherwise(BigDecimal.ZERO).sum().`as`("disagreeCount")
                 ))
-                .groupBy(qMission.id, qMission.imageUrl, qUser.nickname)
+                .groupBy(qMission.id, qMission.imageUrl, qMission.type, qMission.difficulty, qUser.nickname).orderBy(qMission.type.asc())
 //                .where(dateFormat.eq(date).and(qMission.bee.eq(bee)))
 
         return missionInfos.fetch()

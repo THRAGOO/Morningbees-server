@@ -22,7 +22,7 @@ class MissionVoteController {
     fun vote(@RequestBody missionVoteDto: MissionVoteDto, request: HttpServletRequest): ResponseEntity<Any> {
         val user: User = request.getAttribute("user") as User
 
-        val result = missionVoteService.action(user, missionVoteDto)
+        missionVoteService.action(user, missionVoteDto)
         return ResponseEntity(HttpStatus.OK)
     }
 }
