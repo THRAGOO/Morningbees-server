@@ -44,5 +44,8 @@ enum class LogEvent(val code: String) {
     BeeControllerProcess("BCP001"),
 
     // MissionVoteService Process
-    MissionVoteServiceProcess("MVP001")
+    MissionVoteServiceProcess("MVP001"),
+
+    // MainService Process
+    MainServiceProcess("MSP002")
 }

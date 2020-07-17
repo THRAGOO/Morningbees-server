@@ -1,6 +1,7 @@
 package com.morningbees.model
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
+import com.morningbees.dto.UserInfoDto
 import org.springframework.stereotype.Component
 import javax.persistence.*
 
@@ -48,6 +49,8 @@ data class User(
 
                 return beeId
         }
+
+        fun defaultInfo(): UserInfoDto = UserInfoDto(this.nickname)
 
         enum class UserStatus(val status: Int) {
                 Use(1),
