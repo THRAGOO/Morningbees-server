@@ -101,9 +101,10 @@ class BeeService(
         return true
     }
 
-    fun fetchInfos(beeId:Long):List<BeeInfoDto> {
-        val bee = beeRepository.getById(beeId)
-        val beeInfos = beeRepository.fetchBeeInfosByBeeAndCreatedAt(bee.get())
+    fun fetchInfos(beeId:Long, userId:Long):List<BeeInfoDto> {
+        val bee = beeRepository.findById(beeId)
+        val user = userRepository.findById(userId)
+        val beeInfos = beeRepositorySupport.fetchBeeInfosByBeeAndCreatedAt(bee.get(), user.get())
         return beeInfos
     }
 }

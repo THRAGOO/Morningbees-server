@@ -86,8 +86,8 @@ class BeeController {
 
     @ResponseBody
     @GetMapping("/bees")
-    fun beeInfo(@RequestParam("beeId") beeId:Long, request: HttpServletRequest): ResponseEntity<List<BeeInfoDto>> {
-        val response = beeService.fetchInfos(beeId)
+    fun beeInfo(@RequestParam("beeId") beeId:Long, @RequestParam("userId") userId:Long, request: HttpServletRequest): ResponseEntity<List<BeeInfoDto>> {
+        val response = beeService.fetchInfos(beeId, userId)
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, "application/json")
