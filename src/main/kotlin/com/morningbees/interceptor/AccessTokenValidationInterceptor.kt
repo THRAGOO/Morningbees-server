@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class AccessTokenValidationInterceptor : HandlerInterceptorAdapter() {
-    private val log = org.slf4j.LoggerFactory.getLogger(AccessTokenValidationInterceptor::class.java)
+    private val logger = org.slf4j.LoggerFactory.getLogger(AccessTokenValidationInterceptor::class.java)
 
     @Autowired
     lateinit var accessTokenService: AccessTokenService
@@ -25,6 +25,7 @@ class AccessTokenValidationInterceptor : HandlerInterceptorAdapter() {
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         try {
             val accessToken: String = request.getHeader("X-BEES-ACCESS-TOKEN")
+            logger.info("Token: $accessToken")
 
             val tokenBody = accessTokenService.decodeAndGetInfos(accessToken)
             val user: User = userService.getUserById(tokenBody.userId)
