@@ -4,6 +4,7 @@ import com.morningbees.dto.MissionCreateDto
 import com.morningbees.dto.MissionInfoDto
 import com.morningbees.model.User
 import com.morningbees.service.MissionService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -19,17 +20,26 @@ import javax.servlet.http.HttpServletRequest
 @RestController
 @RequestMapping("/api")
 class MissionController {
+    private val logger = LoggerFactory.getLogger(this.javaClass.name)
+
     @Autowired
     lateinit var missionService: MissionService
 
+    @CrossOrigin
     @ResponseBody
     @PostMapping("/missions", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun create(@RequestParam("image") image: MultipartFile, @ModelAttribute missionCreateDto: MissionCreateDto, request: HttpServletRequest): ResponseEntity<Any> {
         val user: User = request.getAttribute("user") as User
+        val accessToken = request.getHeader("X-BEES-ACCESS-TOKEN")
+        logger.info("Token: $accessToken")
+        logger.info("nickname: ${user.nickname}")
+        logger.info("type: ${missionCreateDto.type}")
+        logger.info("beeId: ${missionCreateDto.beeId}")
+        logger.info("description: ${missionCreateDto.description}")
 
-        val currnetDate = SimpleDateFormat("yyyyMMdd").format(Date())
+        val currentDate = SimpleDateFormat("yyyyMMdd").format(Date())
 
-        missionService.create(user, image, missionCreateDto, currnetDate)
+        missionService.create(user, image, missionCreateDto, currentDate)
 
         return ResponseEntity(HttpStatus.CREATED)
     }
