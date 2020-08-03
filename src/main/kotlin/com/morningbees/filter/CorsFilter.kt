@@ -30,14 +30,16 @@ class CorsFilter : Filter {
         //set header
 
         httpServletResponse.setHeader("Access-Control-Allow-Origin", "*")
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, X-BEES-ACCESS-TOKEN")
-        httpServletResponse.setHeader("Access-Control-Allow-Methods",
-                "POST, GET, DELETE, PUT, PATCH, OPTIONS")
+        httpServletResponse.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, access-control-allow-origin, authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, X-BEES-ACCESS-TOKEN")
+        httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, PATCH, OPTIONS")
         httpServletResponse.setHeader("Accept-Charset", "utf-8")
         httpServletResponse.setHeader("Cache-Control", "no-cache")
         httpServletResponse.setHeader("Expires", "-1")
         httpServletResponse.setHeader("Pragma", "no-cache")
-
-        chain?.doFilter(httpServletRequest, httpServletResponse)
+        if ("OPTIONS".equals(httpServletRequest.getMethod())) {
+            httpServletRequest.setAttribute("status", HttpServletResponse.SC_OK)
+        } else {
+            chain?.doFilter(httpServletRequest, httpServletResponse)
+        }
     }
 }
