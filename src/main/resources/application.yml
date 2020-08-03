@@ -75,6 +75,9 @@ spring:
     port: ${MORNINGBEES_PRD_REDIS_PORT}
     password:
 
+server:
+  max-http-header-size: 4800
+
 aws:
   access-key-id: ${AWS_ACCESS_KEY_ID}
   secret-key: ${AWS_SECRET_ACCESS_KEY}
