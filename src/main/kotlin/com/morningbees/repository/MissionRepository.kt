@@ -59,7 +59,7 @@ class MissionRepositorySupport(
                         .otherwise(BigDecimal.ZERO).sum().`as`("disagreeCount")
                 ))
                 .groupBy(qMission.id, qMission.imageUrl, qMission.type, qMission.difficulty, qUser.nickname).orderBy(qMission.type.asc())
-//                .where(dateFormat.eq(date).and(qMission.bee.eq(bee)))
+                .where(dateFormat.eq(date).and(qMission.bee.eq(bee)))
 
         return missionInfos.fetch()
     }
