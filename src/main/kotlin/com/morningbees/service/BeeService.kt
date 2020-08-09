@@ -56,28 +56,23 @@ class BeeService {
     }
 
     fun withdrawal(user: User): Boolean {
-        try {
-            val beeMember: BeeMember? = beeMemberRepository.findByUser(user)
-            if (beeMember == null) throw Exception("bee member is null")
+        val beeMember: BeeMember? = beeMemberRepository.findByUser(user)
+        if (beeMember == null) throw BadRequestException("bee member is null")
 
-            val bee: Bee? = beeMember.bee
-            if (bee == null) throw Exception("bee is null")
+        val bee: Bee? = beeMember.bee
+        if (bee == null) throw BadRequestException("bee is null")
 
-            if (beeMember.isManager() && bee.users.size > 1) {
-                delegateManager(bee.users.first())
-            }
-
-            beeMemberRepository.deleteByBeeAndUser(bee, user)
-
-            if (bee.users.size == 1) {
-                beeRepository.deleteBeeById(bee.id!!)
-            }
-
-            return true
-        } catch (ex: Exception) {
-            logger.warn(ex.message, kv("userId", user.id), kv("eventCode", LogEvent.BeeServiceProcess.code), kv("backTrace", ex.stackTrace[0].toString() + ex.stackTrace[1].toString()))
-            return false
+        if (beeMember.isManager() && bee.users.size > 1) {
+            delegateManager(bee.users.first())
         }
+
+        beeMemberRepository.deleteByBeeAndUser(bee, user)
+
+        if (bee.users.size == 1) {
+            beeRepository.deleteBeeById(bee.id!!)
+        }
+
+        return true
     }
 
     fun getBeeDetailInfo(bee: Bee, todayQuestionDto: MissionInfoDto): BeeDetailInfoDto = BeeDetailInfoDto(bee.title,
