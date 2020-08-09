@@ -11,12 +11,12 @@ import com.morningbees.repository.BeeRepository
 import com.morningbees.repository.MissionRepository
 import com.morningbees.repository.UserRepository
 import org.flywaydb.test.annotation.FlywayTest
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.sql.Time
 import org.springframework.mock.web.MockMultipartFile
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -80,9 +80,9 @@ internal open class MissionServiceTest : SpringMockMvcTestSupport() {
     @Test
     @FlywayTest
     @DisplayName("가입되지 않은 유저가 미션을 쓸 때 에러를 반환한다.")
-    fun returnThrowNotJoinUserToBee() {
+    @Transactional
+    open fun returnThrowNotJoinUserToBee() {
         val user = userRepository.findById(1).get()
-        val bee = beeRepository.findById(1).get()
 
         val firstFile = MockMultipartFile("data", "filename.txt", "text/plain", "some xml".toByteArray())
         val missionCreateDto = MissionCreateDto( 1, "test", Mission.MissionDifficulty.Intermediate.level, Mission.MissionType.Question.type)
@@ -106,6 +106,6 @@ internal open class MissionServiceTest : SpringMockMvcTestSupport() {
 
         val missions = missionService.fetchInfos(1, targetDate)
 
-        assertEquals(missions.get(0).imageUrl, "test.jpg")
+        assertEquals(missions[0].imageUrl, "test.jpg")
     }
 }

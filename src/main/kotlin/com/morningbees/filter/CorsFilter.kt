@@ -14,14 +14,6 @@ import javax.servlet.http.HttpServletResponse
 class CorsFilter : Filter {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    override fun init(filterConfig: FilterConfig?) {
-        super.init(filterConfig)
-    }
-
-    override fun destroy() {
-        super.destroy()
-    }
-
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain?) {
         val httpServletRequest = request as HttpServletRequest
         val httpServletResponse = response as HttpServletResponse
@@ -36,7 +28,7 @@ class CorsFilter : Filter {
         httpServletResponse.setHeader("Cache-Control", "no-cache")
         httpServletResponse.setHeader("Expires", "-1")
         httpServletResponse.setHeader("Pragma", "no-cache")
-        if ("OPTIONS".equals(httpServletRequest.getMethod())) {
+        if ("OPTIONS" == httpServletRequest.method) {
             httpServletRequest.setAttribute("status", HttpServletResponse.SC_OK)
         } else {
             chain?.doFilter(httpServletRequest, httpServletResponse)

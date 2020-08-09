@@ -10,16 +10,12 @@ import com.morningbees.model.User
 import com.morningbees.repository.BeeMemberRepository
 import com.morningbees.repository.BeeRepository
 import com.morningbees.repository.UserRepository
-import com.morningbees.util.LogEvent
-import net.logstash.logback.argument.StructuredArguments.kv
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.Period
 
 @Service
 class BeeService {
@@ -56,11 +52,9 @@ class BeeService {
     }
 
     fun withdrawal(user: User): Boolean {
-        val beeMember: BeeMember? = beeMemberRepository.findByUser(user)
-        if (beeMember == null) throw BadRequestException("bee member is null")
+        val beeMember: BeeMember = beeMemberRepository.findByUser(user) ?: throw BadRequestException("bee member is null")
 
-        val bee: Bee? = beeMember.bee
-        if (bee == null) throw BadRequestException("bee is null")
+        val bee: Bee = beeMember.bee
 
         if (beeMember.isManager() && bee.users.size > 1) {
             delegateManager(bee.users.first())
@@ -75,14 +69,21 @@ class BeeService {
         return true
     }
 
-    fun getBeeDetailInfo(bee: Bee, todayQuestionDto: MissionInfoDto): BeeDetailInfoDto = BeeDetailInfoDto(bee.title,
-            bee.startTime.hour,
-            bee.endTime.hour,
-            todayQuestionDto.difficulty,
-            bee.beePenalties.map { it.penalty }.sum(),
-            bee.users.size,
-            getQuestioner(bee, LocalDateTime.now()).defaultInfo(),
-            getQuestioner(bee, LocalDateTime.now().plusDays(1)).defaultInfo())
+    fun getBeeDetailInfo(
+            bee: Bee,
+            todayQuestionDto: MissionInfoDto
+    ): BeeDetailInfoDto {
+        return BeeDetailInfoDto(
+                bee.title,
+                bee.startTime.hour,
+                bee.endTime.hour,
+                todayQuestionDto.difficulty,
+                bee.beePenalties.map { it.penalty }.sum(),
+                bee.users.size,
+                getQuestioner(bee, LocalDateTime.now()).defaultInfo(),
+                getQuestioner(bee, LocalDateTime.now().plusDays(1)).defaultInfo()
+        )
+    }
 
     fun getQuestioner(bee: Bee, targetDate: LocalDateTime): User {
         val users = bee.users.sortedBy { it.createdAt }
@@ -94,9 +95,8 @@ class BeeService {
     }
 
     private fun delegateManager(delegateUser: BeeMember): Boolean {
-        val anotherBeeMember = delegateUser
-        anotherBeeMember.type = BeeMember.MemberType.Manager.type
-        beeMemberRepository.save(anotherBeeMember)
+        delegateUser.type = BeeMember.MemberType.Manager.type
+        beeMemberRepository.save(delegateUser)
 
         return true
     }

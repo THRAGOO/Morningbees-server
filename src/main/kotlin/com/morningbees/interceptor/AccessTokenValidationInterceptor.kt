@@ -25,7 +25,6 @@ class AccessTokenValidationInterceptor : HandlerInterceptorAdapter() {
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         try {
             val accessToken: String = request.getHeader("X-BEES-ACCESS-TOKEN")
-            logger.info("Token: $accessToken")
 
             val tokenBody = accessTokenService.decodeAndGetInfos(accessToken)
             val user: User = userService.getUserById(tokenBody.userId)

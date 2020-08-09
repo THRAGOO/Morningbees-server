@@ -2,7 +2,6 @@ package com.morningbees.controller
 
 import com.morningbees.exception.ErrorCode
 import com.morningbees.exception.ErrorResponse
-import com.morningbees.exception.InternalException
 import com.morningbees.exception.MorningbeesException
 import com.morningbees.util.LogEvent
 import net.logstash.logback.argument.StructuredArguments
@@ -11,8 +10,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.MissingServletRequestParameterException
-import org.springframework.web.bind.annotation.*
-import java.lang.Exception
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestControllerAdvice
 import java.time.LocalDateTime
 import javax.servlet.http.HttpServletRequest
 

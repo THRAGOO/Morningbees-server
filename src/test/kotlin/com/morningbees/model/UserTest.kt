@@ -52,6 +52,6 @@ internal class UserTest : SpringMockMvcTestSupport() {
     @DisplayName("중복된 닉네임을 가진 유저가 있을경우 에러를 반환한다.")
     fun failDuplicateNickname() {
         val duplicateUser = User("Test")
-        assertThrows(Exception::class.java, { userRepository.save(duplicateUser) })
+        assertThrows(Exception::class.java) { userRepository.save(duplicateUser) }
     }
 }

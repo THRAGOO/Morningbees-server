@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import javax.transaction.Transactional
 
 @Service
 class MissionService {
@@ -39,6 +40,7 @@ class MissionService {
     val UPLOAD_FREE_TIME: Long = 1
 
     @CacheEvict(value = ["MissionInfos"], key = "#missionCreateDto.beeId + '_' + #currentDate")
+    @Transactional
     fun create(user: User, image: MultipartFile, missionCreateDto: MissionCreateDto, currentDate: String): Boolean {
         val currentTime = LocalTime.now()
 
@@ -61,11 +63,9 @@ class MissionService {
     @Cacheable(value = ["MissionInfos"], key = "#beeId + '_' + #targetDate.replace('-','')")
     fun fetchInfos(beeId: Long, targetDate: String): List<MissionInfoDto> {
         val bee = beeRepository.findById(beeId)
-        if (bee.isPresent == false) throw BadRequestException("bee is null", ErrorCode.BadRequest, LogEvent.MissionServiceProcess.code)
+        if (!bee.isPresent) throw BadRequestException("bee is null", ErrorCode.BadRequest, LogEvent.MissionServiceProcess.code)
 
-        val missions = missionRepositorySupport.fetchMissionInfosByBeeAndCreatedAt(bee.get(), targetDate)
-
-        return missions
+        return missionRepositorySupport.fetchMissionInfosByBeeAndCreatedAt(bee.get(), targetDate)
     }
 
     fun alreadyUploadToday(user: User, bee: Bee): Boolean {

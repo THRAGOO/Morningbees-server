@@ -11,7 +11,7 @@ class AppleLoginService : SocialLoginService() {
     override fun getEmailByToken(socialToken: String): String {
         val notDecodePayload: String = socialToken.split(".")[1]
 
-        val decodedPayload: String = String(Base64.decodeBase64(notDecodePayload), Charsets.UTF_8)
+        val decodedPayload = String(Base64.decodeBase64(notDecodePayload), Charsets.UTF_8)
 
         val mapper = ObjectMapper()
         val payload = mapper.readTree(decodedPayload)

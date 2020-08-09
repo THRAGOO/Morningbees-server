@@ -30,13 +30,6 @@ class MissionController {
     @PostMapping("/missions", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun create(@RequestParam("image") image: MultipartFile, @ModelAttribute missionCreateDto: MissionCreateDto, request: HttpServletRequest): ResponseEntity<Any> {
         val user: User = request.getAttribute("user") as User
-        val accessToken = request.getHeader("X-BEES-ACCESS-TOKEN")
-        logger.info("Token: $accessToken")
-        logger.info("nickname: ${user.nickname}")
-        logger.info("type: ${missionCreateDto.type}")
-        logger.info("beeId: ${missionCreateDto.beeId}")
-        logger.info("description: ${missionCreateDto.description}")
-
         val currentDate = SimpleDateFormat("yyyyMMdd").format(Date())
 
         missionService.create(user, image, missionCreateDto, currentDate)

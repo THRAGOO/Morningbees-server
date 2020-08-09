@@ -12,44 +12,43 @@ import kotlin.collections.HashMap
 
 
 @Configuration
-open class TokenService() {
+class TokenService {
 
-    final val tokenConfig: TokenConfig = TokenConfig()
+    private final val tokenConfig: TokenConfig = TokenConfig()
 
     private val SALT = tokenConfig.salt
     private val JWT_ALG = "HS567"
     private val JWT_TYPE = "JWT"
 
-    open fun getExpirationDate(): Long { return Date().getTime() }
-    open fun decodeAndGetInfos(JWTToken: String): AuthTokenInfos { return AuthTokenInfos() }
+    fun getExpirationDate(): Long { return Date().time
+    }
+    fun decodeAndGetInfos(JWTToken: String): AuthTokenInfos { return AuthTokenInfos() }
 
     fun encodeJWT(payload: HashMap<String, Any?>): String {
         val headers = HashMap<String, Any?>()
-        headers.put("alg", JWT_ALG)
-        headers.put("typ", JWT_TYPE)
+        headers["alg"] = JWT_ALG
+        headers["typ"] = JWT_TYPE
 
         val claim = HashMap<String, Any?>()
-        claim.put("exp", getExpirationDate())
-        claim.put("sub", "morningbees")
-        claim.put("iat", Date().time/1000)
-        payload.forEach{ k,v -> claim.put(k, v) }
+        claim["exp"] = getExpirationDate()
+        claim["sub"] = "morningbees"
+        claim["iat"] = Date().time/1000
+        payload.forEach{ (k, v) -> claim[k] = v }
 
-        val jwt = Jwts.builder()
+        return Jwts.builder()
                 .setHeader(headers)
                 .setClaims(claim)
-                .signWith(SignatureAlgorithm.HS256, this.generateKey())
+                .signWith(SignatureAlgorithm.HS256, generateKey())
                 .compact()
-        return jwt
     }
 
     fun decodeJWT(JWTToken: String): Claims {
         try {
-            val body :Claims = Jwts.parser()
-                    .setSigningKey(this.generateKey())
+
+            return Jwts.parser()
+                    .setSigningKey(generateKey())
                     .parseClaimsJws(JWTToken)
                     .body
-
-            return body
         } catch (e: JwtException) {
             throw UnAuthorizeException(e.message.toString(), ErrorCode.InvalidAccessToken, LogEvent.TokenServiceProcessError.code)
         }
@@ -62,10 +61,9 @@ open class TokenService() {
         }
     }
 
-    private fun generateKey(): kotlin.ByteArray {
-        val key: kotlin.ByteArray = SALT.toByteArray()
+    private fun generateKey(): ByteArray {
 
-        return key
+        return SALT.toByteArray()
     }
 }
 

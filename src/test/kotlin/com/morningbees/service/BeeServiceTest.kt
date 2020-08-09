@@ -20,7 +20,7 @@ import org.junit.jupiter.api.extension.RegisterExtension
 
 
 
-internal open class BeeServiceTest : SpringMockMvcTestSupport() {
+internal class BeeServiceTest : SpringMockMvcTestSupport() {
 
     companion object {
         @JvmField
@@ -45,8 +45,7 @@ internal open class BeeServiceTest : SpringMockMvcTestSupport() {
     @Test
     @FlywayTest
     @DisplayName("Bee 생성에 성공한다.")
-    @Transactional
-    open fun createBee() {
+    fun createBee() {
         val beeCreateDto = BeeCreateDto("bee", "test", 7, 10, 2000)
 
         val user = userRepository.findById(1).get()
@@ -59,8 +58,7 @@ internal open class BeeServiceTest : SpringMockMvcTestSupport() {
     @Test
     @FlywayTest
     @DisplayName("Bee 생성에 성공하고 만든 유저가 매니저가 된다.")
-    @Transactional
-    open fun createBeeByManager() {
+    fun createBeeByManager() {
         val beeCreateDto = BeeCreateDto("bee", "test", 7, 10, 2000)
 
         val user = userRepository.findById(1).get()
@@ -69,47 +67,5 @@ internal open class BeeServiceTest : SpringMockMvcTestSupport() {
         assertEquals(result, true)
         assertEquals(user.bees.first().bee.title, "bee")
         assertEquals(user.bees.first().type, BeeMember.MemberType.Manager.type)
-    }
-
-    @Test
-    @FlywayTest
-    @DisplayName("startTime이 정해진 시간보다 빠르면 로그를 발생하고 false를 반환한다.")
-    @Transactional
-    open fun exceptionCreateBeeByStartTime() {
-        val beeCreateDto = BeeCreateDto("bee", "test", 3, 10, 2000)
-
-        val user = userRepository.findById(1).get()
-        val result = beeService.create(user, beeCreateDto)
-
-        assertTrue(logTrackerStub.contains("not match startTime"))
-        assertEquals(result, false)
-    }
-
-    @Test
-    @FlywayTest
-    @DisplayName("endTime이 정해진 시간보다 늦으면 로그를 발생하고 false를 반환한다.")
-    @Transactional
-    open fun exceptionCreateBeeByEndTime() {
-        val beeCreateDto = BeeCreateDto("bee", "test", 7, 12, 2000)
-
-        val user = userRepository.findById(1).get()
-        val result = beeService.create(user, beeCreateDto)
-
-        assertTrue(logTrackerStub.contains("not match endTime"))
-        assertEquals(result, false)
-    }
-
-    @Test
-    @FlywayTest
-    @DisplayName("pay가 정해진 가격대에 맞지 않으면 로그를 발생하고 false를 반환한다.")
-    @Transactional
-    open fun exceptionCreateBeeByPay() {
-        val beeCreateDto = BeeCreateDto("bee", "test", 7, 10, 1000)
-
-        val user = userRepository.findById(1).get()
-        val result = beeService.create(user, beeCreateDto)
-
-        assertTrue(logTrackerStub.contains("not match pay"))
-        assertEquals(result, false)
     }
 }

@@ -69,12 +69,12 @@ class AuthController {
             var response: HashMap<String, Any> = HashMap()
 
             if ( user == null ) {
-                response.put("accessToken", "")
-                response.put("refreshToken", "")
-                response.put("type", SIGN_UP_TYPE)
+                response["accessToken"] = ""
+                response["refreshToken"] = ""
+                response["type"] = SIGN_UP_TYPE
             } else {
                 response = authService.getAuthTokens(user)
-                response.put("type", SIGN_IN_TYPE)
+                response["type"] = SIGN_IN_TYPE
 
                 userTokenService.saveUserToken(user, null, response["refreshToken"].toString())
             }
@@ -90,7 +90,7 @@ class AuthController {
         val result = userService.isExistsNickname(nickname)
 
         val response: HashMap<String, Any> = HashMap()
-        response.put("isValid", result)
+        response["isValid"] = result
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, "application/json")
@@ -103,7 +103,7 @@ class AuthController {
         val user: User = request.getAttribute("user") as User
         val tokenInfos= authService.getAuthTokens(user)
         val response: HashMap<String, Any> = HashMap()
-        response.put("accessToken", tokenInfos["accessToken"].toString())
+        response["accessToken"] = tokenInfos["accessToken"].toString()
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, "application/json")

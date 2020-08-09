@@ -1,6 +1,7 @@
 package com.morningbees.service
 
 import com.morningbees.dto.BeeJoinDto
+import com.morningbees.exception.BadRequestException
 import com.morningbees.model.Bee
 import com.morningbees.model.BeeMember
 import com.morningbees.model.User
@@ -34,20 +35,14 @@ class BeeMemberService {
 
     @Transactional
     fun joinBeeByUser(beeJoinDto : BeeJoinDto) : Boolean {
-        try {
-            val user:User = userRepository.getById(beeJoinDto.userId)
-            val bee:Bee = beeRepository.getById(beeJoinDto.beeId)
+        val user:User = userRepository.getById(beeJoinDto.userId)
+        val bee:Bee = beeRepository.getById(beeJoinDto.beeId)
 
-            if(isAlreadyJoinBee(user)) throw Exception("Already join bee")
+        if(isAlreadyJoinBee(user)) throw BadRequestException("Already join bee")
 
-            val beeMember = bee.addUser(user, BeeMember.MemberType.Member.type)
-            beeMemberRepository.save(beeMember)
+        val beeMember = bee.addUser(user, BeeMember.MemberType.Member.type)
+        beeMemberRepository.save(beeMember)
 
-            return true
-        } catch(ex: Exception) {
-            logger.warn(ex.message, kv("userId", beeJoinDto.userId), kv("beeId", beeJoinDto.beeId), kv("eventCode", LogEvent.BeeMemberServiceProcess.code))
-            return false
-        }
-
+        return true
     }
 }

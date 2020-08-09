@@ -27,8 +27,8 @@ class AuthService {
         val refreshToken: String = refreshTokenService.generate(user)
 
         val tokenStore = HashMap<String, Any>()
-        tokenStore.put("accessToken", accessToken)
-        tokenStore.put("refreshToken", refreshToken)
+        tokenStore["accessToken"] = accessToken
+        tokenStore["refreshToken"] = refreshToken
 
         return tokenStore
     }

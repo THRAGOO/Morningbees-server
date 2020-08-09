@@ -20,12 +20,11 @@ class RefreshTokenService : TokenService() {
 
     fun generate(user: User): String {
         val additionalInfos = HashMap<String, Any?>()
-        additionalInfos.put("userId", user.id)
-        additionalInfos.put("nickname", user.nickname)
-        additionalInfos.put("tokenType", this.getTokenType(TokenType.REFRESH_TOKEN))
-        val jwt :String = encodeJWT(additionalInfos)
+        additionalInfos["userId"] = user.id
+        additionalInfos["nickname"] = user.nickname
+        additionalInfos["tokenType"] = this.getTokenType(TokenType.REFRESH_TOKEN)
 
-        return jwt
+        return encodeJWT(additionalInfos)
     }
 
     override fun decodeAndGetInfos(JWTToken: String): AuthTokenInfos {
@@ -35,8 +34,7 @@ class RefreshTokenService : TokenService() {
         val tokenType: Int = body["tokenType"] as Int
         val nickname: String = body["nickname"].toString()
         val provider: String = body["provider"].toString()
-        val authTokenInfos = AuthTokenInfos(userId, nickname, provider, tokenType)
 
-        return authTokenInfos
+        return AuthTokenInfos(userId, nickname, provider, tokenType)
     }
 }

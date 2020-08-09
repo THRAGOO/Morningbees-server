@@ -24,14 +24,14 @@ data class Bee(
         var pay: Int
 ) : BaseEntity() {
         @OneToMany(mappedBy = "bee", cascade = [CascadeType.ALL])
-        val beePenalties: MutableList<BeePenalty> = mutableListOf<BeePenalty>()
+        val beePenalties: MutableList<BeePenalty> = mutableListOf()
 
         @OneToMany(mappedBy = "bee", cascade = [CascadeType.ALL])
-        val missions: MutableList<Mission> = mutableListOf<Mission>()
+        val missions: MutableList<Mission> = mutableListOf()
 
         @OneToMany(mappedBy = "bee", cascade = [CascadeType.MERGE])
         @JsonManagedReference
-        val users: MutableSet<BeeMember> = mutableSetOf<BeeMember>()
+        val users: MutableSet<BeeMember> = mutableSetOf()
 
         fun update(title: String, description: String, startTime: Int, endTime: Int, pay: Int): Bee {
                 this.title = title
