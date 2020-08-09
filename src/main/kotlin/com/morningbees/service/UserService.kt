@@ -22,18 +22,18 @@ class UserService {
 
     fun signUpWithProvider(@NotNull email: String, @NotNull nickname: String, @NotNull provider: String): User {
         // 이미 가입된 이메일인지 확인 필요
-        if ( userProviderRepository.existsByEmailAndProvider(email, provider) == true ) {
+        if (userProviderRepository.existsByEmailAndProvider(email, provider)) {
             throw BadRequestException("alreay exists social email", ErrorCode.AlreadySocialEmail, LogEvent.UserServiceProcessError.code)
         }
-        if ( userRepository.existsByNickname(nickname) == true ) {
+        if (userRepository.existsByNickname(nickname)) {
             throw BadRequestException("alreay exists nickname", ErrorCode.AlreadyNickname, LogEvent.UserServiceProcessError.code)
         }
 
         val user = User(nickname =  nickname)
         userRepository.save(user)
 
-        val user_provider = UserProvider(user = user, email = email, provider = provider)
-        userProviderRepository.save(user_provider)
+        val userProvider = UserProvider(user = user, email = email, provider = provider)
+        userProviderRepository.save(userProvider)
 
         return user
     }
@@ -42,9 +42,9 @@ class UserService {
         val result: HashMap<String, Any> = HashMap()
         val alreadyJoin = user.bees.size > 0
 
-        result.put("nickname", user.nickname)
-        result.put("alreadyJoin", alreadyJoin)
-        result.put("beeId", user.getJoinBeeId())
+        result["nickname"] = user.nickname
+        result["alreadyJoin"] = alreadyJoin
+        result["beeId"] = user.getJoinBeeId()
 
         return result
     }
@@ -57,13 +57,12 @@ class UserService {
     }
 
     fun getUserById(@NotNull id: Long): User {
-        val user: User = userRepository.findById(id).get()
 
-        return user
+        return userRepository.findById(id).get()
     }
 
     fun isExistsNickname(nickname: String): Boolean {
-        if ( userRepository.existsByNickname(nickname) == true ) {
+        if (userRepository.existsByNickname(nickname)) {
             return false
         }
 

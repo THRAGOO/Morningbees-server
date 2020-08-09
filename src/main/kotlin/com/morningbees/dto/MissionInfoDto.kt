@@ -1,9 +1,7 @@
 package com.morningbees.dto
 
-import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.math.BigDecimal
-import java.time.LocalDateTime
 
 data class MissionInfoDto (
         @JsonProperty("missionId") val missionId: Long,
@@ -13,6 +11,4 @@ data class MissionInfoDto (
         @JsonProperty("difficulty") val difficulty: Int,
         @JsonProperty("createdAt") val createdAt: String,
         @JsonProperty("agreeCount") val agreeCount: BigDecimal,
-        @JsonProperty("disagreeCount") val disagreeCount: BigDecimal) {
-
-}
+        @JsonProperty("disagreeCount") val disagreeCount: BigDecimal)

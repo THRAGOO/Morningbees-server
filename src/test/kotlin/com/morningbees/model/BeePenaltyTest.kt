@@ -5,17 +5,15 @@ import com.morningbees.repository.BeePenaltyRepository
 import com.morningbees.repository.BeeRepository
 import com.morningbees.repository.UserRepository
 import org.flywaydb.test.annotation.FlywayTest
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
-import java.sql.Time
 import java.time.LocalTime
 
-internal open class BeePenaltyTest : SpringMockMvcTestSupport() {
+internal class BeePenaltyTest : SpringMockMvcTestSupport() {
 
     @Autowired
     lateinit var beePenaltyRepository: BeePenaltyRepository

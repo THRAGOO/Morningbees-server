@@ -28,7 +28,7 @@ class RedisConfig : CachingConfigurerSupport() {
     @Value("\${spring.redis.password}")
     private val redisPassword: String? = null
 
-    @Bean()
+    @Bean
     fun lettuceConnectionFactory(): RedisConnectionFactory {
 
 

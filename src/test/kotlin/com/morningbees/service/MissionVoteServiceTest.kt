@@ -48,7 +48,6 @@ internal class MissionVoteServiceTest : SpringMockMvcTestSupport() {
     @Test
     @FlywayTest
     fun `파라미터로 유저가 넘어오지 않으면 에러를 반환한다`() {
-        val user = userRepository.findById(2).get()
         val mission = missionRepository.getById(1) ?: throw Exception()
         val agreeVoteType = MissionVote.VoteType.Agree
 

@@ -20,9 +20,9 @@ class LogTracker {
 
     private val loggingSources = Vector<Class<*>>()
 
-    private var level: LogTracker.LogLevel = LogTracker.LogLevel.TRACE
+    private var level: LogLevel = LogLevel.TRACE
 
-    enum class LogLevel private constructor(internal var internalLevel: Level) {
+    enum class LogLevel(internal var internalLevel: Level) {
         TRACE(Level.TRACE),
         DEBUG(Level.DEBUG),
         INFO(Level.INFO),
@@ -30,7 +30,7 @@ class LogTracker {
         ERROR(Level.ERROR)
     }
 
-    fun recordForLevel(level: LogTracker.LogLevel): LogTracker {
+    fun recordForLevel(level: LogLevel): LogTracker {
         this.level = level
         resetLoggingFramework()
         prepareLoggingFramework()

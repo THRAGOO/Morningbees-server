@@ -60,18 +60,18 @@ internal class RefreshTokenServiceTest: SpringMockMvcTestSupport() {
     @DisplayName("fail decode token")
     fun failDecodeToken() {
         val headers = HashMap<String, Any?>()
-        headers.put("alg", "HS256")
-        headers.put("typ", "JWT")
+        headers["alg"] = "HS256"
+        headers["typ"] = "JWT"
 
         val claim = HashMap<String, Any?>()
-        claim.put("exp", Date().getTime() + 1000)
-        claim.put("iat", Date().time/1000)
+        claim["exp"] = Date().time + 1000
+        claim["iat"] = Date().time/1000
 
         val accessToken :String = Jwts.builder()
                 .setHeader(headers)
                 .setClaims(claim)
                 .signWith(SignatureAlgorithm.HS256, "unexpect_secret".toByteArray())
                 .compact()
-        assertThrows(UnAuthorizeException::class.java, { refreshTokenService.decodeAndGetInfos(accessToken) })
+        assertThrows(UnAuthorizeException::class.java) { refreshTokenService.decodeAndGetInfos(accessToken) }
     }
 }

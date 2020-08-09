@@ -13,11 +13,11 @@ import org.springframework.web.client.HttpClientErrorException
 import java.net.URI
 
 @Service
-open class SocialLoginService() {
+class SocialLoginService {
 
-    open val socialLoginUrl = "https://openapi.naver.com/v1/nid/me"
+    val socialLoginUrl = "https://openapi.naver.com/v1/nid/me"
 
-    open fun getEmailByToken(socialToken: String): String { return "" }
+    fun getEmailByToken(socialToken: String): String { return "" }
 
     fun getResponseByUrl(socialToken: String): JsonNode {
         try {
@@ -32,9 +32,8 @@ open class SocialLoginService() {
             val result = rest.exchange(URI(socialLoginUrl), HttpMethod.GET, request, String::class.java)
 
             val objectMapper = ObjectMapper()
-            val response = objectMapper.readTree(result.body)
 
-            return response
+            return objectMapper.readTree(result.body)
         } catch (e: HttpClientErrorException) {
             throw BadRequestException("invalid social access token", ErrorCode.InvalidSocialToken, LogEvent.SocialLoginServiceProcessError.code)
         }

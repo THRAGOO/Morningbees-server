@@ -21,18 +21,16 @@ class AWSConfig : WebMvcConfigurer {
     private val secretKey: String = "secret"
 
     @Bean
-    fun AWSCredentials() : BasicAWSCredentials {
-        val awsCredentials = BasicAWSCredentials(accessKeyId, secretKey)
-        return awsCredentials
+    fun awsCredentials() : BasicAWSCredentials {
+        return BasicAWSCredentials(accessKeyId, secretKey)
     }
 
     @Bean
-    fun AwsS3Client() : AmazonS3 {
-        val s3Client = AmazonS3ClientBuilder.standard()
+    fun awsS3Client() : AmazonS3 {
+
+        return AmazonS3ClientBuilder.standard()
                 .withRegion(Regions.AP_NORTHEAST_2)
                 .withCredentials(EnvironmentVariableCredentialsProvider())
                 .build()
-
-        return s3Client
     }
 }

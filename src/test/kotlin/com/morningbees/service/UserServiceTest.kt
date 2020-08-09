@@ -2,13 +2,13 @@ package com.morningbees.service
 
 import com.morningbees.SpringMockMvcTestSupport
 import com.morningbees.exception.BadRequestException
-import com.morningbees.exception.UnAuthorizeException
 import com.morningbees.model.User
 import com.morningbees.model.UserProvider
 import com.morningbees.repository.UserProviderRepository
 import com.morningbees.repository.UserRepository
 import org.flywaydb.test.annotation.FlywayTest
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
