@@ -3,9 +3,9 @@ package com.morningbees.service
 import com.morningbees.dto.BeeCreateDto
 import com.morningbees.dto.BeeDetailInfoDto
 import com.morningbees.dto.MissionInfoDto
+import com.morningbees.exception.BadRequestException
 import com.morningbees.model.Bee
 import com.morningbees.model.BeeMember
-import com.morningbees.model.Mission
 import com.morningbees.model.User
 import com.morningbees.repository.BeeMemberRepository
 import com.morningbees.repository.BeeRepository
@@ -35,22 +35,24 @@ class BeeService {
     lateinit var userRepository: UserRepository
 
     @Transactional
-    fun createBeeByManager(user: User, beeCreateDto: BeeCreateDto): Boolean {
-        try {
-            if (beeCreateDto.startTime < 6) throw Exception("not match startTime")
-            if (beeCreateDto.endTime > 10) throw Exception("not match endTime")
-            if (beeCreateDto.pay < 2000 || beeCreateDto.pay > 10000) throw Exception("not match pay")
-            val bee: Bee = beeCreateDto.toEntity()
-            beeRepository.save(bee)
+    fun create(user: User, beeCreateDto: BeeCreateDto): Boolean {
+        val bee: Bee = beeCreateDto.toEntity()
+        beeRepository.save(bee)
 
-            val beeMember = bee.addUser(user, BeeMember.MemberType.Manager.type)
-            beeMemberRepository.save(beeMember)
+        val beeMember = bee.addUser(user, BeeMember.MemberType.Manager.type)
+        beeMemberRepository.save(beeMember)
 
-            return true
-        } catch (ex: Exception) {
-            logger.warn(ex.message, kv("userId", user.id), kv("eventCode", LogEvent.BeeServiceProcess.code))
-            return false
-        }
+        return true
+    }
+
+    @Transactional
+    fun update(user: User, beeId: Long, beeCreateDto: BeeCreateDto): Boolean {
+        val bee = beeRepository.findById(beeId).orElseThrow { throw BadRequestException("bee is null") }
+        if(!beeMemberRepository.existsByUserAndBeeAndType(user, bee, BeeMember.MemberType.Manager.type)) { throw BadRequestException("is not manager") }
+
+        bee.update(beeCreateDto.title, beeCreateDto.description, beeCreateDto.startTime, beeCreateDto.endTime, beeCreateDto.pay)
+
+        return true
     }
 
     fun withdrawal(user: User): Boolean {
@@ -96,8 +98,7 @@ class BeeService {
         return users.elementAt(todayQuestionerIndex).user
     }
 
-    private
-    fun delegateManager(delegateUser: BeeMember): Boolean {
+    private fun delegateManager(delegateUser: BeeMember): Boolean {
         val anotherBeeMember = delegateUser
         anotherBeeMember.type = BeeMember.MemberType.Manager.type
         beeMemberRepository.save(anotherBeeMember)

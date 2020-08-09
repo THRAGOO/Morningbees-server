@@ -50,7 +50,7 @@ internal open class BeeServiceTest : SpringMockMvcTestSupport() {
         val beeCreateDto = BeeCreateDto("bee", "test", 7, 10, 2000)
 
         val user = userRepository.findById(1).get()
-        val result = beeService.createBeeByManager(user, beeCreateDto)
+        val result = beeService.create(user, beeCreateDto)
 
         assertEquals(result, true)
         assertEquals(user.bees.first().bee.title, "bee")
@@ -64,7 +64,7 @@ internal open class BeeServiceTest : SpringMockMvcTestSupport() {
         val beeCreateDto = BeeCreateDto("bee", "test", 7, 10, 2000)
 
         val user = userRepository.findById(1).get()
-        val result = beeService.createBeeByManager(user, beeCreateDto)
+        val result = beeService.create(user, beeCreateDto)
 
         assertEquals(result, true)
         assertEquals(user.bees.first().bee.title, "bee")
@@ -79,7 +79,7 @@ internal open class BeeServiceTest : SpringMockMvcTestSupport() {
         val beeCreateDto = BeeCreateDto("bee", "test", 3, 10, 2000)
 
         val user = userRepository.findById(1).get()
-        val result = beeService.createBeeByManager(user, beeCreateDto)
+        val result = beeService.create(user, beeCreateDto)
 
         assertTrue(logTrackerStub.contains("not match startTime"))
         assertEquals(result, false)
@@ -93,7 +93,7 @@ internal open class BeeServiceTest : SpringMockMvcTestSupport() {
         val beeCreateDto = BeeCreateDto("bee", "test", 7, 12, 2000)
 
         val user = userRepository.findById(1).get()
-        val result = beeService.createBeeByManager(user, beeCreateDto)
+        val result = beeService.create(user, beeCreateDto)
 
         assertTrue(logTrackerStub.contains("not match endTime"))
         assertEquals(result, false)
@@ -107,7 +107,7 @@ internal open class BeeServiceTest : SpringMockMvcTestSupport() {
         val beeCreateDto = BeeCreateDto("bee", "test", 7, 10, 1000)
 
         val user = userRepository.findById(1).get()
-        val result = beeService.createBeeByManager(user, beeCreateDto)
+        val result = beeService.create(user, beeCreateDto)
 
         assertTrue(logTrackerStub.contains("not match pay"))
         assertEquals(result, false)
