@@ -4,12 +4,14 @@ import com.morningbees.dto.BeeCreateDto
 import com.morningbees.dto.BeeDetailInfoDto
 import com.morningbees.dto.MissionInfoDto
 import com.morningbees.exception.BadRequestException
+import com.morningbees.exception.ErrorCode
 import com.morningbees.model.Bee
 import com.morningbees.model.BeeMember
 import com.morningbees.model.User
 import com.morningbees.repository.BeeMemberRepository
 import com.morningbees.repository.BeeRepository
 import com.morningbees.repository.UserRepository
+import com.morningbees.util.LogEvent
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -43,8 +45,8 @@ class BeeService {
 
     @Transactional
     fun update(user: User, beeId: Long, beeCreateDto: BeeCreateDto): Boolean {
-        val bee = beeRepository.findById(beeId).orElseThrow { throw BadRequestException("bee is null") }
-        if(!beeMemberRepository.existsByUserAndBeeAndType(user, bee, BeeMember.MemberType.Manager.type)) { throw BadRequestException("is not manager") }
+        val bee = beeRepository.findById(beeId).orElseThrow { throw BadRequestException("not find bee", ErrorCode.NotFindBee, LogEvent.BeeServiceProcess.code) }
+        if(!beeMemberRepository.existsByUserAndBeeAndType(user, bee, BeeMember.MemberType.Manager.type)) { throw BadRequestException("is not manager", ErrorCode.IsNotManager, LogEvent.BeeServiceProcess.code) }
 
         bee.update(beeCreateDto.title, beeCreateDto.description, beeCreateDto.startTime, beeCreateDto.endTime, beeCreateDto.pay)
 

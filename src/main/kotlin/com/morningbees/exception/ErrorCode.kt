@@ -27,5 +27,7 @@ enum class ErrorCode(val message: String, val status: Int) {
 
     NotFindBee("모임을 찾을 수 없습니다.", 170),
     NotFindUser("유저를 찾을 수 없습니다", 171),
-    AlreadyJoinBee("이미 가입이 완료되었습니다.", 172)
+    AlreadyJoinBee("이미 가입이 완료되었습니다.", 172),
+
+    IsNotManager("잘 못된 접근입니다.", 180),
 }
