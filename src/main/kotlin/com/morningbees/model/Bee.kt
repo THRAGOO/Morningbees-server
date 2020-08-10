@@ -9,30 +9,38 @@ import javax.persistence.*
 @Table(name = "bees")
 data class Bee(
         @Column
-        val title: String,
+        var title: String,
 
         @Column
-        val description: String,
+        var description: String,
 
         @Column
-        val startTime: LocalTime,
+        var startTime: LocalTime,
 
         @Column
-        val endTime: LocalTime,
+        var endTime: LocalTime,
 
         @Column
-        val pay: Int
+        var pay: Int
 ) : BaseEntity() {
         @OneToMany(mappedBy = "bee", cascade = [CascadeType.ALL])
-        val beePenalties: MutableList<BeePenalty> = mutableListOf<BeePenalty>()
+        val beePenalties: MutableList<BeePenalty> = mutableListOf()
 
         @OneToMany(mappedBy = "bee", cascade = [CascadeType.ALL])
-        val missions: MutableList<Mission> = mutableListOf<Mission>()
+        val missions: MutableList<Mission> = mutableListOf()
 
         @OneToMany(mappedBy = "bee", cascade = [CascadeType.MERGE])
         @JsonManagedReference
-        val users: MutableSet<BeeMember> = mutableSetOf<BeeMember>()
+        val users: MutableSet<BeeMember> = mutableSetOf()
 
+        fun update(title: String, description: String, startTime: Int, endTime: Int, pay: Int): Bee {
+                this.title = title
+                this.description = description
+                this.startTime = LocalTime.of(startTime, 0, 0)
+                this.endTime = LocalTime.of(endTime, 0, 0)
+                this.pay = pay
+                return this
+        }
         fun addUser(newUser: User, memberType: Int): BeeMember {
                 val beeMember = BeeMember(newUser, this, memberType)
                 this.users.add(beeMember)

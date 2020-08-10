@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtensionContext
 
 class LogTrackerStub private constructor()//hide the constructor to force the use of the "create" method
     : BeforeTestExecutionCallback, AfterTestExecutionCallback {
-    internal var logTracker = LogTracker.create()
+    private var logTracker = LogTracker.create()
 
     @Throws(Exception::class)
     override fun beforeTestExecution(context: ExtensionContext) {

@@ -3,6 +3,7 @@ package com.morningbees.exception
 enum class ErrorCode(val message: String, val status: Int) {
     BadRequest("잠시 후 다시 시도해주세요.", 100),
     InvalidAccessToken("다시 로그인 해주세요.", 101),
+    InvalidParameter("요청에 문제가 있습니다.", 102),
 
     UnknownProvider("알 수 없는 계정 정보입니다.", 110),
     InvalidSocialToken("알 수 없는 계정 정보입니다.", 111),
@@ -23,4 +24,10 @@ enum class ErrorCode(val message: String, val status: Int) {
 
     CantVoteMyselfMission("자신의 미션에는 투표할 수 없습니다.", 160),
     NotJoinUser("Bee의 가입되지 않은 유저는 투표할 수 없습니다.", 161),
+
+    NotFindBee("모임을 찾을 수 없습니다.", 170),
+    NotFindUser("유저를 찾을 수 없습니다", 171),
+    AlreadyJoinBee("이미 가입이 완료되었습니다.", 172),
+
+    IsNotManager("잘 못된 접근입니다.", 180),
 }

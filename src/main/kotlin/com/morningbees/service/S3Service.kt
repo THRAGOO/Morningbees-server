@@ -1,17 +1,16 @@
 package com.morningbees.service
 
 import com.amazonaws.services.s3.AmazonS3
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
 import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.PutObjectRequest
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
 import com.morningbees.util.LogEvent
-import net.logstash.logback.argument.StructuredArguments
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import java.io.IOException
+import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+import java.io.IOException
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,7 +31,7 @@ class S3Service {
 
             val fileName = fileNameToHashString(file.originalFilename.toString()).substring(0, 10) + "." + fileFormat
 
-            val dateFormat: SimpleDateFormat = SimpleDateFormat("yyyyMMdd")
+            val dateFormat = SimpleDateFormat("yyyyMMdd")
             val bucketName: String = bucket + "/" + dateFormat.format(Date())
             s3Client.putObject(PutObjectRequest(bucketName, fileName, file.inputStream, null).withCannedAcl(CannedAccessControlList.PublicRead))
             return s3Client.getUrl(bucketName, fileName).toString()

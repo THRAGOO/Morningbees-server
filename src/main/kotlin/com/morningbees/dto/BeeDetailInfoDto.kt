@@ -10,6 +10,4 @@ data class BeeDetailInfoDto(
         @JsonProperty("totalPenalty") val totalPenalty: Int,
         @JsonProperty("memberCounts") val memberCounts: Int,
         @JsonProperty("todayQuestioner") val todayQuestioner: UserInfoDto,
-        @JsonProperty("nextQuestioner") val nextQuestioner: UserInfoDto) {
-
-}
+        @JsonProperty("nextQuestioner") val nextQuestioner: UserInfoDto)

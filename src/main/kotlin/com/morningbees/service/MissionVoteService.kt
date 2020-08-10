@@ -4,7 +4,6 @@ import com.morningbees.dto.MissionVoteDto
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
 import com.morningbees.model.User
-import com.morningbees.repository.BeeMemberRepository
 import com.morningbees.repository.MissionRepository
 import com.morningbees.repository.MissionVoteRepository
 import com.morningbees.util.LogEvent

@@ -63,6 +63,10 @@ dependencies {
     // QueryDSL
     implementation("com.querydsl:querydsl-jpa:4.2.1")
     kapt("com.querydsl:querydsl-apt:4.2.1:jpa")
+    
+    // Swagger
+    implementation("io.springfox:springfox-swagger-ui:2.9.2")
+    implementation("io.springfox:springfox-swagger2:2.9.2")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")

@@ -23,27 +23,27 @@ data class User(
 
         @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
         @JsonManagedReference
-        val beePenalties: MutableList<BeePenalty> = mutableListOf<BeePenalty>()
+        val beePenalties: MutableList<BeePenalty> = mutableListOf()
 
         @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
         @JsonManagedReference
-        val comments: MutableList<Comment> = mutableListOf<Comment>()
+        val comments: MutableList<Comment> = mutableListOf()
 
         @OneToMany(mappedBy = "bee", cascade = [CascadeType.ALL])
-        val missions: MutableList<Mission> = mutableListOf<Mission>()
+        val missions: MutableList<Mission> = mutableListOf()
 
         @OneToMany(mappedBy = "user", cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
-        val missionVotes: MutableSet<MissionVote> = mutableSetOf<MissionVote>()
+        val missionVotes: MutableSet<MissionVote> = mutableSetOf()
 
         @OneToMany(mappedBy = "user", cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
         @JsonManagedReference
-        val bees: MutableSet<BeeMember> = mutableSetOf<BeeMember>()
+        val bees: MutableSet<BeeMember> = mutableSetOf()
 
         fun getJoinBeeId(): Long {
                 var beeId: Long = 0
 
                 val bees = this.bees
-                if(!bees.isEmpty()) {
+                if(bees.isNotEmpty()) {
                         beeId = bees.last().bee.id!!
                 }
 

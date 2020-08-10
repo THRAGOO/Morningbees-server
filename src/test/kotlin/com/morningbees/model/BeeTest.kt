@@ -5,12 +5,11 @@ import com.morningbees.repository.BeeMemberRepository
 import com.morningbees.repository.BeeRepository
 import com.morningbees.repository.UserRepository
 import org.flywaydb.test.annotation.FlywayTest
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.sql.Time
 import java.time.LocalTime
 import javax.transaction.Transactional
 

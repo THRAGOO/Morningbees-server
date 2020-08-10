@@ -46,6 +46,6 @@ internal class UserProviderTest : SpringMockMvcTestSupport() {
         userRepository.save(user)
 
         val duplicatedUserProvider = UserProvider(user, "naver", "test@naver.com")
-        assertThrows(Exception::class.java, { userProviderRepository.save(duplicatedUserProvider) })
+        assertThrows(Exception::class.java) { userProviderRepository.save(duplicatedUserProvider) }
     }
 }

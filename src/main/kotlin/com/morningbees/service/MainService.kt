@@ -10,7 +10,6 @@ import net.logstash.logback.argument.StructuredArguments
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class MainService {
@@ -39,13 +38,13 @@ class MainService {
             val beeInfos = beeService.getBeeDetailInfo(bee, questionMissions.last())
 
             val mainInfos = HashMap<String, Any>()
-            mainInfos.put("beeInfos", beeInfos)
-            mainInfos.put("missions", missions)
+            mainInfos["beeInfos"] = beeInfos
+            mainInfos["missions"] = missions
 
             return mainInfos
         } catch(ex: Exception) {
             logger.warn(ex.message, StructuredArguments.kv("userId", user.id), StructuredArguments.kv("beeId", beeId), StructuredArguments.kv("eventCode", LogEvent.MainServiceProcess.code))
-            return HashMap<String, Any>()
+            return HashMap()
         }
     }
 }

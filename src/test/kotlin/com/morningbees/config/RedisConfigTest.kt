@@ -25,12 +25,12 @@ class RedisConfigTest : SpringMockMvcTestSupport() {
     fun `캐시에 저장한 Value가 특정 시간 이후에 Expire 된다`() {
         redisTemplate.opsForValue().set("test1","hey",1, TimeUnit.SECONDS)
 
-        val old_value = redisTemplate.opsForValue().get("test1")
-        Assertions.assertEquals("hey", old_value)
+        val oldValue = redisTemplate.opsForValue().get("test1")
+        Assertions.assertEquals("hey", oldValue)
 
         Thread.sleep(1100)
 
-        val new_value = redisTemplate.opsForValue().get("test1")
-        Assertions.assertNull(new_value)
+        val newValue = redisTemplate.opsForValue().get("test1")
+        Assertions.assertNull(newValue)
     }
 }
