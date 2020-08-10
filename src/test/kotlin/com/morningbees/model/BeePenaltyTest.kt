@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalTime
 
-internal class BeePenaltyTest : SpringMockMvcTestSupport() {
+internal open class BeePenaltyTest : SpringMockMvcTestSupport() {
 
     @Autowired
     lateinit var beePenaltyRepository: BeePenaltyRepository
