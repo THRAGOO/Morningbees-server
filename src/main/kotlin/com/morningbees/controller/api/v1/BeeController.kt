@@ -3,6 +3,7 @@ package com.morningbees.controller.api.v1
 
 import com.morningbees.dto.BeeCreateDto
 import com.morningbees.dto.BeeJoinDto
+import com.morningbees.dto.BeeMemberInfoDto
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
 import com.morningbees.model.User
@@ -10,6 +11,7 @@ import com.morningbees.service.BeeService
 import com.morningbees.service.BeeMemberService
 import com.morningbees.util.LogEvent
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -25,6 +27,16 @@ class BeeController {
 
     @Autowired
     lateinit var beeMemberService: BeeMemberService
+
+    @ResponseBody
+    @GetMapping("/bees/{id}/members")
+    fun members(@PathVariable id: Long, request: HttpServletRequest): ResponseEntity<BeeMemberInfoDto> {
+        val response = beeMemberService.getBeeMembers(id)
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                .body(response)
+    }
 
     @ResponseBody
     @PostMapping("/bees")
