@@ -45,8 +45,8 @@ class BeeService {
 
     @Transactional
     fun update(user: User, beeId: Long, beeCreateDto: BeeCreateDto): Boolean {
-        val bee = beeRepository.findById(beeId).orElseThrow { throw BadRequestException("not find bee", ErrorCode.NotFindBee, LogEvent.BeeServiceProcess.code) }
-        if(!beeMemberRepository.existsByUserAndBeeAndType(user, bee, BeeMember.MemberType.Manager.type)) { throw BadRequestException("is not manager", ErrorCode.IsNotManager, LogEvent.BeeServiceProcess.code) }
+        val bee = beeRepository.findById(beeId).orElseThrow { throw BadRequestException("not find bee", ErrorCode.NotFindBee, LogEvent.BeeServiceProcess.code, logger) }
+        if(!beeMemberRepository.existsByUserAndBeeAndType(user, bee, BeeMember.MemberType.Manager.type)) { throw BadRequestException("is not manager", ErrorCode.IsNotManager, LogEvent.BeeServiceProcess.code, logger) }
 
         bee.update(beeCreateDto.title, beeCreateDto.description, beeCreateDto.startTime, beeCreateDto.endTime, beeCreateDto.pay)
 
@@ -54,7 +54,7 @@ class BeeService {
     }
 
     fun withdrawal(user: User): Boolean {
-        val beeMember: BeeMember = beeMemberRepository.findByUser(user) ?: throw BadRequestException("bee member is null")
+        val beeMember: BeeMember = beeMemberRepository.findByUser(user) ?: throw BadRequestException("bee member is null", ErrorCode.NotFindBee, LogEvent.BeeServiceProcess.code, logger)
 
         val bee: Bee = beeMember.bee
 

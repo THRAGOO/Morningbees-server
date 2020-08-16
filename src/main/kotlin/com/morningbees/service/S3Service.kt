@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
 import com.morningbees.util.LogEvent
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -17,6 +18,8 @@ import java.util.*
 
 @Service
 class S3Service {
+    private val logger = LoggerFactory.getLogger(this.javaClass.name)
+
     @Autowired
     lateinit var s3Client: AmazonS3
 
@@ -36,7 +39,7 @@ class S3Service {
             s3Client.putObject(PutObjectRequest(bucketName, fileName, file.inputStream, null).withCannedAcl(CannedAccessControlList.PublicRead))
             return s3Client.getUrl(bucketName, fileName).toString()
         } catch (ex: Exception) {
-            throw BadRequestException(ex.message!!, ErrorCode.BadRequest, LogEvent.S3ServiceProcessError.code)
+            throw BadRequestException(ex.message!!, ErrorCode.BadRequest, LogEvent.S3ServiceProcessError.code, logger)
         }
     }
 

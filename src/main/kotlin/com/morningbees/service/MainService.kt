@@ -30,7 +30,7 @@ class MainService {
     fun fetchMainInfo(user: User, beeId: Long, targetDate: String): HashMap<String, Any> {
         try {
             val bee = beeRepository.findById(beeId).get()
-            if (!beeMemberService.isJoinUserToBee(user, bee)) throw BadRequestException("not join user", ErrorCode.NotJoinUser, LogEvent.MainServiceProcess.code)
+            if (!beeMemberService.isJoinUserToBee(user, bee)) throw BadRequestException("not join user", ErrorCode.NotJoinUser, LogEvent.MainServiceProcess.code, logger)
 
             val missions = missionService.fetchInfos(beeId, targetDate)
             val questionMissions = missions.filter { it.type == Mission.MissionType.Question.type }

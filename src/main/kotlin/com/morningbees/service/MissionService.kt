@@ -45,11 +45,11 @@ class MissionService {
         val currentTime = LocalTime.now()
 
         val bee: Bee = beeRepository.findById(missionCreateDto.beeId).get()
-        if (!beeMemberService.isJoinUserToBee(user, bee)) throw BadRequestException("not join user", ErrorCode.NotJoinUserToBee, LogEvent.MissionServiceProcess.code)
-        if (alreadyUploadToday(user, bee)) throw BadRequestException("already upload mission today", ErrorCode.AlreadyUploadMissionToday, LogEvent.MissionServiceProcess.code)
+        if (!beeMemberService.isJoinUserToBee(user, bee)) throw BadRequestException("not join user", ErrorCode.NotJoinUserToBee, LogEvent.MissionServiceProcess.code, logger)
+        if (alreadyUploadToday(user, bee)) throw BadRequestException("already upload mission today", ErrorCode.AlreadyUploadMissionToday, LogEvent.MissionServiceProcess.code, logger)
         if (missionCreateDto.type == Mission.MissionType.Answer.type) {
-            if (bee.startTime > currentTime) throw BadRequestException("can not upload mission because start time over", ErrorCode.NotUploadTime, LogEvent.MissionServiceProcess.code)
-            if (bee.endTime.plusHours(UPLOAD_FREE_TIME) < currentTime) throw BadRequestException("can not upload mission because end time over", ErrorCode.NotUploadTime, LogEvent.MissionServiceProcess.code)
+            if (bee.startTime > currentTime) throw BadRequestException("can not upload mission because start time over", ErrorCode.NotUploadTime, LogEvent.MissionServiceProcess.code, logger)
+            if (bee.endTime.plusHours(UPLOAD_FREE_TIME) < currentTime) throw BadRequestException("can not upload mission because end time over", ErrorCode.NotUploadTime, LogEvent.MissionServiceProcess.code, logger)
         }
 
         val imageUrl: String = s3Service.upload(image)
@@ -63,7 +63,7 @@ class MissionService {
     @Cacheable(value = ["MissionInfos"], key = "#beeId + '_' + #targetDate.replace('-','')")
     fun fetchInfos(beeId: Long, targetDate: String): List<MissionInfoDto> {
         val bee = beeRepository.findById(beeId)
-        if (!bee.isPresent) throw BadRequestException("bee is null", ErrorCode.BadRequest, LogEvent.MissionServiceProcess.code)
+        if (!bee.isPresent) throw BadRequestException("bee is null", ErrorCode.BadRequest, LogEvent.MissionServiceProcess.code, logger)
 
         return missionRepositorySupport.fetchMissionInfosByBeeAndCreatedAt(bee.get(), targetDate)
     }
