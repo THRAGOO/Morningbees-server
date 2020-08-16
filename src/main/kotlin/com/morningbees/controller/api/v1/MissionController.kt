@@ -4,7 +4,6 @@ import com.morningbees.dto.MissionCreateDto
 import com.morningbees.dto.MissionInfoDto
 import com.morningbees.model.User
 import com.morningbees.service.MissionService
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -20,7 +19,6 @@ import javax.servlet.http.HttpServletRequest
 @RestController
 @RequestMapping("/api")
 class MissionController {
-    private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
     @Autowired
     lateinit var missionService: MissionService

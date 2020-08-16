@@ -10,6 +10,7 @@ import com.morningbees.model.User
 import com.morningbees.service.BeeService
 import com.morningbees.service.BeeMemberService
 import com.morningbees.util.LogEvent
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -21,6 +22,7 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api")
 class BeeController {
+    private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
     @Autowired
     lateinit var beeService: BeeService
@@ -44,7 +46,7 @@ class BeeController {
         val user: User = request.getAttribute("user") as User
 
         val result = beeService.create(user, beeCreateDto)
-        if(!result) throw BadRequestException("fail create bee", ErrorCode.NotCreateBee, LogEvent.BeeControllerProcess.code)
+        if(!result) throw BadRequestException("fail create bee", ErrorCode.NotCreateBee, LogEvent.BeeControllerProcess.code, logger)
 
         return ResponseEntity(HttpStatus.CREATED)
     }
@@ -64,7 +66,7 @@ class BeeController {
     fun joinBee(@RequestBody beeJoinDto: BeeJoinDto, request: HttpServletRequest): ResponseEntity<Any> {
 
         val result = beeMemberService.joinBeeByUser(beeJoinDto)
-        if(!result) throw BadRequestException("fail join bee", ErrorCode.NotJoinBee, LogEvent.BeeControllerProcess.code)
+        if(!result) throw BadRequestException("fail join bee", ErrorCode.NotJoinBee, LogEvent.BeeControllerProcess.code, logger)
 
         return ResponseEntity(HttpStatus.OK)
     }
@@ -75,7 +77,7 @@ class BeeController {
         val user: User = request.getAttribute("user") as User
 
         val result = beeService.withdrawal(user)
-        if(!result) throw BadRequestException("fail withdrawal bee", ErrorCode.FailWithdrwalBee, LogEvent.BeeControllerProcess.code)
+        if(!result) throw BadRequestException("fail withdrawal bee", ErrorCode.FailWithdrwalBee, LogEvent.BeeControllerProcess.code, logger)
 
         return ResponseEntity(HttpStatus.OK)
     }

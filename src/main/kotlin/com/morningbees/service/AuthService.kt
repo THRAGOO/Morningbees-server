@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class AuthService {
-    private val log = org.slf4j.LoggerFactory.getLogger(AuthService::class.java)
+    private val logger = org.slf4j.LoggerFactory.getLogger(this.javaClass.name)
 
     @Autowired
     lateinit var accessTokenService: AccessTokenService
@@ -20,7 +20,7 @@ class AuthService {
 
     fun getAuthTokens(user: User?): HashMap<String, Any> {
         if ( user == null ) {
-            throw BadRequestException("user is nil", ErrorCode.BadRequest, LogEvent.AuthServiceProcessError.code)
+            throw BadRequestException("user is nil", ErrorCode.BadRequest, LogEvent.AuthServiceProcessError.code, logger)
         }
 
         val accessToken: String = accessTokenService.generate(user)

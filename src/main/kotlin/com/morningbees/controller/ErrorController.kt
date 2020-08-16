@@ -18,12 +18,12 @@ import javax.servlet.http.HttpServletRequest
 
 @RestControllerAdvice
 class ErrorController {
-    private val log = org.slf4j.LoggerFactory.getLogger(ErrorController::class.java)
+    private val logger = org.slf4j.LoggerFactory.getLogger(this.javaClass.name)
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleMethodArgumentNotValidException(req: HttpServletRequest, ex: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
-        log.warn(ex.message, StructuredArguments.kv("eventCode", LogEvent.MissingServletRequestParameterException))
+        logger.warn(ex.message, StructuredArguments.kv("eventCode", LogEvent.MissingServletRequestParameterException))
         val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), ErrorCode.InvalidParameter.message, ErrorCode.InvalidParameter.status)
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
@@ -31,7 +31,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException::class)
     fun handleMissingServletRequestParameter(req: HttpServletRequest, ex: MissingServletRequestParameterException): ResponseEntity<ErrorResponse> {
-        log.warn(ex.message, StructuredArguments.kv("eventCode", LogEvent.MissingServletRequestParameterException))
+        logger.warn(ex.message, StructuredArguments.kv("eventCode", LogEvent.MissingServletRequestParameterException))
         val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), ErrorCode.BadRequest.message, ErrorCode.BadRequest.status)
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
@@ -39,7 +39,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun handleHttpMessageNotReadableException(req: HttpServletRequest, ex: HttpMessageNotReadableException): ResponseEntity<ErrorResponse> {
-        log.warn(ex.message, StructuredArguments.kv("eventCode", LogEvent.HttpMessageNotReadableException))
+        logger.warn(ex.message, StructuredArguments.kv("eventCode", LogEvent.HttpMessageNotReadableException))
         val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), ErrorCode.BadRequest.message, ErrorCode.BadRequest.status)
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
@@ -47,7 +47,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MorningbeesException::class)
     fun handleMorningbeesException(req: HttpServletRequest, ex: MorningbeesException): ResponseEntity<ErrorResponse> {
-        log.warn(ex.message, StructuredArguments.kv("eventCode", LogEvent.GlobalException))
+        ex.logger.warn(ex.message, StructuredArguments.kv("eventCode", ex.logEventCode))
         val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), ex.code.message, ex.code.status)
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
@@ -55,7 +55,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Exception::class)
     fun handleGlobalException(req: HttpServletRequest, ex: Exception): ResponseEntity<ErrorResponse> {
-        log.warn(ex.message, StructuredArguments.kv("eventCode", LogEvent.GlobalException))
+        logger.warn(ex.message, StructuredArguments.kv("eventCode", LogEvent.GlobalException))
         val errorResponse = ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), ErrorCode.BadRequest.message, ErrorCode.BadRequest.status)
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }

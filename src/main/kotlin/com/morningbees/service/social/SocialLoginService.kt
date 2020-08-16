@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
 import com.morningbees.util.LogEvent
+import org.slf4j.LoggerFactory
 import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -14,6 +15,7 @@ import java.net.URI
 
 @Service
 class SocialLoginService {
+    private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
     val socialLoginUrl = "https://openapi.naver.com/v1/nid/me"
 
@@ -35,10 +37,10 @@ class SocialLoginService {
 
             return objectMapper.readTree(result.body)
         } catch (e: HttpClientErrorException) {
-            throw BadRequestException("invalid social access token", ErrorCode.InvalidSocialToken, LogEvent.SocialLoginServiceProcessError.code)
+            throw BadRequestException("invalid social access token", ErrorCode.InvalidSocialToken, LogEvent.SocialLoginServiceProcessError.code, logger)
         }
         catch (e: Exception) {
-            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.SocialLoginServiceProcessError.code)
+            throw BadRequestException(e.message!!, ErrorCode.BadRequest, LogEvent.SocialLoginServiceProcessError.code, logger)
         }
     }
 }

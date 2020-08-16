@@ -1,10 +1,13 @@
 package com.morningbees.util
 
+import org.springframework.web.util.ContentCachingRequestWrapper
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 class RequestInfoLogging {
-    fun makeLoggingRequestMap(request: HttpServletRequest): HashMap<String, Any> {
+    fun makeLoggingRequestMap(req: HttpServletRequest): HashMap<String, Any> {
+        val request = ContentCachingRequestWrapper(req)
+
         val requestInfos = HashMap<String, Any>()
 
         // request parameter
