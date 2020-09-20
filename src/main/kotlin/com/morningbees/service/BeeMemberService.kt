@@ -16,11 +16,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import javax.persistence.Id
 
 @Service
 class BeeMemberService {
-
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
     @Autowired
@@ -37,10 +35,10 @@ class BeeMemberService {
 
     @Transactional
     fun joinBeeByUser(beeJoinDto : BeeJoinDto): Boolean {
-        val user:User = userRepository.findById(beeJoinDto.userId).orElseThrow { throw BadRequestException("not find user", ErrorCode.NotFindUser, LogEvent.BeeMemberServiceProcess.code) }
-        val bee:Bee = beeRepository.findById(beeJoinDto.beeId).orElseThrow { throw BadRequestException("not find bee", ErrorCode.NotFindBee, LogEvent.BeeMemberServiceProcess.code) }
+        val user:User = userRepository.findById(beeJoinDto.userId).orElseThrow { throw BadRequestException("not find user", ErrorCode.NotFindUser, LogEvent.BeeMemberServiceProcess.code, logger) }
+        val bee:Bee = beeRepository.findById(beeJoinDto.beeId).orElseThrow { throw BadRequestException("not find bee", ErrorCode.NotFindBee, LogEvent.BeeMemberServiceProcess.code, logger) }
 
-        if(isAlreadyJoinBee(user)) throw BadRequestException("Already join bee", ErrorCode.AlreadyJoinBee, LogEvent.BeeMemberServiceProcess.code)
+        if(isAlreadyJoinBee(user)) throw BadRequestException("Already join bee", ErrorCode.AlreadyJoinBee, LogEvent.BeeMemberServiceProcess.code, logger)
 
         val beeMember = bee.addUser(user, BeeMember.MemberType.Member.type)
         beeMemberRepository.save(beeMember)
@@ -49,7 +47,7 @@ class BeeMemberService {
     }
 
     fun getBeeMembers(beeId: Long): BeeMemberInfoDto {
-        val bee = beeRepository.findById(beeId).orElseThrow { throw BadRequestException("not find bee", ErrorCode.NotFindBee, LogEvent.BeeMemberServiceProcess.code) }
+        val bee = beeRepository.findById(beeId).orElseThrow { throw BadRequestException("not find bee", ErrorCode.NotFindBee, LogEvent.BeeMemberServiceProcess.code, logger) }
         val beeMembers = beeMemberRepositorySupport.getBeeMembersByBeeId(bee)
         return BeeMemberInfoDto(beeMembers)
     }

@@ -26,6 +26,7 @@ class WebMvcConfig : WebMvcConfigurer {
                 .excludePathPatterns("/webjars/**")
                 .excludePathPatterns("/favicon.ico")
                 .excludePathPatterns("/hello")
+                .excludePathPatterns("/image/upload")
                 .excludePathPatterns("/error")
                 .excludePathPatterns("/api/auth/valid_nickname")
                 .excludePathPatterns("/api/auth/renewal")

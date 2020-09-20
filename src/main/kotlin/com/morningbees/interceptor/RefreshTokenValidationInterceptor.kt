@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class RefreshTokenValidationInterceptor : HandlerInterceptorAdapter() {
-    private val log = org.slf4j.LoggerFactory.getLogger(RefreshTokenValidationInterceptor::class.java)
+    private val logger = org.slf4j.LoggerFactory.getLogger(this.javaClass.name)
 
     @Autowired
     lateinit var refreshTokenService: RefreshTokenService
@@ -37,9 +37,9 @@ class RefreshTokenValidationInterceptor : HandlerInterceptorAdapter() {
 
             return super.preHandle(request, response, handler)
         } catch(ex: UnAuthorizeException) {
-            throw UnAuthorizeException(ex.message!!, ErrorCode.InvalidAccessToken, LogEvent.AccessTokenInterceptorProcess.code)
+            throw UnAuthorizeException(ex.message!!, ErrorCode.InvalidAccessToken, LogEvent.AccessTokenInterceptorProcess.code, logger)
         } catch (ex: Exception) {
-            throw UnAuthorizeException(ex.message!!, ErrorCode.InvalidAccessToken, LogEvent.AccessTokenInterceptorProcess.code)
+            throw UnAuthorizeException(ex.message!!, ErrorCode.InvalidAccessToken, LogEvent.AccessTokenInterceptorProcess.code, logger)
         }
     }
 }

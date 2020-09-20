@@ -10,9 +10,8 @@ import com.morningbees.service.social.SocialLoginFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
-import org.slf4j.LoggerFactory
 import org.springframework.validation.Errors
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 import javax.validation.Valid
 
@@ -22,7 +21,6 @@ class AuthController {
 
     private val SIGN_UP_TYPE = 0
     private val SIGN_IN_TYPE = 1
-    private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
     @Autowired
     lateinit var authService: AuthService
