@@ -1,5 +1,6 @@
 package com.morningbees.controller.api.v1
 
+import com.morningbees.dto.MainInfoDto
 import com.morningbees.model.User
 import com.morningbees.service.MainService
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,7 +17,7 @@ class MainController {
 
     @ResponseBody
     @GetMapping("/main")
-    fun missions(@RequestParam("beeId") beeId: Long, @RequestParam("targetDate") targetDate: String, request: HttpServletRequest): ResponseEntity<HashMap<String, Any>> {
+    fun missions(@RequestParam("beeId") beeId: Long, @RequestParam("targetDate") targetDate: String, request: HttpServletRequest): ResponseEntity<MainInfoDto> {
         val user: User = request.getAttribute("user") as User
         val response = mainService.fetchMainInfo(user, beeId, targetDate)
 
