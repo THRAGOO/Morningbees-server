@@ -2,6 +2,7 @@ package com.morningbees.controller.api.v1
 
 import com.morningbees.dto.SignInDto
 import com.morningbees.dto.SignUpDto
+import com.morningbees.dto.meInfoDto
 import com.morningbees.model.User
 import com.morningbees.service.AuthService
 import com.morningbees.service.UserService
@@ -110,7 +111,7 @@ class AuthController {
 
     @ResponseBody
     @GetMapping("/me")
-    fun me(request: HttpServletRequest): ResponseEntity<HashMap<String, Any>> {
+    fun me(request: HttpServletRequest): ResponseEntity<meInfoDto> {
         val user: User = request.getAttribute("user") as User
 
         val response = userService.me(user)

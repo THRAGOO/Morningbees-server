@@ -27,7 +27,7 @@ class RefreshTokenValidationInterceptor : HandlerInterceptorAdapter() {
             val refreshToken: String = request.getHeader("X-BEES-REFRESH-TOKEN")
 
             val tokenBody = refreshTokenService.decodeAndGetInfos(refreshToken)
-            val user: User = userService.getUserById(tokenBody.userId)
+            val user: User = userService.findById(tokenBody.userId)
             request.setAttribute("claims", tokenBody)
             request.setAttribute("user", user)
 

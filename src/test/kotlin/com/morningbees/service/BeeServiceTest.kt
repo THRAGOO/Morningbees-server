@@ -1,5 +1,7 @@
 package com.morningbees.service
 
+import com.morningbees.LogTracker
+import com.morningbees.LogTrackerStub
 import com.morningbees.SpringMockMvcTestSupport
 import com.morningbees.dto.BeeCreateDto
 import com.morningbees.model.BeeMember
@@ -7,20 +9,15 @@ import com.morningbees.model.User
 import com.morningbees.repository.BeeRepository
 import com.morningbees.repository.UserRepository
 import org.flywaydb.test.annotation.FlywayTest
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
-import org.springframework.beans.factory.annotation.Autowired
-import javax.transaction.Transactional
-import com.morningbees.LogTracker
-import com.morningbees.LogTrackerStub
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import org.springframework.beans.factory.annotation.Autowired
 
 
-
-internal class BeeServiceTest : SpringMockMvcTestSupport() {
+internal open class BeeServiceTest : SpringMockMvcTestSupport() {
 
     companion object {
         @JvmField
@@ -68,4 +65,5 @@ internal class BeeServiceTest : SpringMockMvcTestSupport() {
         assertEquals(user.bees.first().bee.title, "bee")
         assertEquals(user.bees.first().type, BeeMember.MemberType.Manager.type)
     }
+
 }

@@ -27,7 +27,7 @@ class AccessTokenValidationInterceptor : HandlerInterceptorAdapter() {
             val accessToken: String = request.getHeader("X-BEES-ACCESS-TOKEN")
 
             val tokenBody = accessTokenService.decodeAndGetInfos(accessToken)
-            val user: User = userService.getUserById(tokenBody.userId)
+            val user: User = userService.findById(tokenBody.userId)
             request.setAttribute("claims", tokenBody)
             request.setAttribute("user", user)
 

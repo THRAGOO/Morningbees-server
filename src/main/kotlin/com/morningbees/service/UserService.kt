@@ -1,5 +1,6 @@
 package com.morningbees.service
 
+import com.morningbees.dto.meInfoDto
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
 import com.morningbees.model.User
@@ -10,16 +11,19 @@ import com.morningbees.util.LogEvent
 import com.sun.istack.NotNull
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class UserService {
+class UserService(
+        private val userRepository: UserRepository,
+        private val userProviderRepository: UserProviderRepository
+) {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    @Autowired
-    lateinit var userRepository: UserRepository
-    @Autowired
-    lateinit var userProviderRepository: UserProviderRepository
+    fun findById(userId: Long): User =
+            userRepository.findByIdOrNull(userId)
+                    ?: throw BadRequestException("user cannot found", ErrorCode.BadRequest, LogEvent.MissionVoteServiceProcess.code, logger)
 
     fun signUpWithProvider(@NotNull email: String, @NotNull nickname: String, @NotNull provider: String): User {
         // 이미 가입된 이메일인지 확인 필요
@@ -39,7 +43,7 @@ class UserService {
         return user
     }
 
-    fun me(user: User): HashMap<String, Any> {
+    fun me(user: User): meInfoDto {
         val result: HashMap<String, Any> = HashMap()
         val alreadyJoin = user.bees.size > 0
 
@@ -47,7 +51,7 @@ class UserService {
         result["alreadyJoin"] = alreadyJoin
         result["beeId"] = user.getJoinBeeId()
 
-        return result
+        return meInfoDto(user.nickname, alreadyJoin, user.getJoinBeeId())
     }
 
 
@@ -55,11 +59,6 @@ class UserService {
         val userProvider: UserProvider? = userProviderRepository.findByEmailAndProvider(email, provider)
 
         return userProvider?.user
-    }
-
-    fun getUserById(@NotNull id: Long): User {
-
-        return userRepository.findById(id).get()
     }
 
     fun isExistsNickname(nickname: String): Boolean {
