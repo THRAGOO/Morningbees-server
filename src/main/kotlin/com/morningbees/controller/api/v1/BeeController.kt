@@ -2,18 +2,16 @@
 package com.morningbees.controller.api.v1
 
 import com.morningbees.dto.BeeCreateDto
+import com.morningbees.dto.BeeInfoDto
 import com.morningbees.dto.BeeJoinDto
 import com.morningbees.dto.BeeMemberInfoDto
-import com.morningbees.dto.BeeInfoDto
-import com.morningbees.dto.MissionInfoDto
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
 import com.morningbees.model.User
-import com.morningbees.service.BeeService
 import com.morningbees.service.BeeMemberService
+import com.morningbees.service.BeeService
 import com.morningbees.util.LogEvent
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -23,14 +21,24 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api")
-class BeeController {
+class BeeController(
+        private val beeService: BeeService,
+        private val beeMemberService: BeeMemberService
+) {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    @Autowired
-    lateinit var beeService: BeeService
+    @ResponseBody
+    @GetMapping("/bees/{id}")
+    fun beeInfo(@PathVariable id: Long, request: HttpServletRequest): ResponseEntity<BeeInfoDto> {
+        val user: User = request.getAttribute("user") as User
 
-    @Autowired
-    lateinit var beeMemberService: BeeMemberService
+        val response = beeService.fetchInfos(id, user)
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                .body(response)
+
+    }
 
     @ResponseBody
     @GetMapping("/bees/{id}/members")
@@ -82,17 +90,6 @@ class BeeController {
         if(!result) throw BadRequestException("fail withdrawal bee", ErrorCode.FailWithdrwalBee, LogEvent.BeeControllerProcess.code, logger)
 
         return ResponseEntity(HttpStatus.OK)
-    }
-
-    @ResponseBody
-    @GetMapping("/bees")
-    fun beeInfo(@RequestParam("beeId") beeId:Long, @RequestParam("userId") userId:Long, request: HttpServletRequest): ResponseEntity<List<BeeInfoDto>> {
-        val response = beeService.fetchInfos(beeId, userId)
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                .body(response)
-
     }
 }
 

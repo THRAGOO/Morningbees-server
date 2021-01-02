@@ -2,6 +2,7 @@ package com.morningbees.service
 
 import com.morningbees.dto.BeeCreateDto
 import com.morningbees.dto.BeeDetailInfoDto
+import com.morningbees.dto.BeeInfoDto
 import com.morningbees.dto.MissionInfoDto
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
@@ -101,10 +102,16 @@ class BeeService(
         return true
     }
 
-    fun fetchInfos(beeId:Long, userId:Long):List<BeeInfoDto> {
-        val bee = beeRepository.findById(beeId)
-        val user = userRepository.findById(userId)
-        val beeInfos = beeRepositorySupport.fetchBeeInfosByBeeAndCreatedAt(bee.get(), user.get())
-        return beeInfos
+    fun fetchInfos(beeId:Long, user: User): BeeInfoDto {
+        val bee = findById(beeId)
+        val beeMember = bee.users.last { it.user == user }
+
+        return BeeInfoDto(
+                beeMember.isManager(),
+                user.nickname,
+                bee.startTime,
+                bee.endTime,
+                bee.pay
+        )
     }
 }
