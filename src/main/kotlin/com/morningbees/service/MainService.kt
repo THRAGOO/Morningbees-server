@@ -22,9 +22,9 @@ class MainService(
         if (!beeMemberService.isJoinUserToBee(user, bee)) throw BadRequestException("not join user", ErrorCode.NotJoinUser, LogEvent.MainServiceProcess.code, logger)
 
         val missions = missionService.fetchInfos(beeId, targetDate)
-        val questionMissions = missions.filter { it.type == Mission.MissionType.Question.type }
+        val questionMissions = missions.lastOrNull { it.type == Mission.MissionType.Question.type }
 
-        val beeInfos = beeService.getBeeDetailInfo(bee, questionMissions.last())
+        val beeInfos = beeService.getBeeDetailInfo(bee, questionMissions)
 
         return MainInfoDto(beeInfos, missions)
     }

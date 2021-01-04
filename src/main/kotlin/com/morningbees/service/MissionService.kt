@@ -11,6 +11,7 @@ import com.morningbees.repository.BeeRepository
 import com.morningbees.repository.MissionRepository
 import com.morningbees.repository.MissionRepositorySupport
 import com.morningbees.util.LogEvent
+import net.logstash.logback.argument.StructuredArguments.kv
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.CacheEvict
@@ -55,6 +56,8 @@ class MissionService {
         val imageUrl: String = s3Service.upload(image)
 
         val mission: Mission = missionCreateDto.toEntity(bee, user, imageUrl)
+
+        logger.info("log mission type", kv("mission_type_integer", missionCreateDto.type), kv("mission_type", mission.type))
         missionRepository.save(mission)
 
         return true
