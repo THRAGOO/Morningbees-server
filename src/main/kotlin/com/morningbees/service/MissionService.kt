@@ -40,7 +40,7 @@ class MissionService {
 
     val UPLOAD_FREE_TIME: Long = 1
 
-    @CacheEvict(value = ["MissionInfos"], key = "#missionCreateDto.beeId + '_' + #currentDate")
+//    @CacheEvict(value = ["MissionInfos"], key = "#missionCreateDto.beeId + '_' + #currentDate")
     @Transactional
     fun create(user: User, image: MultipartFile, missionCreateDto: MissionCreateDto, currentDate: String): Boolean {
         val currentTime = LocalTime.now()
@@ -63,7 +63,7 @@ class MissionService {
         return true
     }
 
-    @Cacheable(value = ["MissionInfos"], key = "#beeId + '_' + #targetDate.replace('-','')")
+//    @Cacheable(value = ["MissionInfos"], key = "#beeId + '_' + #targetDate.replace('-','')")
     fun fetchInfos(beeId: Long, targetDate: String): List<MissionInfoDto> {
         val bee = beeRepository.findById(beeId)
         if (!bee.isPresent) throw BadRequestException("bee is null", ErrorCode.BadRequest, LogEvent.MissionServiceProcess.code, logger)

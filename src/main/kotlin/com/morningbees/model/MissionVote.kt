@@ -8,12 +8,12 @@ data class MissionVote (
         @EmbeddedId
         private val id: MissionVoteKey?,
 
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
         @MapsId("user_id")
         @JoinColumn(name = "user_id")
         val user: User,
 
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
         @MapsId("mission_id")
         @JoinColumn(name = "mission_id")
         val mission: Mission,
