@@ -10,7 +10,6 @@ import com.morningbees.repository.UserRepository
 import com.morningbees.util.LogEvent
 import com.sun.istack.NotNull
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -44,14 +43,9 @@ class UserService(
     }
 
     fun me(user: User): meInfoDto {
-        val result: HashMap<String, Any> = HashMap()
         val alreadyJoin = user.bees.size > 0
 
-        result["nickname"] = user.nickname
-        result["alreadyJoin"] = alreadyJoin
-        result["beeId"] = user.getJoinBeeId()
-
-        return meInfoDto(user.nickname, alreadyJoin, user.getJoinBeeId())
+        return meInfoDto(user.nickname, alreadyJoin, user.getJoinBeeId(), user.id)
     }
 
 
