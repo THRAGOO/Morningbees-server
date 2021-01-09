@@ -19,7 +19,8 @@ class MainController {
     @GetMapping("/main")
     fun missions(@RequestParam("beeId") beeId: Long, @RequestParam("targetDate") targetDate: String, request: HttpServletRequest): ResponseEntity<MainInfoDto> {
         val user: User = request.getAttribute("user") as User
-        val response = mainService.fetchMainInfo(user, beeId, targetDate)
+        val response = mainService.
+                fetchMainInfo(user, beeId, targetDate)
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, "application/json")
