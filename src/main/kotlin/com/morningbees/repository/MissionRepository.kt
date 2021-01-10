@@ -46,7 +46,7 @@ class MissionRepositorySupport(
                 .innerJoin(qMission.user, qUser)
                 .leftJoin(qMission.missionVotes, qMissionVote)
                 .select(Projections.constructor(MissionInfoDto::class.java,
-                        qMission.id, qMission.title, qMission.imageUrl, qUser.nickname, qMission.type, qMission.difficulty,
+                        qMission.id, qMission.description, qMission.imageUrl, qUser.nickname, qMission.type, qMission.difficulty,
                         Expressions.stringTemplate("DATE_FORMAT({0}, {1})", qMission.createdAt, ConstantImpl.create<String>("%Y-%m-%d %H:%i:%S")),
                         CaseBuilder()
                         .`when`(qMissionVote.type.eq(MissionVote.VoteType.Agree.type))
@@ -58,7 +58,7 @@ class MissionRepositorySupport(
                         .otherwise(BigDecimal.ZERO).sum().`as`("disagreeCount")
                 ))
                 .where(dateFormat.eq(date).and(qMission.bee.eq(bee)))
-                .groupBy(qMission.id, qMission.title, qMission.imageUrl, qMission.type, qMission.difficulty, qUser.nickname).orderBy(qMission.type.asc())
+                .groupBy(qMission.id, qMission.description, qMission.imageUrl, qMission.type, qMission.difficulty, qUser.nickname).orderBy(qMission.type.asc())
 
         return missionInfos.fetch()
     }
