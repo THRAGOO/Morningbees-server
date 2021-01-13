@@ -50,7 +50,7 @@ data class User(
                 return beeId
         }
 
-        fun defaultInfo(): UserInfoDto = UserInfoDto(this.nickname, "https://thragoo-test.s3.ap-northeast-2.amazonaws.com/temp_profile_image.png")
+        fun defaultInfo(): UserInfoDto = UserInfoDto(this.id, this.nickname, "https://thragoo-test.s3.ap-northeast-2.amazonaws.com/temp_profile_image.png")
 
         enum class UserStatus(val status: Int) {
                 Use(1),
