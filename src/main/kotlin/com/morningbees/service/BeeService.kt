@@ -21,15 +21,15 @@ import java.time.LocalDateTime
 
 @Service
 class BeeService(
-        private val beeRepository: BeeRepository,
-        private val beeMemberRepository: BeeMemberRepository
+    private val beeRepository: BeeRepository,
+    private val beeMemberRepository: BeeMemberRepository
 ) {
 
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
     fun findById(beeId: Long): Bee =
-            beeRepository.findByIdOrNull(beeId)
-                    ?: throw BadRequestException("not find bee", ErrorCode.NotFindBee, LogEvent.BeeServiceProcess.code, logger)
+        beeRepository.findByIdOrNull(beeId)
+            ?: throw BadRequestException("not find bee", ErrorCode.NotFindBee, LogEvent.BeeServiceProcess.code, logger)
 
     @Transactional
     fun create(user: User, beeCreateDto: BeeCreateDto): Boolean {
@@ -71,18 +71,19 @@ class BeeService(
     }
 
     fun getBeeDetailInfo(
-            bee: Bee,
-            todayQuestionDto: MissionInfoDto?
+        bee: Bee,
+        todayQuestionDto: MissionInfoDto?
     ): BeeDetailInfoDto {
         return BeeDetailInfoDto(
-                bee.title,
-                bee.startTime.hour,
-                bee.endTime.hour,
-                todayQuestionDto?.difficulty,
-                bee.beePenalties.map { it.penalty }.sum(),
-                bee.users.size,
-                getQuestioner(bee, LocalDateTime.now()).defaultInfo(),
-                getQuestioner(bee, LocalDateTime.now().plusDays(1)).defaultInfo()
+            bee.title,
+            bee.startTime.hour,
+            bee.endTime.hour,
+            todayQuestionDto?.difficulty,
+            bee.beePenalties.map { it.penalty }.sum(),
+            getManager(bee).defaultInfo(),
+            bee.users.size,
+            getQuestioner(bee, LocalDateTime.now()).defaultInfo(),
+            getQuestioner(bee, LocalDateTime.now().plusDays(1)).defaultInfo()
         )
     }
 
@@ -94,6 +95,8 @@ class BeeService(
 
         return users.elementAt(todayQuestionerIndex).user
     }
+
+    fun getManager(bee: Bee): User = bee.users.last { it.type == BeeMember.MemberType.Manager.type }.user
 
     private fun delegateManager(delegateUser: BeeMember): Boolean {
         delegateUser.type = BeeMember.MemberType.Manager.type
@@ -107,11 +110,11 @@ class BeeService(
         val beeMember = bee.users.last { it.user == user }
 
         return BeeInfoDto(
-                beeMember.isManager(),
-                user.nickname,
-                bee.startTime,
-                bee.endTime,
-                bee.pay
+            beeMember.isManager(),
+            user.nickname,
+            bee.startTime,
+            bee.endTime,
+            bee.pay
         )
     }
 }

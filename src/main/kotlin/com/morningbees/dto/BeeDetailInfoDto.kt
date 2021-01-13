@@ -8,6 +8,7 @@ data class BeeDetailInfoDto(
         @JsonProperty("endTime") val endTime: Int,
         @JsonProperty("todayDifficulty") val todayDifficulty: Int?,
         @JsonProperty("totalPenalty") val totalPenalty: Int,
+        @JsonProperty("manager") val manage: UserInfoDto,
         @JsonProperty("memberCounts") val memberCounts: Int,
         @JsonProperty("todayQuestioner") val todayQuestioner: UserInfoDto,
         @JsonProperty("nextQuestioner") val nextQuestioner: UserInfoDto)
