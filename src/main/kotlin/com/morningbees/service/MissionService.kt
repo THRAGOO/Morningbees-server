@@ -13,11 +13,11 @@ import com.morningbees.util.LogEvent
 import net.logstash.logback.argument.StructuredArguments.kv
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import javax.transaction.Transactional
 
 @Service
 class MissionService(
@@ -68,6 +68,7 @@ class MissionService(
         targetDate == LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
     //    @Cacheable(value = ["MissionInfos"], key = "#beeId + '_' + #targetDate.replace('-','')")
+    @Transactional(readOnly = true)
     fun fetchInfos(beeId: Long, targetDate: String): List<MissionInfoDto> {
         val bee = beeService.findById(beeId)
 
