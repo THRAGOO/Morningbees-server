@@ -8,6 +8,7 @@ import com.morningbees.model.User
 import com.morningbees.util.LogEvent
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class MainService(
@@ -17,6 +18,7 @@ class MainService(
 ) {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
+    @Transactional(readOnly = true)
     fun fetchMainInfo(user: User, beeId: Long, targetDate: String): MainInfoDto {
         val bee = beeService.findById(beeId)
         if (!beeMemberService.isJoinUserToBee(user, bee)) throw BadRequestException("not join user", ErrorCode.NotJoinUser, LogEvent.MainServiceProcess.code, logger)
