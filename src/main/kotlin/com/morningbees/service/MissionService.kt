@@ -43,9 +43,9 @@ class MissionService(
             if (!beeMemberService.isJoinUserToBee(user, bee)) throw BadRequestException("not join user", ErrorCode.NotJoinUserToBee, LogEvent.MissionServiceProcess.code, logger)
             if (alreadyUploadTargetDate(user, bee, targetDate)) throw BadRequestException("already upload mission target date", ErrorCode.AlreadyUploadMissionToday, LogEvent.MissionServiceProcess.code, logger)
             if (type == Mission.MissionType.Answer.type) {
-                if (!isTodayMission(targetDate)) throw BadRequestException("can upload today mission", ErrorCode.CanUploadTodayAnswerMission, LogEvent.MissionServiceProcess.code, logger)
-                if (bee.startTime > currentTime) throw BadRequestException("can not upload mission because start time over", ErrorCode.NotUploadTime, LogEvent.MissionServiceProcess.code, logger)
-                if (bee.endTime.plusHours(UPLOAD_FREE_TIME) < currentTime) throw BadRequestException("can not upload mission because end time over", ErrorCode.NotUploadTime, LogEvent.MissionServiceProcess.code, logger)
+//                if (!isTodayMission(targetDate)) throw BadRequestException("can upload today mission", ErrorCode.CanUploadTodayAnswerMission, LogEvent.MissionServiceProcess.code, logger)
+//                if (bee.startTime > currentTime) throw BadRequestException("can not upload mission because start time over", ErrorCode.NotUploadTime, LogEvent.MissionServiceProcess.code, logger)
+//                if (bee.endTime.plusHours(UPLOAD_FREE_TIME) < currentTime) throw BadRequestException("can not upload mission because end time over", ErrorCode.NotUploadTime, LogEvent.MissionServiceProcess.code, logger)
             }
             if (type == Mission.MissionType.Question.type) {
                 date = LocalDateTime.parse("${targetDate}T00:00:00")
