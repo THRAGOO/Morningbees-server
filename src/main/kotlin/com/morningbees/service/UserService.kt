@@ -12,6 +12,7 @@ import com.sun.istack.NotNull
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserService(
@@ -42,6 +43,7 @@ class UserService(
         return user
     }
 
+    @Transactional(readOnly = true)
     fun me(user: User): meInfoDto {
         val alreadyJoin = user.bees.size > 0
 
