@@ -1,32 +1,46 @@
 package com.morningbees.model
 
+import com.fasterxml.jackson.annotation.JsonFormat
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @Table(name = "missions")
 data class Mission (
-        @Column
-        val imageUrl: String = "",
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0,
 
-        @Column
-        val description: String = "",
+    @Column
+    val imageUrl: String = "",
 
-        @Column(columnDefinition = "TINYINT")
-        val type: Int = MissionType.Question.type,
+    @Column
+    val description: String = "",
 
-        @Column(columnDefinition = "TINYINT")
-        val difficulty: Int = MissionDifficulty.Intermediate.level,
+    @Column(columnDefinition = "TINYINT")
+    val type: Int = MissionType.Question.type,
 
-        @ManyToOne
-        @JoinColumn(name = "bee_id")
-        val bee: Bee,
+    @Column(columnDefinition = "TINYINT")
+    val difficulty: Int = MissionDifficulty.Intermediate.level,
 
-        @ManyToOne
-        @JoinColumn(name = "user_id")
-        val user: User
-) : BaseEntity() {
-    constructor(imageUrl: String, description: String, difficulty: MissionDifficulty, missionType: MissionType, bee: Bee, user: User) :
-            this(imageUrl, description, difficulty.level, missionType.type, bee, user) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bee_id")
+    val bee: Bee,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    val user: User,
+
+    @Column(name = "created_at", updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    var createdAt: LocalDateTime = LocalDateTime.now()
+) {
+    @Column(name = "updated_at")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    var updatedAt: LocalDateTime = LocalDateTime.now()
+
+    constructor(id: Long, imageUrl: String, description: String, difficulty: MissionDifficulty, missionType: MissionType, bee: Bee, user: User) :
+            this(id, imageUrl, description, difficulty.level, missionType.type, bee, user) {
         bee.missions.add(this)
         user.missions.add(this)
     }

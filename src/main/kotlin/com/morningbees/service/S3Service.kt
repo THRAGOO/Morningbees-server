@@ -32,7 +32,7 @@ class S3Service {
             var fileFormat: String? = file.contentType?.split("/")?.last()
             if (fileFormat == null) fileFormat = "jpg"
 
-            val fileName = fileNameToHashString(file.originalFilename.toString()).substring(0, 10) + "." + fileFormat
+            val fileName = generateRandomFileName() + "." + fileFormat
 
             val dateFormat = SimpleDateFormat("yyyyMMdd")
             val bucketName: String = bucket + "/" + dateFormat.format(Date())
@@ -43,10 +43,6 @@ class S3Service {
         }
     }
 
-    private fun fileNameToHashString(input: String): String {
-        return MessageDigest
-                .getInstance("SHA-256")
-                .digest(input.toByteArray())
-                .fold("", { str, it -> str + "%02x".format(it) })
-    }
+    private fun generateRandomFileName()
+            = UUID.randomUUID().toString().substring(0, 10)
 }

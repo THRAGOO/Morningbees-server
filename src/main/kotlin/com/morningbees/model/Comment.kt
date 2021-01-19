@@ -8,11 +8,11 @@ data class Comment (
         @Column
         val comment: String,
 
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "mission_id")
         val mission: Mission,
 
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "user_id")
         val user: User
 ) : BaseEntity()

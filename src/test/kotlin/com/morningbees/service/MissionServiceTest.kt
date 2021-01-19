@@ -51,7 +51,7 @@ internal open class MissionServiceTest : SpringMockMvcTestSupport() {
         val bee = beeRepository.findById(1).get()
         missionRepository.save(Mission("test.jpg",  "Test", Mission.MissionDifficulty.Intermediate, Mission.MissionType.Question, bee, user))
 
-        val result = missionService.alreadyUploadToday(user, bee)
+        val result = missionService.alreadyUploadTargetDate(user, bee)
 
         assertEquals(result, true)
     }
