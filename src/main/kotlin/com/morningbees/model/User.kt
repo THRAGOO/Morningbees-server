@@ -32,10 +32,10 @@ data class User(
         @OneToMany(mappedBy = "bee", cascade = [CascadeType.ALL])
         val missions: MutableList<Mission> = mutableListOf()
 
-        @OneToMany(mappedBy = "user", cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
+        @OneToMany(mappedBy = "user", cascade = [CascadeType.MERGE], fetch = FetchType.LAZY)
         val missionVotes: MutableSet<MissionVote> = mutableSetOf()
 
-        @OneToMany(mappedBy = "user", cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
+        @OneToMany(mappedBy = "user", cascade = [CascadeType.MERGE], fetch = FetchType.LAZY)
         @JsonManagedReference
         val bees: MutableSet<BeeMember> = mutableSetOf()
 

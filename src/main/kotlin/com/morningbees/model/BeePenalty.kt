@@ -6,12 +6,12 @@ import javax.persistence.*
 @Entity
 @Table(name = "bee_penalties")
 data class BeePenalty (
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "bee_id")
         @JsonBackReference
         val bee: Bee,
 
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "user_id")
         @JsonBackReference
         val user: User,

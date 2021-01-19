@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.Period
 
 @Service
 class BeeService(
@@ -90,8 +91,8 @@ class BeeService(
     fun getQuestioner(bee: Bee, targetDate: LocalDateTime): User {
         val users = bee.users.sortedBy { it.createdAt }
         val beesSize = users.size
-        val period = Duration.between(bee.createdAt, targetDate).toDays()
-        val todayQuestionerIndex = (period % beesSize).toInt()
+        val period = Period.between(bee.createdAt.toLocalDate(), targetDate.toLocalDate()).days
+        val todayQuestionerIndex = (period % beesSize)
 
         return users.elementAt(todayQuestionerIndex).user
     }
