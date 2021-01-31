@@ -42,7 +42,7 @@ internal class MissionVoteServiceTest : SpringMockMvcTestSupport() {
         val beeMember = bee.addUser(user1, BeeMember.MemberType.Member.type)
         beeMemberRepository.save(beeMember)
 
-        missionRepository.save(Mission("test.jpg",  "Test", Mission.MissionDifficulty.Intermediate, Mission.MissionType.Question, bee, user))
+        missionRepository.save(Mission(0, "test.jpg",  "Test", Mission.MissionDifficulty.Intermediate, Mission.MissionType.Question, bee, user))
     }
 
     @Test

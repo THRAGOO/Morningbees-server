@@ -37,7 +37,6 @@ class BeeController(
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, "application/json")
                 .body(response)
-
     }
 
     @ResponseBody

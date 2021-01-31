@@ -39,8 +39,4 @@ data class BeeMember (
         Manager(1),
         Member(0)
     }
-
-    fun todayUser(user : User) {
-
-    }
 }

@@ -1,7 +1,11 @@
 package com.morningbees.repository
 
+import com.morningbees.dto.BeePenaltyDto
 import com.morningbees.dto.UserInfoDto
 import com.morningbees.model.*
+import com.morningbees.model.QBeeMember.beeMember
+import com.morningbees.model.QBeePenalty.beePenalty
+import com.morningbees.model.QUser.user
 import com.querydsl.core.types.Projections
 import com.querydsl.core.types.dsl.Expressions.asString
 import com.querydsl.jpa.impl.JPAQueryFactory
@@ -42,6 +46,23 @@ class BeeMemberRepositorySupport(
                 asString("https://thragoo-test.s3.ap-northeast-2.amazonaws.com/temp_profile_image.png").`as`("profileImage")))
             .innerJoin(qBeeMember.user, qUser)
             .where(qBeeMember.bee.eq(bee))
+            .fetch()
+    }
+
+    fun getBeeMembersWithPenalty(bee: Bee, status: Int): MutableList<BeePenaltyDto> {
+        return query
+            .select(
+                Projections.constructor(
+                    BeePenaltyDto::class.java,
+                    user.nickname,
+                    beePenalty.penalty
+                )
+            )
+            .from(beeMember)
+            .innerJoin(beeMember.user, user)
+            .leftJoin(user.beePenalties, beePenalty)
+            .on(beePenalty.status.eq(status))
+            .where(beeMember.bee.eq(bee))
             .fetch()
     }
 }
