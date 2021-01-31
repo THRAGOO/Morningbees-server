@@ -49,9 +49,9 @@ internal open class MissionServiceTest : SpringMockMvcTestSupport() {
     open fun returnTrueIfAlreadyCreateMissionToday() {
         val user = userRepository.findById(1).get()
         val bee = beeRepository.findById(1).get()
-        missionRepository.save(Mission("test.jpg",  "Test", Mission.MissionDifficulty.Intermediate, Mission.MissionType.Question, bee, user))
+        missionRepository.save(Mission(0, "test.jpg",  "Test", Mission.MissionDifficulty.Intermediate, Mission.MissionType.Question, bee, user))
 
-        val result = missionService.alreadyUploadTargetDate(user, bee)
+        val result = missionService.alreadyUploadTargetDate(user, bee, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
 
         assertEquals(result, true)
     }
@@ -66,7 +66,7 @@ internal open class MissionServiceTest : SpringMockMvcTestSupport() {
         bee.addUser(user, BeeMember.MemberType.Member.type)
         beeRepository.save(bee)
 
-        val mission = Mission("test.jpg",  "Test", Mission.MissionDifficulty.Intermediate, Mission.MissionType.Question, bee, user)
+        val mission = Mission(0, "test.jpg",  "Test", Mission.MissionDifficulty.Intermediate, Mission.MissionType.Question, bee, user)
         missionRepository.save(mission)
 
         val firstFile = MockMultipartFile("data", "filename.txt", "text/plain", "some xml".toByteArray())
@@ -74,7 +74,7 @@ internal open class MissionServiceTest : SpringMockMvcTestSupport() {
         val missionCreateDto = MissionCreateDto( 1, "test", Mission.MissionDifficulty.Intermediate.level, Mission.MissionType.Question.type)
 
         val thrown = assertThrows(BadRequestException::class.java) { missionService.create(user, firstFile, missionCreateDto, "20200501") }
-        assertEquals(thrown.message, "already upload mission today")
+        assertEquals(thrown.message, "already upload mission target date")
     }
 
     @Test
@@ -97,7 +97,7 @@ internal open class MissionServiceTest : SpringMockMvcTestSupport() {
     open fun `해당 Bee의 모든 Mission Info를 반환한다`() {
         val user = userRepository.findById(1).get()
         val bee = beeRepository.findById(1).get()
-        missionRepository.save(Mission("test.jpg",  "description", Mission.MissionDifficulty.Intermediate, Mission.MissionType.Question, bee, user))
+        missionRepository.save(Mission(0, "test.jpg",  "description", Mission.MissionDifficulty.Intermediate, Mission.MissionType.Question, bee, user))
 
         val current = LocalDateTime.now()
 

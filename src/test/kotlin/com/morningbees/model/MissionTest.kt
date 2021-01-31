@@ -43,7 +43,7 @@ internal open class MissionTest : SpringMockMvcTestSupport() {
         val user = userRepository.findById(1).get()
         val bee = beeRepository.findById(1).get()
 
-        val mission = Mission("test.jpg",  "Test", Mission.MissionDifficulty.Intermediate, Mission.MissionType.Question, bee, user)
+        val mission = Mission(0,"test.jpg",  "Test", Mission.MissionDifficulty.Intermediate, Mission.MissionType.Question, bee, user)
         missionRepository.save(mission)
 
         assertEquals(1, bee.missions.size)

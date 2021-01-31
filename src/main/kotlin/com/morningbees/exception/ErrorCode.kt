@@ -31,5 +31,7 @@ enum class ErrorCode(val message: String, val status: Int) {
     NotFindUser("유저를 찾을 수 없습니다", 171),
     AlreadyJoinBee("이미 가입이 완료되었습니다.", 172),
 
-    IsNotManager("잘 못된 접근입니다.", 180),
+    IsNotManager("잘못된 접근입니다.", 180),
+
+    BiggerPenalty("현재 미납 금액보다 적어야 합니다.", 190)
 }

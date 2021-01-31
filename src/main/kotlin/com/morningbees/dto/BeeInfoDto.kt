@@ -8,5 +8,5 @@ data class BeeInfoDto(
         @JsonProperty("nickname")val nickname: String,
         @JsonProperty("startTime")val startTime: LocalTime,
         @JsonProperty("endTime")val endTime: LocalTime,
-        @JsonProperty("totalPay") val totalPay: Int
+        @JsonProperty("pay") val pay: Int
 )

@@ -16,13 +16,13 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.Duration
 import java.time.LocalDateTime
 import java.time.Period
 
 @Service
 class BeeService(
     private val beeRepository: BeeRepository,
+    private val beeMemberService: BeeMemberService,
     private val beeMemberRepository: BeeMemberRepository
 ) {
 
@@ -32,13 +32,21 @@ class BeeService(
         beeRepository.findByIdOrNull(beeId)
             ?: throw BadRequestException("not find bee", ErrorCode.NotFindBee, LogEvent.BeeServiceProcess.code, logger)
 
+    fun findByIdAndUser(beeId: Long, user: User): Bee {
+        val bee = findById(beeId)
+        if (!beeMemberService.isJoinUserToBee(user, bee))
+            throw BadRequestException("not join user", ErrorCode.NotJoinUserToBee, LogEvent.BeeServiceProcess.code, logger)
+
+        return bee
+    }
+
     @Transactional
     fun create(user: User, beeCreateDto: BeeCreateDto): Boolean {
         val bee: Bee = beeCreateDto.toEntity()
         beeRepository.save(bee)
 
         val beeMember = bee.addUser(user, BeeMember.MemberType.Manager.type)
-        beeMemberRepository.save(beeMember)
+        beeMemberService.save(beeMember)
 
         return true
     }
@@ -46,7 +54,7 @@ class BeeService(
     @Transactional
     fun update(user: User, beeId: Long, beeCreateDto: BeeCreateDto): Boolean {
         val bee = findById(beeId)
-        if(!beeMemberRepository.existsByUserAndBeeAndType(user, bee, BeeMember.MemberType.Manager.type)) { throw BadRequestException("is not manager", ErrorCode.IsNotManager, LogEvent.BeeServiceProcess.code, logger) }
+        beeMemberService.checkManager(user, bee)
 
         bee.update(beeCreateDto.title, beeCreateDto.description, beeCreateDto.startTime, beeCreateDto.endTime, beeCreateDto.pay)
 
@@ -54,7 +62,8 @@ class BeeService(
     }
 
     fun withdrawal(user: User): Boolean {
-        val beeMember: BeeMember = beeMemberRepository.findByUser(user) ?: throw BadRequestException("bee member is null", ErrorCode.NotFindBee, LogEvent.BeeServiceProcess.code, logger)
+        val beeMember: BeeMember = beeMemberRepository.findByUser(user) ?:
+        throw BadRequestException("bee member is null", ErrorCode.NotFindBee, LogEvent.BeeServiceProcess.code, logger)
 
         val bee: Bee = beeMember.bee
 
@@ -65,7 +74,7 @@ class BeeService(
         beeMemberRepository.deleteByBeeAndUser(bee, user)
 
         if (bee.users.size == 1) {
-            beeRepository.deleteBeeById(bee.id!!)
+            beeRepository.deleteBeeById(bee.id)
         }
 
         return true
@@ -101,7 +110,7 @@ class BeeService(
 
     private fun delegateManager(delegateUser: BeeMember): Boolean {
         delegateUser.type = BeeMember.MemberType.Manager.type
-        beeMemberRepository.save(delegateUser)
+        beeMemberService.save(delegateUser)
 
         return true
     }
