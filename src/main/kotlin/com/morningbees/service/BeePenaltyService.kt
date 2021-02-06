@@ -34,11 +34,13 @@ class BeePenaltyService(
     fun paid(user: User, bee: Bee, penaltyUnpaidDto: PenaltyUnpaidDto) {
         beeMemberService.checkManager(user, bee)
 
-        val targetUser = userService.findById(penaltyUnpaidDto.userId)
-        val beePenalties = beePenaltyRepository.findAllByBeeAndUser(bee, targetUser)
+        penaltyUnpaidDto.userIds.forEach { userId ->
+            val targetUser = userService.findById(userId)
+            val beePenalties = beePenaltyRepository.findAllByBeeAndUser(bee, targetUser)
 
-        subPendingPenalty(beePenalties, penaltyUnpaidDto.penalty)
-        addPaidPenalty(beePenalties, bee, targetUser, penaltyUnpaidDto.penalty)
+            subPendingPenalty(beePenalties, penaltyUnpaidDto.penalty)
+            addPaidPenalty(beePenalties, bee, targetUser, penaltyUnpaidDto.penalty)
+        }
     }
 
     private fun addPaidPenalty(

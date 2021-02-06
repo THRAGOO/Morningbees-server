@@ -54,6 +54,7 @@ class BeeMemberRepositorySupport(
             .select(
                 Projections.constructor(
                     BeePenaltyDto::class.java,
+                    user.id,
                     user.nickname,
                     beePenalty.penalty
                 )
