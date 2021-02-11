@@ -35,6 +35,8 @@ spring:
     redis:
       repositories:
         enabled: false
+  quartz:
+    job-store-type: memory
 
 aws:
   access-key-id: ${AWS_ACCESS_KEY_ID}

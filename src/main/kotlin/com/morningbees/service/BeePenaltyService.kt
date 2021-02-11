@@ -23,6 +23,9 @@ class BeePenaltyService(
 ) {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
+    fun findAllByBeeAndUser(bee: Bee, user: User): List<BeePenalty> =
+        beePenaltyRepository.findAllByBeeAndUser(bee, user)
+
     fun getPenaltyHistory(bee: Bee, status: Int): BeePenaltyInfoDto {
         val penaltyHistories = beePenaltySupportRepository.getTotalPenaltyHistories(bee)
         val penalties = beeMemberService.getBeeMembersWithPenalty(bee, status)
@@ -31,28 +34,35 @@ class BeePenaltyService(
     }
 
     @Transactional
+    fun addPendingPenalty(bee: Bee, user: User) {
+        val beePenalties = findAllByBeeAndUser(bee, user)
+        increasePenalty(beePenalties, bee, user, bee.pay, BeePenalty.BeePenaltyStatus.Pending)
+    }
+
+    @Transactional
     fun paid(user: User, bee: Bee, penaltyPaidDto: PenaltyPaidDto) {
         beeMemberService.checkManager(user, bee)
 
         penaltyPaidDto.penalties.forEach { penaltyDto ->
             val targetUser = userService.findById(penaltyDto.userId)
-            val beePenalties = beePenaltyRepository.findAllByBeeAndUser(bee, targetUser)
+            val beePenalties = findAllByBeeAndUser(bee, targetUser)
 
             subPendingPenalty(beePenalties, penaltyDto.penalty)
-            addPaidPenalty(beePenalties, bee, targetUser, penaltyDto.penalty)
+            increasePenalty(beePenalties, bee, targetUser, penaltyDto.penalty, BeePenalty.BeePenaltyStatus.Pay)
         }
     }
 
-    private fun addPaidPenalty(
+    private fun increasePenalty(
         beePenalties: List<BeePenalty>,
         bee: Bee,
-        targetUser: User,
-        penalty: Int
+        user: User,
+        penalty: Int,
+        beePenaltyStatus: BeePenalty.BeePenaltyStatus
     ) {
-        val paidPenalty = beePenalties.lastOrNull { it.status == BeePenalty.BeePenaltyStatus.Pay.status }
+        val paidPenalty = beePenalties.lastOrNull { it.status == beePenaltyStatus.status }
 
         if (paidPenalty == null) {
-            save(BeePenalty(bee, targetUser, penalty = penalty, status = BeePenalty.BeePenaltyStatus.Pay.status))
+            save(BeePenalty(bee, user, penalty = penalty, status = beePenaltyStatus.status))
         } else {
             paidPenalty.penalty += penalty
             return
