@@ -1,7 +1,7 @@
 package com.morningbees.service
 
 import com.morningbees.dto.BeePenaltyInfoDto
-import com.morningbees.dto.PenaltyUnpaidDto
+import com.morningbees.dto.PenaltyPaidDto
 import com.morningbees.exception.BadRequestException
 import com.morningbees.exception.ErrorCode
 import com.morningbees.model.Bee
@@ -31,15 +31,15 @@ class BeePenaltyService(
     }
 
     @Transactional
-    fun paid(user: User, bee: Bee, penaltyUnpaidDto: PenaltyUnpaidDto) {
+    fun paid(user: User, bee: Bee, penaltyPaidDto: PenaltyPaidDto) {
         beeMemberService.checkManager(user, bee)
 
-        penaltyUnpaidDto.userIds.forEach { userId ->
-            val targetUser = userService.findById(userId)
+        penaltyPaidDto.penalties.forEach { penaltyDto ->
+            val targetUser = userService.findById(penaltyDto.userId)
             val beePenalties = beePenaltyRepository.findAllByBeeAndUser(bee, targetUser)
 
-            subPendingPenalty(beePenalties, penaltyUnpaidDto.penalty)
-            addPaidPenalty(beePenalties, bee, targetUser, penaltyUnpaidDto.penalty)
+            subPendingPenalty(beePenalties, penaltyDto.penalty)
+            addPaidPenalty(beePenalties, bee, targetUser, penaltyDto.penalty)
         }
     }
 

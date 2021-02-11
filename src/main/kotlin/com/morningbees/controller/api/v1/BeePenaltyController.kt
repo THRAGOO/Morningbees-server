@@ -1,7 +1,7 @@
 package com.morningbees.controller.api.v1
 
 import com.morningbees.dto.BeePenaltyInfoDto
-import com.morningbees.dto.PenaltyUnpaidDto
+import com.morningbees.dto.PenaltyPaidDto
 import com.morningbees.model.User
 import com.morningbees.service.BeePenaltyService
 import com.morningbees.service.BeeService
@@ -33,13 +33,13 @@ class BeePenaltyController(
     @PostMapping("/api/bee_penalties/paid/{beeId}")
     fun paid(
         @PathVariable beeId: Long,
-        @Valid @RequestBody penaltyUnpaidDto: PenaltyUnpaidDto,
+        @Valid @RequestBody penaltyPaidDto: PenaltyPaidDto,
         request: HttpServletRequest
     ): ResponseEntity<Any> {
         val user: User = request.getAttribute("user") as User
         val bee = beeService.findByIdAndUser(beeId, user)
 
-        beePenaltyService.paid(user, bee, penaltyUnpaidDto)
+        beePenaltyService.paid(user, bee, penaltyPaidDto)
 
         return ResponseEntity(HttpStatus.OK)
     }
