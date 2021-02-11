@@ -16,7 +16,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.Duration
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.Period
 
 @Service
@@ -39,6 +41,9 @@ class BeeService(
 
         return bee
     }
+
+    fun findAllByEndTime(endTime: LocalTime): List<Bee> =
+        beeRepository.findAllByEndTime(endTime)
 
     @Transactional
     fun create(user: User, beeCreateDto: BeeCreateDto): Boolean {
