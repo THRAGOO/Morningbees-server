@@ -62,8 +62,9 @@ class BeeMemberRepositorySupport(
             .from(beeMember)
             .innerJoin(beeMember.user, user)
             .leftJoin(user.beePenalties, beePenalty)
-            .on(beePenalty.status.eq(status))
+            .on(beePenalty.bee.eq(bee))
             .where(beeMember.bee.eq(bee))
+            .where(beePenalty.status.eq(status))
             .fetch()
     }
 }
