@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: openjdk8
+      docker: 18
+  build:
+    commands:
+      - echo Build Starting on `date`
+      - echo Building the Docker image...
+      - chmod +x ./gradlew
+      - ./gradlew clean test
+reports:
+  $REPORT_GROUP_ARN:
+    files:
+      - '**/*'
+    base-directory: 'build/test-results/test'
+artifacts:
+  files:
+    - '**/*'
+  name: concurrencysample-$(date +%Y-%m-%d)
+cache:
+  paths:
+    - '/root/.gradle/caches/**/*'

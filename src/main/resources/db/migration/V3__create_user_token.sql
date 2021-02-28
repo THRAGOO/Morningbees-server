@@ -6,5 +6,5 @@ create table user_tokens (
     created_at datetime not null,
     updated_at datetime not null,
     FOREIGN KEY(`user_id`) REFERENCES `users` (`id`),
-    UNIQUE idx_user_id (`user_id`)
+    UNIQUE idx_user_id_in_token (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
