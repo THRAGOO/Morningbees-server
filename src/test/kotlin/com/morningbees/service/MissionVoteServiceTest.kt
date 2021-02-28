@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalTime
 import kotlin.test.assertTrue
 
@@ -94,6 +95,7 @@ internal class MissionVoteServiceTest : SpringMockMvcTestSupport() {
 
     @Test
     @FlywayTest
+    @Transactional
     fun `유저가 미션의 투표 내역이 없으면 MissionVote를 생성한다`() {
         val user = userRepository.findById(2).get()
         val mission = missionRepository.getById(1) ?: throw Exception()
@@ -112,6 +114,7 @@ internal class MissionVoteServiceTest : SpringMockMvcTestSupport() {
 
     @Test
     @FlywayTest
+    @Transactional
     fun `유저가 이미 Agree로 투표했다면 Disagree로 투표할 때 상태를 업데이트한다`() {
         val user = userRepository.findById(2).get()
         userRepository.save(user)
