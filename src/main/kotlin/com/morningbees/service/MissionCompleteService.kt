@@ -36,6 +36,6 @@ class MissionCompleteService(
     }
 
     private fun generateCurrentStartDay(): LocalDateTime {
-        return LocalDateTime.of(LocalDate.now(), LocalTime.MIN)
+        return LocalDateTime.of(LocalDate.now(), LocalTime.MIN).minusMinutes(1)
     }
 }
