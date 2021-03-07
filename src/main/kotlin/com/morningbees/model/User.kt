@@ -1,5 +1,6 @@
 package com.morningbees.model
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.morningbees.dto.UserInfoDto
 import org.springframework.stereotype.Component
@@ -16,6 +17,7 @@ data class User(
         val status: Int = UserStatus.Use.status,
 
         @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
+        @JsonBackReference
         val missions: MutableList<Mission> = mutableListOf()
 ) : BaseEntity() {
         @OneToOne(mappedBy = "user")
@@ -51,6 +53,27 @@ data class User(
         }
 
         fun defaultInfo(): UserInfoDto = UserInfoDto(this.id, this.nickname, "https://thragoo-test.s3.ap-northeast-2.amazonaws.com/temp_profile_image.png")
+        override fun toString(): String {
+                return "User(nickname='$nickname', status=$status)"
+        }
+
+        override fun equals(other: Any?): Boolean {
+                if (this === other) return true
+                if (javaClass != other?.javaClass) return false
+
+                other as User
+
+                if (nickname != other.nickname) return false
+                if (status != other.status) return false
+
+                return true
+        }
+
+        override fun hashCode(): Int {
+                var result = nickname.hashCode()
+                result = 31 * result + status
+                return result
+        }
 
         enum class UserStatus(val status: Int) {
                 Use(1),
