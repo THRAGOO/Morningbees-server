@@ -13,7 +13,10 @@ data class User(
         val nickname: String = "",
 
         @Column(columnDefinition = "TINYINT")
-        val status: Int = UserStatus.Use.status
+        val status: Int = UserStatus.Use.status,
+
+        @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
+        val missions: MutableList<Mission> = mutableListOf()
 ) : BaseEntity() {
         @OneToOne(mappedBy = "user")
         val provider: UserProvider? = null
@@ -28,9 +31,6 @@ data class User(
         @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
         @JsonManagedReference
         val comments: MutableList<Comment> = mutableListOf()
-
-        @OneToMany(mappedBy = "bee", cascade = [CascadeType.ALL])
-        val missions: MutableList<Mission> = mutableListOf()
 
         @OneToMany(mappedBy = "user", cascade = [CascadeType.MERGE], fetch = FetchType.LAZY)
         val missionVotes: MutableSet<MissionVote> = mutableSetOf()
