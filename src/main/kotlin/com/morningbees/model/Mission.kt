@@ -1,6 +1,7 @@
 package com.morningbees.model
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -29,6 +30,7 @@ data class Mission (
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonManagedReference
     val user: User,
 
     @Column(name = "created_at", updatable = false)
