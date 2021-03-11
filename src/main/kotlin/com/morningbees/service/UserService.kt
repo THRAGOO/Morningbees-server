@@ -47,7 +47,7 @@ class UserService(
     fun me(user: User): meInfoDto {
         val alreadyJoin = user.bees.size > 0
 
-        return meInfoDto(user.nickname, alreadyJoin, user.getJoinBeeId(), user.id)
+        return meInfoDto(user.nickname, user.provider?.email ?: "", alreadyJoin, user.getJoinBeeId(), user.id)
     }
 
 
